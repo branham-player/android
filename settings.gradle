@@ -1,1 +1,1 @@
-include ':mobile'
+include ':files', ':app', ':base', ':instantapp'
