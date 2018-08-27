@@ -1,4 +1,6 @@
 apply plugin: 'com.android.feature'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion compile_sdk_version
@@ -21,9 +23,12 @@ android {
 }
 
 dependencies {
-    application project(':app')
+    application project(':installed')
     feature project(':files')
 
     // Android Support Libraries
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
+
+    // Kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }

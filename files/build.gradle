@@ -17,17 +17,21 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':base')
 
     // Android Support Libraries
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    implementation 'androidx.fragment:fragment-ktx:1.0.0-beta01'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-beta01'
     implementation 'androidx.media:media:1.0.0-beta01'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0-beta01'
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    // Logging
+    implementation 'com.orhanobut:logger:2.2.0'
 
     // JUnit
     testImplementation 'junit:junit:4.12'

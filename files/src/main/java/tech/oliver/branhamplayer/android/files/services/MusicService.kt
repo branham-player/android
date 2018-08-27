@@ -1,4 +1,4 @@
-package tech.oliver.branhamplayer.android.files
+package tech.oliver.branhamplayer.android.files.services
 
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat.MediaItem

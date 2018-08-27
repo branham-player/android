@@ -1,1 +1,1 @@
-include ':files', ':app', ':base', ':instantapp'
+include ':instant', ':installed', ':base', ':files'
