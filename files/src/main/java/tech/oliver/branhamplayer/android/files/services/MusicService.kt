@@ -1,105 +1,182 @@
 package tech.oliver.branhamplayer.android.files.services
 
+import android.media.MediaMetadata
+import android.media.MediaMetadataRetriever
+import android.media.MediaPlayer
+import android.media.browse.MediaBrowser
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat.MediaItem
+import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import androidx.media.MediaBrowserServiceCompat
-import java.util.ArrayList
+import com.orhanobut.logger.Logger
+import tech.oliver.branhamplayer.android.files.mappers.FileListMapper
+import tech.oliver.branhamplayer.android.files.repositories.FileListRepository
+import java.io.IOException
 
-/**
- * This class provides a MediaBrowser through a service. It exposes the media library to a browsing
- * client, through the onGetRoot and onLoadChildren methods. It also creates a MediaSession and
- * exposes it through its MediaSession.Token, which allows the client to create a MediaController
- * that connects to and send control commands to the MediaSession remotely. This is useful for
- * user interfaces that need to interact with your media session, like Android Auto. You can
- * (should) also use the same service from your app's UI, which gives a seamless playback
- * experience to the user.
- *
- *
- * To implement a MediaBrowserService, you need to:
- *
- *  *  Extend [MediaBrowserServiceCompat], implementing the media browsing
- * related methods [MediaBrowserServiceCompat.onGetRoot] and
- * [MediaBrowserServiceCompat.onLoadChildren];
- *
- *  *  In onCreate, start a new [MediaSessionCompat] and notify its parent
- * with the session's token [MediaBrowserServiceCompat.setSessionToken];
- *
- *  *  Set a callback on the [MediaSessionCompat.setCallback].
- * The callback will receive all the user's actions, like play, pause, etc;
- *
- *  *  Handle all the actual music playing using any method your app prefers (for example,
- * [android.media.MediaPlayer])
- *
- *  *  Update playbackState, "now playing" metadata and queue, using MediaSession proper methods
- * [MediaSessionCompat.setPlaybackState]
- * [MediaSessionCompat.setMetadata] and
- * [MediaSessionCompat.setQueue])
- *
- *  *  Declare and export the service in AndroidManifest with an intent receiver for the action
- * android.media.browse.MediaBrowserService
- *
- * To make your app compatible with Android Auto, you also need to:
- *
- *  *  Declare a meta-data tag in AndroidManifest.xml linking to a xml resource
- * with a &lt;automotiveApp&gt; root element. For a media app, this must include
- * an &lt;uses name="media"/&gt; element as a child.
- * For example, in AndroidManifest.xml:
- * &lt;meta-data android:name="com.google.android.gms.car.application"
- * android:resource="@xml/automotive_app_desc"/&gt;
- * And in res/values/automotive_app_desc.xml:
- * &lt;automotiveApp&gt;
- * &lt;uses name="media"/&gt;
- * &lt;/automotiveApp&gt;
- *
- */
 class MusicService : MediaBrowserServiceCompat() {
 
-    private lateinit var mSession: MediaSessionCompat
+    private lateinit var player: MediaPlayer
+    private lateinit var songs: List<MediaMetadataCompat>
+    private lateinit var session: MediaSessionCompat
+
+    private var currentSong: MediaMetadataCompat? = null
+    private var currentSongIdx = 0
+    private val repository = FileListRepository()
 
     override fun onCreate() {
         super.onCreate()
 
-        mSession = MediaSessionCompat(this, "MusicService")
-        sessionToken = mSession.sessionToken
-        mSession.setCallback(MediaSessionCallback())
-        mSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
-                MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
+        session = MediaSessionCompat(this, this::class.java.simpleName)
+        session.apply {
+            setCallback(MediaSessionCallback())
+            setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
+                    MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
+
+            isActive = true
+        }
+
+        player = MediaPlayer()
+        player.reset()
+
+        sessionToken = session.sessionToken
+        songs = buildSongs()
+    }
+
+    private fun buildSongs(): List<MediaMetadataCompat> {
+        val songs = FileListMapper().map(repository.getFiles().value)
+        val mediaEntries = songs?.value?.map {
+            var durationInMs = 0L
+            val metadata = MediaMetadataRetriever()
+
+            try {
+                metadata.setDataSource(it.path)
+                durationInMs = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toLong()
+            } catch (e: Exception) {
+
+            } finally {
+                metadata.release()
+            }
+
+            MediaMetadataCompat.Builder()
+                    .putString(MediaMetadata.METADATA_KEY_MEDIA_ID, it.path)
+                    .putString(MediaMetadata.METADATA_KEY_TITLE, it.name)
+                    .putString(MediaMetadata.METADATA_KEY_ARTIST, it.artist)
+                    .putLong(MediaMetadata.METADATA_KEY_DURATION, durationInMs)
+                    .build()
+        }
+
+        return mediaEntries ?: emptyList()
+    }
+
+    private fun handlePlay() {
+        try {
+            player.reset()
+            player.setDataSource(currentSong?.description?.mediaId)
+
+            player.setOnPreparedListener {
+                session.setMetadata(currentSong)
+                session.setPlaybackState(buildState(PlaybackStateCompat.STATE_PLAYING))
+
+                it.start()
+            }
+
+            player.prepareAsync()
+        } catch (e: IOException) {
+            Logger.e("Could not load the song", e.message)
+        }
     }
 
     override fun onDestroy() {
-        mSession.release()
+        player.release()
+        session.release()
     }
 
-    override fun onGetRoot(clientPackageName: String,
-                           clientUid: Int,
-                           rootHints: Bundle?): MediaBrowserServiceCompat.BrowserRoot? {
-        return MediaBrowserServiceCompat.BrowserRoot("root", null)
-    }
+    override fun onGetRoot(clientPackageName: String, clientUid: Int, rootHints: Bundle?) =
+            BrowserRoot(this::class.java.simpleName, null)
 
     override fun onLoadChildren(parentId: String, result: Result<MutableList<MediaItem>>) {
-        result.sendResult(ArrayList())
+        val songList = songs.map {
+            MediaItem(it.description, MediaBrowser.MediaItem.FLAG_PLAYABLE)
+        }
+
+        result.sendResult(songList.toMutableList())
+    }
+
+    private fun buildState(state: Int, position: Long = player.currentPosition.toLong()): PlaybackStateCompat {
+        return PlaybackStateCompat.Builder()
+                .setActions(PlaybackStateCompat.ACTION_PLAY or
+                        PlaybackStateCompat.ACTION_PLAY_PAUSE or
+                        PlaybackStateCompat.ACTION_PAUSE or
+                        PlaybackStateCompat.ACTION_SEEK_TO or
+                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+                        PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID
+                )
+                .setState(
+                        state,
+                        position,
+                        1f
+                )
+                .build()
     }
 
     private inner class MediaSessionCallback : MediaSessionCompat.Callback() {
-        override fun onPlay() {}
+        override fun onPlay() {
+            if (currentSong == null) {
+                currentSong = songs.firstOrNull()
+                currentSongIdx = 0
+            }
 
-        override fun onSkipToQueueItem(queueId: Long) {}
+            handlePlay()
+        }
 
-        override fun onSeekTo(position: Long) {}
+        override fun onSeekTo(position: Long) {
+            if (currentSong == null) return
 
-        override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {}
+            player.seekTo(position.toInt())
+            session.setPlaybackState(buildState(PlaybackStateCompat.STATE_PLAYING, position))
+        }
 
-        override fun onPause() {}
+        override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
+            val index = songs.indexOfFirst {
+                it.description.mediaId == mediaId
+            }
 
-        override fun onStop() {}
+            if (index != -1) {
+                currentSong = songs[index]
+                currentSongIdx = index
+            }
 
-        override fun onSkipToNext() {}
+            handlePlay()
+        }
 
-        override fun onSkipToPrevious() {}
+        override fun onPause() {
+            if (!player.isPlaying) return
 
-        override fun onCustomAction(action: String?, extras: Bundle?) {}
+            player.pause()
+            session.setPlaybackState(buildState(PlaybackStateCompat.STATE_PAUSED))
+        }
 
-        override fun onPlayFromSearch(query: String?, extras: Bundle?) {}
+        override fun onSkipToNext() {
+            ++currentSongIdx
+
+            if (currentSongIdx == songs.size) {
+                currentSongIdx = 0
+            }
+
+            onPlayFromMediaId(songs[currentSongIdx].description.mediaId, null)
+        }
+
+        override fun onSkipToPrevious() {
+            --currentSongIdx
+
+            if (currentSongIdx == -1) {
+                currentSongIdx = songs.size - 1
+            }
+
+            onPlayFromMediaId(songs[currentSongIdx].description.mediaId, null)
+        }
     }
 }

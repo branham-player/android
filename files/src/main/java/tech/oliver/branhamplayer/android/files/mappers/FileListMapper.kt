@@ -11,10 +11,10 @@ import java.util.GregorianCalendar
 import java.util.Locale
 
 class FileListMapper : Mapper<File, FileModel> {
-    override fun map(input: List<File>): LiveData<List<FileModel>> {
+    override fun map(input: List<File>?): LiveData<List<FileModel>>? {
         val update = MutableLiveData<List<FileModel>>()
 
-        update.value = input.map {
+        update.value = input?.map {
             FileModel(
                     artist = "William Branham",
                     date = buildDate(it.name),
@@ -22,7 +22,7 @@ class FileListMapper : Mapper<File, FileModel> {
                     name = trimMetadata(it.nameWithoutExtension),
                     path = it.absolutePath
             )
-        }.sortedWith(compareBy<FileModel, Date?>(nullsLast()) {
+        }?.sortedWith(compareBy<FileModel, Date?>(nullsLast()) {
             it.date
         }.thenBy {
             it.name

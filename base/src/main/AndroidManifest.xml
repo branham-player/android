@@ -13,5 +13,4 @@
             android:name="aia-compat-api-min-version"
             android:value="1" />
     </application>
-
 </manifest>
