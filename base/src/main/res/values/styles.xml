@@ -10,24 +10,24 @@
 
     <!-- endregion -->
 
-    <!-- region FileList -->
+    <!-- region SermonList -->
 
-    <style name="FileList" />
+    <style name="SermonList" />
 
-    <style name="FileList.Row" />
+    <style name="SermonList.Row" />
 
-    <style name="FileList.Row.Date">
+    <style name="SermonList.Row.Date">
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="FileList.Row.Layout">
+    <style name="SermonList.Row.Layout">
         <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:padding">10dp</item>
     </style>
 
-    <style name="FileList.Row.Name">
+    <style name="SermonList.Row.Name">
         <item name="android:layout_marginBottom">8dp</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textSize">16sp</item>
@@ -35,5 +35,4 @@
     </style>
 
     <!-- endregion -->
-
 </resources>

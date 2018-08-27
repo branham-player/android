@@ -1,1 +1,1 @@
-include ':instant', ':installed', ':base', ':files'
+include ':instant', ':installed', ':base', ':sermons'

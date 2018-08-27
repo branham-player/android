@@ -24,7 +24,7 @@ android {
 
 dependencies {
     application project(':installed')
-    feature project(':files')
+    feature project(':sermons')
 
     // Android Support Libraries
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'

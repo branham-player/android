@@ -23,5 +23,5 @@ android {
 
 dependencies {
     implementation project(':base')
-    implementation project(':files')
+    implementation project(':sermons')
 }
