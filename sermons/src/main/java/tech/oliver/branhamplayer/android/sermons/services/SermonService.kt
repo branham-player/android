@@ -1,10 +1,14 @@
 package tech.oliver.branhamplayer.android.sermons.services
 
+import android.content.Context
+import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.MediaMetadata
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
 import android.media.browse.MediaBrowser
 import android.os.Bundle
+import android.os.PowerManager
 import android.support.v4.media.MediaBrowserCompat.MediaItem
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
@@ -15,8 +19,9 @@ import tech.oliver.branhamplayer.android.sermons.mappers.SermonMapper
 import tech.oliver.branhamplayer.android.sermons.repositories.SermonsRepository
 import java.io.IOException
 
-class SermonService : MediaBrowserServiceCompat() {
+class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChangeListener {
 
+    private lateinit var audioManager: AudioManager
     private lateinit var player: MediaPlayer
     private lateinit var notification: SermonNotification
     private lateinit var sermons: List<MediaMetadataCompat>
@@ -30,6 +35,8 @@ class SermonService : MediaBrowserServiceCompat() {
         super.onCreate()
 
         val callback = MediaSessionCallback()
+
+        audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         notification = SermonNotification(this, callback)
 
         session = MediaSessionCompat(this, this::class.java.simpleName)
@@ -42,7 +49,19 @@ class SermonService : MediaBrowserServiceCompat() {
         }
 
         player = MediaPlayer()
-        player.reset()
+
+        player.apply {
+            val attributes = AudioAttributes.Builder().apply {
+                setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                setLegacyStreamType(AudioManager.STREAM_MUSIC)
+                setUsage(AudioAttributes.USAGE_MEDIA)
+            }
+
+            reset()
+            setAudioStreamType(AudioManager.STREAM_MUSIC)
+            setWakeMode(applicationContext, PowerManager.PARTIAL_WAKE_LOCK)
+            //setAudioAttributes(attributes.build())
+        }
 
         sessionToken = session.sessionToken
         sermons = buildSermons()
@@ -88,6 +107,10 @@ class SermonService : MediaBrowserServiceCompat() {
         }
 
         result.sendResult(sermonListList.toMutableList())
+    }
+
+    override fun onAudioFocusChange(focusChange: Int) {
+        player.setVolume(1.0f, 1.0f)
     }
 
     private fun buildState(state: Int, position: Long = player.currentPosition.toLong()): PlaybackStateCompat {
@@ -149,6 +172,7 @@ class SermonService : MediaBrowserServiceCompat() {
             player.pause()
             notification.update(currentSermon, state, sessionToken)
             session.setPlaybackState(state)
+            audioManager.abandonAudioFocus(this@SermonService)
         }
 
         override fun onSkipToNext() {
@@ -179,6 +203,7 @@ class SermonService : MediaBrowserServiceCompat() {
                 player.setDataSource(currentSermon?.description?.mediaId)
 
                 player.setOnPreparedListener {
+                    audioManager.requestAudioFocus(this@SermonService, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
                     notification.update(currentSermon, state, sessionToken)
                     session.setMetadata(currentSermon)
                     session.setPlaybackState(state)
