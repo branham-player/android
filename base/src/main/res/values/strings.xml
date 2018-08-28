@@ -9,4 +9,10 @@
     <string name="notification_previous">Previous</string>
 
     <!-- endregion -->
+
+    <!-- Player Custom Actions -->
+
+    <string name="player_restart">Restart</string>
+
+    <!-- endregion -->
 </resources>

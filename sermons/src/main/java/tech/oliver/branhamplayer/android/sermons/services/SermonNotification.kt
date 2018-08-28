@@ -33,33 +33,31 @@ class SermonNotification(
     private val previousAction: NotificationCompat.Action
 
     init {
-        val sermonServicePackage = service.packageName
-
         val nextIntent = PendingIntent.getBroadcast(
                 service.applicationContext,
                 Notification.RequestCode,
-                Intent(Actions.Next).setPackage(sermonServicePackage),
+                Intent(Actions.Next).setPackage(service.packageName),
                 PendingIntent.FLAG_CANCEL_CURRENT
         )
 
         val pauseIntent = PendingIntent.getBroadcast(
                 service.applicationContext,
                 Notification.RequestCode,
-                Intent(Actions.Pause).setPackage(sermonServicePackage),
+                Intent(Actions.Pause).setPackage(service.packageName),
                 PendingIntent.FLAG_CANCEL_CURRENT
         )
 
         val playIntent = PendingIntent.getBroadcast(
                 service.applicationContext,
                 Notification.RequestCode,
-                Intent(Actions.Play).setPackage(sermonServicePackage),
+                Intent(Actions.Play).setPackage(service.packageName),
                 PendingIntent.FLAG_CANCEL_CURRENT
         )
 
         val previousIntent = PendingIntent.getBroadcast(
                 service.applicationContext,
                 Notification.RequestCode,
-                Intent(Actions.Previous).setPackage(sermonServicePackage),
+                Intent(Actions.Previous).setPackage(service.packageName),
                 PendingIntent.FLAG_CANCEL_CURRENT
         )
 

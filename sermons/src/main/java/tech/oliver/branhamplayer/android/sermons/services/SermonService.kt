@@ -15,8 +15,11 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.media.MediaBrowserServiceCompat
 import com.orhanobut.logger.Logger
+import tech.oliver.branhamplayer.android.sermons.R
+import tech.oliver.branhamplayer.android.sermons.SermonConstants
 import tech.oliver.branhamplayer.android.sermons.mappers.SermonMapper
 import tech.oliver.branhamplayer.android.sermons.repositories.SermonsRepository
+import tech.oliver.branhamplayer.android.sermons.viewmodels.SermonServiceViewModel
 import java.io.IOException
 
 class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChangeListener {
@@ -31,6 +34,8 @@ class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChan
     private var currentSermonIndex = 0
     private val repository = SermonsRepository()
 
+    private lateinit var viewModel: SermonServiceViewModel
+
     override fun onCreate() {
         super.onCreate()
 
@@ -38,6 +43,7 @@ class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChan
 
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         notification = SermonNotification(this, callback)
+        viewModel = SermonServiceViewModel(applicationContext)
 
         session = MediaSessionCompat(this, this::class.java.simpleName)
         session.apply {
@@ -65,6 +71,15 @@ class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChan
 
         sessionToken = session.sessionToken
         sermons = buildSermons()
+
+        viewModel.getMostRecentSermonAsync { sermon ->
+            sermon?.let {
+                val bundle = Bundle()
+                bundle.putString("shouldPlay", "false")
+
+                callback.onPlayFromMediaId(it, bundle)
+            }
+        }
     }
 
     private fun buildSermons(): List<MediaMetadataCompat> {
@@ -94,6 +109,9 @@ class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChan
     }
 
     override fun onDestroy() {
+        saveMostRecent()
+        saveTime()
+
         player.release()
         session.release()
     }
@@ -113,7 +131,7 @@ class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChan
         player.setVolume(1.0f, 1.0f)
     }
 
-    private fun buildState(state: Int, position: Long = player.currentPosition.toLong()): PlaybackStateCompat {
+    private fun buildState(state: Int, position: Int = player.currentPosition): PlaybackStateCompat {
         return PlaybackStateCompat.Builder()
                 .setActions(PlaybackStateCompat.ACTION_PLAY or
                         PlaybackStateCompat.ACTION_PLAY_PAUSE or
@@ -125,10 +143,28 @@ class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChan
                 )
                 .setState(
                         state,
-                        position,
+                        position.toLong(),
                         1f
                 )
+                .addCustomAction(
+                        PlaybackStateCompat.CustomAction.Builder(
+                                SermonConstants.Player.CustomActions.Restart,
+                                getString(R.string.player_restart),
+                                R.drawable.restart
+                        ).build()
+                )
                 .build()
+    }
+
+    private fun saveMostRecent() {
+        viewModel.saveMostRecentSermon(currentSermon?.description?.mediaId)
+    }
+
+    private fun saveTime() {
+        viewModel.savePausedDuration(
+                currentSermon?.description?.mediaId,
+                player.currentPosition
+        )
     }
 
     inner class MediaSessionCallback : MediaSessionCompat.Callback() {
@@ -138,7 +174,7 @@ class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChan
                 currentSermonIndex = 0
             }
 
-            handlePlay()
+            preparePlayer()
         }
 
         override fun onSeekTo(position: Long) {
@@ -161,7 +197,13 @@ class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChan
                 currentSermonIndex = index
             }
 
-            handlePlay()
+            var shouldPlay = true
+
+            if (extras?.getString("shouldPlay") == "false") {
+                shouldPlay = false
+            }
+
+            preparePlayer(shouldPlay)
         }
 
         override fun onPause() {
@@ -169,6 +211,8 @@ class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChan
 
             val state = buildState(PlaybackStateCompat.STATE_PAUSED)
 
+            saveTime()
+            saveMostRecent()
             player.pause()
             notification.update(currentSermon, state, sessionToken)
             session.setPlaybackState(state)
@@ -176,6 +220,8 @@ class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChan
         }
 
         override fun onSkipToNext() {
+            saveTime()
+
             ++currentSermonIndex
 
             if (currentSermonIndex == sermons.size) {
@@ -186,6 +232,8 @@ class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChan
         }
 
         override fun onSkipToPrevious() {
+            saveTime()
+
             --currentSermonIndex
 
             if (currentSermonIndex == -1) {
@@ -195,23 +243,48 @@ class SermonService : MediaBrowserServiceCompat(), AudioManager.OnAudioFocusChan
             onPlayFromMediaId(sermons[currentSermonIndex].description.mediaId, null)
         }
 
-        private fun handlePlay() {
-            try {
-                val state = buildState(PlaybackStateCompat.STATE_PLAYING)
+        override fun onCustomAction(action: String?, extras: Bundle?) {
+            when (action) {
+                SermonConstants.Player.CustomActions.Restart -> restart()
+            }
+        }
 
+        fun restart() {
+            player.pause()
+            player.seekTo(0)
+
+            saveTime()
+            saveMostRecent()
+            onPlay()
+        }
+
+        private fun preparePlayer(shouldPlay: Boolean = true) {
+            try {
                 player.reset()
                 player.setDataSource(currentSermon?.description?.mediaId)
+                saveMostRecent()
 
-                player.setOnPreparedListener {
-                    audioManager.requestAudioFocus(this@SermonService, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
-                    notification.update(currentSermon, state, sessionToken)
-                    session.setMetadata(currentSermon)
-                    session.setPlaybackState(state)
+                viewModel.getPausedDurationAsync(currentSermon?.description?.mediaId) { duration ->
+                    player.setOnPreparedListener { readyPlayer ->
+                        val state = when (shouldPlay) {
+                            true -> buildState(PlaybackStateCompat.STATE_PLAYING, duration)
+                            false -> buildState(PlaybackStateCompat.STATE_PAUSED, duration)
+                        }
 
-                    it.start()
+                        audioManager.requestAudioFocus(this@SermonService, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+                        notification.update(currentSermon, state, sessionToken)
+                        session.setMetadata(currentSermon)
+                        session.setPlaybackState(state)
+
+                        readyPlayer.seekTo(duration)
+
+                        if (shouldPlay) {
+                            readyPlayer.start()
+                        }
+                    }
+
+                    player.prepareAsync()
                 }
-
-                player.prepareAsync()
             } catch (e: IOException) {
                 Logger.e("Could not load the sermon", e.message)
             }
