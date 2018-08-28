@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Branham Player</string>
+
+    <!-- region Notification -->
+
+    <string name="notification_next">Next</string>
+    <string name="notification_pause">Pause</string>
+    <string name="notification_play">Play</string>
+    <string name="notification_previous">Previous</string>
+
+    <!-- endregion -->
 </resources>

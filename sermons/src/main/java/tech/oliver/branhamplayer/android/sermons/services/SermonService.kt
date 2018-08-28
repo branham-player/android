@@ -18,6 +18,7 @@ import java.io.IOException
 class SermonService : MediaBrowserServiceCompat() {
 
     private lateinit var player: MediaPlayer
+    private lateinit var notification: SermonNotification
     private lateinit var sermons: List<MediaMetadataCompat>
     private lateinit var session: MediaSessionCompat
 
@@ -28,9 +29,12 @@ class SermonService : MediaBrowserServiceCompat() {
     override fun onCreate() {
         super.onCreate()
 
+        val callback = MediaSessionCallback()
+        notification = SermonNotification(this, callback)
+
         session = MediaSessionCompat(this, this::class.java.simpleName)
         session.apply {
-            setCallback(MediaSessionCallback())
+            setCallback(callback)
             setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or
                     MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
 
@@ -70,24 +74,6 @@ class SermonService : MediaBrowserServiceCompat() {
         return mediaEntries ?: emptyList()
     }
 
-    private fun handlePlay() {
-        try {
-            player.reset()
-            player.setDataSource(currentSermon?.description?.mediaId)
-
-            player.setOnPreparedListener {
-                session.setMetadata(currentSermon)
-                session.setPlaybackState(buildState(PlaybackStateCompat.STATE_PLAYING))
-
-                it.start()
-            }
-
-            player.prepareAsync()
-        } catch (e: IOException) {
-            Logger.e("Could not load the sermon", e.message)
-        }
-    }
-
     override fun onDestroy() {
         player.release()
         session.release()
@@ -122,7 +108,7 @@ class SermonService : MediaBrowserServiceCompat() {
                 .build()
     }
 
-    private inner class MediaSessionCallback : MediaSessionCompat.Callback() {
+    inner class MediaSessionCallback : MediaSessionCompat.Callback() {
         override fun onPlay() {
             if (currentSermon == null) {
                 currentSermon = sermons.firstOrNull()
@@ -135,8 +121,11 @@ class SermonService : MediaBrowserServiceCompat() {
         override fun onSeekTo(position: Long) {
             if (currentSermon == null) return
 
+            val state = buildState(PlaybackStateCompat.STATE_PAUSED)
+
             player.seekTo(position.toInt())
-            session.setPlaybackState(buildState(PlaybackStateCompat.STATE_PLAYING, position))
+            notification.update(currentSermon, state, sessionToken)
+            session.setPlaybackState(state)
         }
 
         override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
@@ -155,8 +144,11 @@ class SermonService : MediaBrowserServiceCompat() {
         override fun onPause() {
             if (!player.isPlaying) return
 
+            val state = buildState(PlaybackStateCompat.STATE_PAUSED)
+
             player.pause()
-            session.setPlaybackState(buildState(PlaybackStateCompat.STATE_PAUSED))
+            notification.update(currentSermon, state, sessionToken)
+            session.setPlaybackState(state)
         }
 
         override fun onSkipToNext() {
@@ -177,6 +169,27 @@ class SermonService : MediaBrowserServiceCompat() {
             }
 
             onPlayFromMediaId(sermons[currentSermonIndex].description.mediaId, null)
+        }
+
+        private fun handlePlay() {
+            try {
+                val state = buildState(PlaybackStateCompat.STATE_PLAYING)
+
+                player.reset()
+                player.setDataSource(currentSermon?.description?.mediaId)
+
+                player.setOnPreparedListener {
+                    notification.update(currentSermon, state, sessionToken)
+                    session.setMetadata(currentSermon)
+                    session.setPlaybackState(state)
+
+                    it.start()
+                }
+
+                player.prepareAsync()
+            } catch (e: IOException) {
+                Logger.e("Could not load the sermon", e.message)
+            }
         }
     }
 }

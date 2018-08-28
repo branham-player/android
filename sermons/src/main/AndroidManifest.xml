@@ -3,6 +3,7 @@
     package="tech.oliver.branhamplayer.android.sermons">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application android:name="tech.oliver.branhamplayer.android.sermons.App">
         <activity
