@@ -163,7 +163,7 @@ class SermonNotification(
                 0L
             }
 
-            color = ContextCompat.getColor(service.applicationContext, R.color.colorPrimary)
+            color = ContextCompat.getColor(service.applicationContext, tech.oliver.branhamplayer.android.R.color.colorPrimary)
 
             setChannelId(Notification.Channel.ID)
             setContentIntent(createContentIntent())

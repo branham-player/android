@@ -15,6 +15,11 @@ object SermonConstants {
         object CustomActions {
             const val Restart = "tech.oliver.branhamplayer.android.sermons.SermonConstants.Restart"
         }
+
+        object Volume {
+            const val FocusGained = 1.0f
+            const val FocusLost = 0.2f
+        }
     }
 
     object Notification {
@@ -30,7 +35,11 @@ object SermonConstants {
 
         object Channel {
             const val ID = "tech.oliver.branhamplayer.android.sermons.SermonConstants.Channel"
-            const val Name = "Sermon Player"
+            const val Name = "Branham Player"
         }
+    }
+
+    object Service {
+        const val Root = "tech.oliver.branhamplayer.android.sermons.Service"
     }
 }

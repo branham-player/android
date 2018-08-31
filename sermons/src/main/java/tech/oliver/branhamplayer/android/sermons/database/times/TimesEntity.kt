@@ -9,6 +9,6 @@ import tech.oliver.branhamplayer.android.sermons.SermonConstants
 @Entity(tableName = SermonConstants.Database.Tables.Times, indices = [Index(value = ["media_id"], unique = true)])
 data class TimesEntity(
         @PrimaryKey(autoGenerate = true) var id: Int = 0,
-        @ColumnInfo(name = "media_id") var mediaId: String = "",
-        @ColumnInfo(name = "time") var time: Int = 0
+        @ColumnInfo(name = "media_id") var mediaId: String,
+        @ColumnInfo(name = "time") var time: Int
 )

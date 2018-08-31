@@ -10,6 +10,7 @@
         <activity
             android:name="tech.oliver.branhamplayer.android.sermons.ui.MainActivity"
             android:label="@string/app_name">
+
             <intent-filter android:order="1">
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -28,9 +29,9 @@
                     android:pathPattern="/branham-player/android"
                     android:scheme="https" />
             </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

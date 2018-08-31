@@ -8,5 +8,5 @@ import tech.oliver.branhamplayer.android.sermons.SermonConstants
 @Entity(tableName = SermonConstants.Database.Tables.Recent)
 data class RecentEntity(
         @PrimaryKey(autoGenerate = true) var id: Int = 0,
-        @ColumnInfo(name = "media_id") var mediaId: String = ""
+        @ColumnInfo(name = "media_id") var mediaId: String
 )

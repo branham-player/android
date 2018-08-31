@@ -13,9 +13,6 @@ interface TimesDao {
     @Query("SELECT * FROM times WHERE media_id = :mediaId")
     fun fetchSermon(mediaId: String): Maybe<TimesEntity>
 
-    @Update
-    fun update(time: TimesEntity)
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun upsert(time: TimesEntity)
 }

@@ -68,7 +68,7 @@ class SermonMapper : Mapper<File, SermonModel> {
     }
 
     companion object {
-        const val DATE_PATTERN = "^\\d{2}-\\d{4}[AEM]?"
+        const val DATE_PATTERN = "^\\d{2}-\\d{4}[A-Za-z]?"
         const val VGR_PATTERN = "VGR"
     }
 }
