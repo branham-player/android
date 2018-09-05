@@ -81,6 +81,7 @@ class PlayerViewModel(
     fun saveMostRecentSermon(mediaId: String?) {
         val subscription = Completable.fromAction {
             database.recentDao().upsert(RecentEntity(
+                    id = 1,
                     mediaId = mediaId.toString()
             ))
         }.subscribeOn(bg)
