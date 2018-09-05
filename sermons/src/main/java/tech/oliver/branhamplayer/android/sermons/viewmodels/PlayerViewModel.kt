@@ -4,13 +4,10 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.orhanobut.logger.Logger
 import io.reactivex.Completable
-import io.reactivex.CompletableObserver
-import io.reactivex.MaybeObserver
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import tech.oliver.branhamplayer.android.sermons.database.SermonsDatabase
 import tech.oliver.branhamplayer.android.sermons.database.recent.RecentEntity

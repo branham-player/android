@@ -1,8 +1,6 @@
 package tech.oliver.branhamplayer.android.sermons.services.media
 
-import android.media.MediaMetadata
 import android.media.MediaMetadataRetriever
-import android.media.browse.MediaBrowser
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import com.orhanobut.logger.Logger
@@ -38,10 +36,10 @@ class Library(
             }
 
             MediaMetadataCompat.Builder()
-                    .putString(MediaMetadata.METADATA_KEY_ARTIST, it.artist)
-                    .putString(MediaMetadata.METADATA_KEY_MEDIA_ID, it.path)
-                    .putString(MediaMetadata.METADATA_KEY_TITLE, it.name)
-                    .putLong(MediaMetadata.METADATA_KEY_DURATION, durationInMs.toLong())
+                    .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, it.formattedDate)
+                    .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, it.path)
+                    .putString(MediaMetadataCompat.METADATA_KEY_TITLE, it.name)
+                    .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, durationInMs.toLong())
                     .build()
         }
 
@@ -51,7 +49,7 @@ class Library(
     // region Browsing
 
     fun buildMediaBrowserMenu() = sermonListMetadata.map {
-        MediaBrowserCompat.MediaItem(it.description, MediaBrowser.MediaItem.FLAG_PLAYABLE)
+        MediaBrowserCompat.MediaItem(it.description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
     }.toMutableList()
 
     // endregion
