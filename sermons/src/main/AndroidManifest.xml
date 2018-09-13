@@ -4,10 +4,13 @@
     package="tech.oliver.branhamplayer.android.sermons">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <application android:name="tech.oliver.branhamplayer.android.sermons.App">
+    <application
+        android:name="tech.oliver.branhamplayer.android.sermons.App"
+        android:usesCleartextTraffic="true"> <!-- TODO: We shouldn't need this -->
         <activity
             android:name="tech.oliver.branhamplayer.android.sermons.ui.MainActivity"
             android:label="@string/app_name">

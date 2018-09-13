@@ -13,6 +13,9 @@ android {
         versionCode version_code
         versionName version_name
 
+        buildConfigField "String", "LOGGLY_ENVIRONMENT", '"development"'
+        buildConfigField "String", "LOGGLY_KEY", BRANHAM_PLAYER_ANDROID_DEV_LOGGLY_KEY
+
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
 }
@@ -32,7 +35,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // Logging
+    implementation 'com.github.tony19:timber-loggly:1.0.1'
     implementation 'com.orhanobut:logger:2.2.0'
+    implementation 'com.squareup.retrofit:retrofit:1.9.0'
 
     // JUnit
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'

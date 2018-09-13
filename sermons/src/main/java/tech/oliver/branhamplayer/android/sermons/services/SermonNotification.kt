@@ -13,7 +13,8 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import com.orhanobut.logger.Logger
+import tech.oliver.branhamplayer.android.sermons.services.logging.Loggly
+import tech.oliver.branhamplayer.android.sermons.services.logging.LogglyConstants.Tags.NOTIFICATION
 import tech.oliver.branhamplayer.android.sermons.R
 import tech.oliver.branhamplayer.android.sermons.SermonConstants.Notification
 import tech.oliver.branhamplayer.android.sermons.SermonConstants.Notification.Actions
@@ -128,7 +129,7 @@ class SermonNotification(
             try {
                 service.unregisterReceiver(this)
             } catch (e: Exception) {
-                Logger.w("The notification manager receiver is not registered")
+                Loggly.e(NOTIFICATION, e, "The notification manager receiver is not registered")
             } finally {
                 service.stopSelf()
             }

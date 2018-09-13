@@ -3,9 +3,10 @@ package tech.oliver.branhamplayer.android.sermons.services.media
 import android.media.MediaMetadataRetriever
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
-import com.orhanobut.logger.Logger
 import tech.oliver.branhamplayer.android.sermons.mappers.SermonMapper
 import tech.oliver.branhamplayer.android.sermons.repositories.SermonsRepository
+import tech.oliver.branhamplayer.android.sermons.services.logging.Loggly
+import tech.oliver.branhamplayer.android.sermons.services.logging.LogglyConstants.Tags.SERMON_LIBRARY
 
 class Library(
         repository: SermonsRepository = SermonsRepository(),
@@ -27,10 +28,9 @@ class Library(
                 metadata.setDataSource(it.path)
                 durationInMs = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toInt()
 
-                Logger.d("Found startingTime of sermon: ${it.path}")
-                Logger.d("Duration: $durationInMs")
+                Loggly.d(SERMON_LIBRARY,"Found starting time of sermon: ${it.path}, duration: $durationInMs")
             } catch (e: Exception) {
-                Logger.e("Could not determine the startingTime of ${it.path}")
+                Loggly.e(SERMON_LIBRARY, e, "Could not determine the startingTime of ${it.path}")
             } finally {
                 metadata.release()
             }

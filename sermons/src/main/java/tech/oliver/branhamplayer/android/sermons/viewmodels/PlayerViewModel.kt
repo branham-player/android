@@ -2,7 +2,6 @@ package tech.oliver.branhamplayer.android.sermons.viewmodels
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.orhanobut.logger.Logger
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.Single
@@ -12,6 +11,8 @@ import io.reactivex.schedulers.Schedulers
 import tech.oliver.branhamplayer.android.sermons.database.SermonsDatabase
 import tech.oliver.branhamplayer.android.sermons.database.recent.RecentEntity
 import tech.oliver.branhamplayer.android.sermons.database.times.TimesEntity
+import tech.oliver.branhamplayer.android.sermons.services.logging.Loggly
+import tech.oliver.branhamplayer.android.sermons.services.logging.LogglyConstants.Tags.PLAYER_VIEW_MODEL
 
 class PlayerViewModel(
         context: Context,
@@ -27,18 +28,13 @@ class PlayerViewModel(
                 .subscribeOn(bg)
                 .observeOn(ui)
                 .subscribe({
-                    Logger.d("Found a most recent sermon")
-                    Logger.d("Sermon: ${it.mediaId}")
-
+                    Loggly.d(PLAYER_VIEW_MODEL, "Found a most recent sermon: ${it.mediaId}")
                     subscriber.onSuccess(it.mediaId)
                 }, {
-                    Logger.e("Encountered an error when locating a most recent sermon")
-                    Logger.e("Error: ${it.message}")
-
+                    Loggly.e(PLAYER_VIEW_MODEL, it, "Encountered an error when locating a most recent sermon: ${it.message}")
                     subscriber.onError(it)
                 }, {
-                    Logger.i("Could not find a most recent sermon")
-
+                    Loggly.i(PLAYER_VIEW_MODEL, "Could not find a most recent sermon")
                     subscriber.onError(Throwable("Could not find a most recent sermon"))
                 })
 
@@ -51,20 +47,13 @@ class PlayerViewModel(
                 .subscribeOn(bg)
                 .observeOn(ui)
                 .subscribe({
-                    Logger.d("Found a paused startingTime for: $mediaId")
-                    Logger.d("Time: ${it.time}")
-
+                    Loggly.d(PLAYER_VIEW_MODEL, "Found a paused startingTime for: $mediaId, time: ${it.time}")
                     subscriber.onSuccess(it.time)
                 }, {
-                    Logger.e("Encountered an error when locating a paused startingTime for: $mediaId")
-                    Logger.e("Error: ${it.message}")
-                    Logger.e("Defaulting to the beginning")
-
+                    Loggly.e(PLAYER_VIEW_MODEL, it, "Encountered an error when locating a paused startingTime for: $mediaId")
                     subscriber.onError(it)
                 }, {
-                    Logger.i("Could not find a paused startingTime for: $mediaId")
-                    Logger.i("Defaulting to the beginning")
-
+                    Loggly.i(PLAYER_VIEW_MODEL, "Could not find a paused startingTime for: $mediaId")
                     subscriber.onError(Throwable("No paused startingTime found"))
                 })
 
@@ -84,11 +73,9 @@ class PlayerViewModel(
         }.subscribeOn(bg)
                 .observeOn(ui)
                 .subscribe({
-                    Logger.d("Saved a most recent sermon")
-                    Logger.d("Sermon: $mediaId")
+                    Loggly.d(PLAYER_VIEW_MODEL, "Saved a most recent sermon: $mediaId")
                 }, {
-                    Logger.e("Encountered an error when saving a most recent sermon for: $mediaId")
-                    Logger.e("Error: ${it.message}")
+                    Loggly.e(PLAYER_VIEW_MODEL, it, "Encountered an error when saving a most recent sermon for: $mediaId")
                 })
 
         disposable.add(subscription)
@@ -103,11 +90,9 @@ class PlayerViewModel(
         }.subscribeOn(bg)
                 .observeOn(ui)
                 .subscribe({
-                    Logger.d("Saved a paused startingTime for: $mediaId")
-                    Logger.d("Time: $time")
+                    Loggly.d(PLAYER_VIEW_MODEL, "Saved a paused startingTime for: $mediaId, time: $time")
                 }, {
-                    Logger.e("Encountered an error when saving a paused startingTime for: $mediaId")
-                    Logger.e("Error: ${it.message}")
+                    Loggly.e(PLAYER_VIEW_MODEL, it, "Encountered an error when saving a paused startingTime for: $mediaId")
                 })
 
         disposable.add(subscription)

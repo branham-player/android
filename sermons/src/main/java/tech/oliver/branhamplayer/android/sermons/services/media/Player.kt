@@ -6,7 +6,6 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.PowerManager
 import android.support.v4.media.session.PlaybackStateCompat
-import com.orhanobut.logger.Logger
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -14,6 +13,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import tech.oliver.branhamplayer.android.sermons.R
 import tech.oliver.branhamplayer.android.sermons.SermonConstants
+import tech.oliver.branhamplayer.android.sermons.services.logging.Loggly
+import tech.oliver.branhamplayer.android.sermons.services.logging.LogglyConstants.Tags.PLAYER
 
 class Player(
         private val context: Context,
@@ -103,9 +104,7 @@ class Player(
 
             mediaPlayer.prepareAsync()
         } catch (e: Exception) {
-            Logger.e("Could not load the sermon: $pathToSermon")
-            Logger.e("Error: ${e.message}")
-
+            Loggly.e(PLAYER, e, "Could not load the sermon: $pathToSermon")
             subscriber.onError(e)
         }
     }

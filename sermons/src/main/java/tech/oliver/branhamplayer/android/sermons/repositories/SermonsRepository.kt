@@ -3,8 +3,9 @@ package tech.oliver.branhamplayer.android.sermons.repositories
 import android.os.Environment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.orhanobut.logger.Logger
 import tech.oliver.branhamplayer.android.base.Repository
+import tech.oliver.branhamplayer.android.sermons.services.logging.Loggly
+import tech.oliver.branhamplayer.android.sermons.services.logging.LogglyConstants.Tags.REPOSITORY
 import java.io.File
 
 class SermonsRepository : Repository {
@@ -16,16 +17,16 @@ class SermonsRepository : Repository {
         val theTableDirectory = File(sermonsDirectory, "VGR")
         val sermonList = theTableDirectory.listFiles()
 
-        Logger.d("Determined sermon directory is: ${theTableDirectory.absolutePath}")
+        Loggly.d(REPOSITORY,"Determined sermon directory is: ${theTableDirectory.absolutePath}")
 
         if (sermonList == null || sermonList.isEmpty()) {
-            Logger.i("There are no available sermons")
+            Loggly.i(REPOSITORY,"There are no available sermons")
 
             sermons.value = emptyList()
             return sermons
         }
 
-        Logger.d("Found ${sermonList.size} sermons")
+        Loggly.d(REPOSITORY,"Found ${sermonList.size} sermons")
 
         sermons.value = sermonList.toList()
         return sermons
