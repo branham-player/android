@@ -142,7 +142,7 @@ class SermonService : MediaBrowserServiceCompat(), AudioFocus.Callback, Player.C
                 }
                 .subscribeOn(bg)
                 .observeOn(ui)
-                .subscribe()
+                .subscribe({}, {})
 
         disposable.add(subscription)
     }
