@@ -2,7 +2,7 @@ package tech.oliver.branhamplayer.android.sermons.mappers
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import tech.oliver.branhamplayer.android.base.Mapper
+import tech.oliver.branhamplayer.android.mappers.Mapper
 import tech.oliver.branhamplayer.android.sermons.models.SermonModel
 import java.io.File
 import java.text.SimpleDateFormat

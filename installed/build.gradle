@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion compile_sdk_version
@@ -14,6 +15,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix '.dev'
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -25,3 +30,6 @@ dependencies {
     implementation project(':base')
     implementation project(':sermons')
 }
+
+// Keep at the bottom
+apply plugin: 'com.google.gms.google-services'

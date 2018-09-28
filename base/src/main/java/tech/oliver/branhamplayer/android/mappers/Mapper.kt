@@ -1,4 +1,4 @@
-package tech.oliver.branhamplayer.android.base
+package tech.oliver.branhamplayer.android.mappers
 
 import androidx.lifecycle.LiveData
 

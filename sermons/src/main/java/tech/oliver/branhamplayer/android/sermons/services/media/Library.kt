@@ -5,8 +5,8 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import tech.oliver.branhamplayer.android.sermons.mappers.SermonMapper
 import tech.oliver.branhamplayer.android.sermons.repositories.SermonsRepository
-import tech.oliver.branhamplayer.android.sermons.services.logging.Loggly
-import tech.oliver.branhamplayer.android.sermons.services.logging.LogglyConstants.Tags.SERMON_LIBRARY
+import tech.oliver.branhamplayer.android.services.logging.Loggly
+import tech.oliver.branhamplayer.android.services.logging.LogglyConstants.Tags.SERMON_LIBRARY
 
 class Library(
         repository: SermonsRepository = SermonsRepository(),

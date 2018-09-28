@@ -13,12 +13,12 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
-import tech.oliver.branhamplayer.android.sermons.services.logging.Loggly
-import tech.oliver.branhamplayer.android.sermons.services.logging.LogglyConstants.Tags.NOTIFICATION
 import tech.oliver.branhamplayer.android.sermons.R
 import tech.oliver.branhamplayer.android.sermons.SermonConstants.Notification
 import tech.oliver.branhamplayer.android.sermons.SermonConstants.Notification.Actions
 import tech.oliver.branhamplayer.android.sermons.ui.MainActivity
+import tech.oliver.branhamplayer.android.services.logging.Loggly
+import tech.oliver.branhamplayer.android.services.logging.LogglyConstants.Tags.NOTIFICATION
 
 class SermonNotification(
         private val service: SermonService,

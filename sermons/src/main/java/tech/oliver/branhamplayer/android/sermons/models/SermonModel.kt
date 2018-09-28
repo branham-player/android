@@ -1,6 +1,6 @@
 package tech.oliver.branhamplayer.android.sermons.models
 
-import tech.oliver.branhamplayer.android.base.Model
+import tech.oliver.branhamplayer.android.models.Model
 import java.util.Date
 
 data class SermonModel(

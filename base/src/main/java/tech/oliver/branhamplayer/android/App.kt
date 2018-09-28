@@ -1,4 +1,4 @@
-package tech.oliver.branhamplayer.android.sermons
+package tech.oliver.branhamplayer.android
 
 import android.app.Application
 import com.github.tony19.timber.loggly.LogglyTree

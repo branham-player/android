@@ -1,4 +1,4 @@
-package tech.oliver.branhamplayer.android.sermons.services.logging
+package tech.oliver.branhamplayer.android.services.logging
 
 import com.orhanobut.logger.Logger
 import timber.log.Timber

@@ -11,8 +11,8 @@ import io.reactivex.schedulers.Schedulers
 import tech.oliver.branhamplayer.android.sermons.database.SermonsDatabase
 import tech.oliver.branhamplayer.android.sermons.database.recent.RecentEntity
 import tech.oliver.branhamplayer.android.sermons.database.times.TimesEntity
-import tech.oliver.branhamplayer.android.sermons.services.logging.Loggly
-import tech.oliver.branhamplayer.android.sermons.services.logging.LogglyConstants.Tags.PLAYER_VIEW_MODEL
+import tech.oliver.branhamplayer.android.services.logging.Loggly
+import tech.oliver.branhamplayer.android.services.logging.LogglyConstants.Tags.PLAYER_VIEW_MODEL
 
 class PlayerViewModel(
         context: Context,

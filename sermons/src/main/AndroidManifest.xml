@@ -4,15 +4,12 @@
     package="tech.oliver.branhamplayer.android.sermons">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <application
-        android:name="tech.oliver.branhamplayer.android.sermons.App"
-        android:usesCleartextTraffic="true"> <!-- TODO: We shouldn't need this -->
+    <application android:usesCleartextTraffic="true"> <!-- TODO: We shouldn't need this flag -->
         <activity
-            android:name="tech.oliver.branhamplayer.android.sermons.ui.MainActivity"
+            android:name=".ui.MainActivity"
             android:label="@string/app_name">
 
             <intent-filter>
@@ -42,7 +39,7 @@
             android:resource="@xml/automotive_app_desc" />
 
         <service
-            android:name="tech.oliver.branhamplayer.android.sermons.services.SermonService"
+            android:name=".services.SermonService"
             android:enabled="true"
             android:exported="true"
             tools:ignore="ExportedService">

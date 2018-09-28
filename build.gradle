@@ -3,7 +3,7 @@ buildscript {
         application_id = 'tech.oliver.branhamplayer.android'
 
         compile_sdk_version = 28
-        kotlin_version = '1.2.61'
+        kotlin_version = '1.2.71'
         min_sdk_version = 21
         target_sdk_version = 28
 
@@ -12,13 +12,21 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0-alpha10'
+        classpath 'com.android.tools.build:gradle:3.3.0-alpha12'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // Firebase
+        classpath 'com.google.gms:google-services:4.0.1' // TODO: Update after 4.1.0, when they support Instant Apps properly
+        classpath 'io.fabric.tools:gradle:1.25.4'
     }
 
     repositories {
         google()
         jcenter()
+
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
 }
 
@@ -26,6 +34,10 @@ allprojects {
     repositories {
         google()
         jcenter()
+
+        maven {
+            url 'https://maven.google.com/'
+        }
     }
 }
 

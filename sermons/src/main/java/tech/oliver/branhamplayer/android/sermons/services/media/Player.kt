@@ -13,8 +13,8 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import tech.oliver.branhamplayer.android.sermons.R
 import tech.oliver.branhamplayer.android.sermons.SermonConstants
-import tech.oliver.branhamplayer.android.sermons.services.logging.Loggly
-import tech.oliver.branhamplayer.android.sermons.services.logging.LogglyConstants.Tags.PLAYER
+import tech.oliver.branhamplayer.android.services.logging.Loggly
+import tech.oliver.branhamplayer.android.services.logging.LogglyConstants.Tags.PLAYER
 
 class Player(
         private val context: Context,
