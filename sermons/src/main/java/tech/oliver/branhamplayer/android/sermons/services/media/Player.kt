@@ -6,27 +6,21 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.PowerManager
 import android.support.v4.media.session.PlaybackStateCompat
-import io.reactivex.Scheduler
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.Completable
 import tech.oliver.branhamplayer.android.sermons.R
 import tech.oliver.branhamplayer.android.sermons.SermonConstants
+import tech.oliver.branhamplayer.android.sermons.models.PlayerUpdateModel
 import tech.oliver.branhamplayer.android.services.logging.Loggly
 import tech.oliver.branhamplayer.android.services.logging.LogglyConstants.Tags.PLAYER
 
 class Player(
         private val context: Context,
         private val callback: Callback,
-        private val mediaPlayer: MediaPlayer = MediaPlayer(),
-        private val disposable: CompositeDisposable = CompositeDisposable(),
-        private val bg: Scheduler = Schedulers.io(),
-        private val ui: Scheduler = AndroidSchedulers.mainThread()
+        private val mediaPlayer: MediaPlayer = MediaPlayer()
 ) : MediaPlayer.OnCompletionListener {
 
     private var currentSermon: String? = null
-    private var state = PlaybackStateCompat.STATE_NONE
+    private var internalState = PlaybackStateCompat.STATE_NONE
 
     init {
         val attributes = AudioAttributes.Builder().apply {
@@ -39,70 +33,139 @@ class Player(
         mediaPlayer.setAudioAttributes(attributes.build())
         mediaPlayer.setOnCompletionListener(this)
         mediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK)
+
+        Loggly.d(PLAYER, "Successfully loaded the media player")
     }
 
     // region Player Controls
 
-    fun pause() {
-        if (currentSermon == null) return
-        if (state != PlaybackStateCompat.STATE_PLAYING) return
+    fun pause(shouldNotifyStatusChange: Boolean = true) {
+        if (currentSermon == null || internalState != PlaybackStateCompat.STATE_PLAYING) {
+            Loggly.w(PLAYER, "Did not pause the sermon $currentSermon, internal state: $internalState, media player playing: ${mediaPlayer.isPlaying}")
+            return
+        }
 
-        state = PlaybackStateCompat.STATE_PAUSED
+        internalState = PlaybackStateCompat.STATE_PAUSED
 
-        callback.onPlayerStateChanged(buildState(state, mediaPlayer.currentPosition), currentSermon, mediaPlayer.currentPosition)
+        if (shouldNotifyStatusChange) {
+            val update = PlayerUpdateModel(
+                    state = internalState.toPlaybackState(),
+                    oldSermon = PlayerUpdateModel.SermonState(
+                            id = currentSermon,
+                            duration = mediaPlayer.currentPosition
+                    ),
+                    newSermon = PlayerUpdateModel.SermonState(
+                            id = currentSermon,
+                            duration = mediaPlayer.currentPosition
+                    )
+            )
+
+            callback.onPlayerStateChanged(update)
+        }
 
         if (mediaPlayer.isPlaying) mediaPlayer.pause()
+
+        Loggly.d(PLAYER, "Paused $currentSermon at ${mediaPlayer.currentPosition}")
     }
 
-    fun play(pathToSermon: String?, startingTime: Int) {
-        if (pathToSermon == null) return
-        if (state == PlaybackStateCompat.STATE_PLAYING) return
+    fun play(pathToSermon: String?, startingTime: Int, shouldNotifyStatusChange: Boolean = true): Completable = Completable.create { subscriber ->
+        if (pathToSermon == null || internalState == PlaybackStateCompat.STATE_PLAYING) {
+            Loggly.w(PLAYER, "Did not play the sermon $currentSermon, internal state: $internalState, media player playing: ${mediaPlayer.isPlaying}")
+            subscriber.onComplete()
+            return@create
+        }
 
-        val subscription = setCurrentWithoutPlaying(pathToSermon, startingTime)
-                .subscribeOn(bg)
-                .observeOn(ui)
-                .subscribe { preparedPlayer ->
-                    state = PlaybackStateCompat.STATE_PLAYING
+        val oldSermon = currentSermon
+        val oldSermonDuration = mediaPlayer.currentPosition
 
-                    callback.onPlayerStateChanged(buildState(state, startingTime), currentSermon, startingTime)
-
-                    if (!mediaPlayer.isPlaying) preparedPlayer.start()
-                }
-
-        disposable.add(subscription)
-    }
-
-    fun release() {
-        pause()
-        disposable.dispose()
-        mediaPlayer.release()
-    }
-
-    fun restartCurrentFromBeginning() {
-        pause()
-        play(currentSermon, 0)
-    }
-
-    fun resumeCurrent() {
-        play(currentSermon, mediaPlayer.currentPosition)
-    }
-
-    fun setCurrentWithoutPlaying(pathToSermon: String?, startingTime: Int = 0): Single<MediaPlayer> = Single.create { subscriber ->
         currentSermon = pathToSermon
 
         try {
             mediaPlayer.reset()
             mediaPlayer.setDataSource(pathToSermon)
+            mediaPlayer.prepare()
+            mediaPlayer.seekTo(startingTime)
 
-            mediaPlayer.setOnPreparedListener { preparedPlayer ->
-                state = PlaybackStateCompat.STATE_PAUSED
+            internalState = PlaybackStateCompat.STATE_PLAYING
 
-                callback.onPlayerStateChanged(buildState(state, startingTime), currentSermon, startingTime)
-                preparedPlayer.seekTo(startingTime)
-                subscriber.onSuccess(preparedPlayer)
+            if (shouldNotifyStatusChange) {
+                val update = PlayerUpdateModel(
+                        state = internalState.toPlaybackState(),
+                        oldSermon = PlayerUpdateModel.SermonState(
+                                id = oldSermon,
+                                duration = oldSermonDuration
+                        ),
+                        newSermon = PlayerUpdateModel.SermonState(
+                                id = currentSermon,
+                                duration = startingTime
+                        )
+                )
+
+                callback.onPlayerStateChanged(update)
             }
 
-            mediaPlayer.prepareAsync()
+            if (!mediaPlayer.isPlaying) mediaPlayer.start()
+
+            Loggly.d(PLAYER, "Playing $currentSermon at $startingTime")
+            subscriber.onComplete()
+        } catch (e: Exception) {
+            Loggly.e(PLAYER, e, "Could not load and play the sermon: $pathToSermon")
+            subscriber.onError(e)
+        }
+    }
+
+    fun release() {
+        pause()
+        mediaPlayer.release()
+    }
+
+    fun restartCurrentFromBeginning(): Completable = Completable
+            .fromAction {
+                pause(false)
+            }
+            .andThen {
+                play(currentSermon, 0)
+            }.andThen {
+                Loggly.d(PLAYER, "Restarted $currentSermon")
+            }
+
+    fun resumeCurrent(): Completable = play(currentSermon, mediaPlayer.currentPosition)
+            .andThen {
+                Loggly.d(PLAYER, "Resuming $currentSermon at ${mediaPlayer.currentPosition}")
+            }
+
+    fun setCurrentWithoutPlaying(pathToSermon: String?, startingTime: Int = 0, shouldNotifyStatusChange: Boolean = true): Completable = Completable.create { subscriber ->
+        val oldSermon = currentSermon
+        val oldSermonDuration = mediaPlayer.currentPosition
+
+        currentSermon = pathToSermon
+
+        try {
+            mediaPlayer.reset()
+            mediaPlayer.setDataSource(pathToSermon)
+            mediaPlayer.prepare()
+            mediaPlayer.seekTo(startingTime)
+
+            internalState = PlaybackStateCompat.STATE_PAUSED
+
+            if (shouldNotifyStatusChange) {
+                val update = PlayerUpdateModel(
+                        state = internalState.toPlaybackState(),
+                        oldSermon = PlayerUpdateModel.SermonState(
+                                id = oldSermon,
+                                duration = oldSermonDuration
+                        ),
+                        newSermon = PlayerUpdateModel.SermonState(
+                                id = currentSermon,
+                                duration = startingTime
+                        )
+                )
+
+                callback.onPlayerStateChanged(update)
+            }
+
+            Loggly.i(PLAYER, "Loaded $currentSermon at $startingTime")
+            subscriber.onComplete()
         } catch (e: Exception) {
             Loggly.e(PLAYER, e, "Could not load the sermon: $pathToSermon")
             subscriber.onError(e)
@@ -111,21 +174,32 @@ class Player(
 
     fun setVolume(volume: Float) {
         mediaPlayer.setVolume(volume, volume)
+        Loggly.v(PLAYER, "Changed volume to $volume")
     }
+
+    // endregion
+
+    // region Player State
+
+    val state: Int
+        get() = internalState
 
     // endregion
 
     // region MediaPlayer.OnCompletionListener
 
     override fun onCompletion(player: MediaPlayer?) {
+        if (currentSermon == null) return
+
         callback.onSermonCompleted(currentSermon)
+        Loggly.v(PLAYER, "Completed $currentSermon")
     }
 
     // endregion
 
     // region Private Methods
 
-    private fun buildState(state: Int, currentTime: Int) = PlaybackStateCompat
+    private fun Int.toPlaybackState() = PlaybackStateCompat
             .Builder()
             .setActions(PlaybackStateCompat.ACTION_PAUSE or
                     PlaybackStateCompat.ACTION_PLAY or
@@ -134,8 +208,8 @@ class Player(
                     PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
             )
             .setState(
-                    state,
-                    currentTime.toLong(),
+                    this,
+                    mediaPlayer.currentPosition.toLong(),
                     1f
             )
             .addCustomAction(
@@ -152,8 +226,8 @@ class Player(
     // region Callback Definition
 
     interface Callback {
-        fun onPlayerStateChanged(state: PlaybackStateCompat, mediaId: String?, duration: Int)
-        fun onSermonCompleted(mediaId: String?)
+        fun onPlayerStateChanged(update: PlayerUpdateModel)
+        fun onSermonCompleted(sermonId: String?)
     }
 
     // endregion

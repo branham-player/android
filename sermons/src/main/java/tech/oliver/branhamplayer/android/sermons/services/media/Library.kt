@@ -28,7 +28,7 @@ class Library(
                 metadata.setDataSource(it.path)
                 durationInMs = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toInt()
 
-                Loggly.d(SERMON_LIBRARY,"Found starting time of sermon: ${it.path}, duration: $durationInMs")
+                Loggly.d(SERMON_LIBRARY, "Found starting time of sermon: ${it.path}, duration: $durationInMs")
             } catch (e: Exception) {
                 Loggly.e(SERMON_LIBRARY, e, "Could not determine the startingTime of ${it.path}")
             } finally {
@@ -48,7 +48,7 @@ class Library(
 
     // region Browsing
 
-    fun buildMediaBrowserMenu() = sermonListMetadata.map {
+    fun buildMediaBrowserMenu() = sermonListMetadata.asSequence().map {
         MediaBrowserCompat.MediaItem(it.description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
     }.toMutableList()
 
@@ -56,50 +56,53 @@ class Library(
 
     // region Player Navigation
 
-    fun getCurrentOrFirst(): MediaMetadataCompat? {
-        currentSermon?.let {
-            return it
-        }
+    val currentOrFirst: MediaMetadataCompat?
+        get() {
+            currentSermon?.let {
+                return it
+            }
 
-        currentSermon = sermonListMetadata.firstOrNull()
-        currentSermonIndex = 0
-        return currentSermon
-    }
-
-    fun next(): MediaMetadataCompat? {
-        if (sermonListMetadata.isEmpty()) return null
-
-        ++currentSermonIndex
-
-        if (currentSermonIndex == sermonListMetadata.size) {
+            currentSermon = sermonListMetadata.firstOrNull()
             currentSermonIndex = 0
+            return currentSermon
         }
 
-        currentSermon = sermonListMetadata[currentSermonIndex]
+    val next: MediaMetadataCompat?
+        get() {
+            if (sermonListMetadata.isEmpty()) return null
 
-        return currentSermon
-    }
+            ++currentSermonIndex
 
-    fun previous(): MediaMetadataCompat? {
-        if (sermonListMetadata.isEmpty()) return null
+            if (currentSermonIndex == sermonListMetadata.size) {
+                currentSermonIndex = 0
+            }
 
-        --currentSermonIndex
+            currentSermon = sermonListMetadata[currentSermonIndex]
 
-        if (currentSermonIndex == -1) {
-            currentSermonIndex = sermonListMetadata.size - 1
+            return currentSermon
         }
 
-        currentSermon = sermonListMetadata[currentSermonIndex]
+    val previous: MediaMetadataCompat?
+        get() {
+            if (sermonListMetadata.isEmpty()) return null
 
-        return currentSermon
-    }
+            --currentSermonIndex
 
-    fun setCurrentByMediaId(mediaId: String) {
+            if (currentSermonIndex == -1) {
+                currentSermonIndex = sermonListMetadata.size - 1
+            }
+
+            currentSermon = sermonListMetadata[currentSermonIndex]
+
+            return currentSermon
+        }
+
+    fun setCurrentByMediaId(mediaId: String?) {
         val index = sermonListMetadata.indexOfFirst {
             it.description?.mediaId == mediaId
         }
 
-        if (index != 1) {
+        if (index != -1) {
             currentSermonIndex = index
             currentSermon = sermonListMetadata[currentSermonIndex]
         }

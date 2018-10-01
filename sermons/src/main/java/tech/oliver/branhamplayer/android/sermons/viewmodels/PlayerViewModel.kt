@@ -51,10 +51,10 @@ class PlayerViewModel(
                     subscriber.onSuccess(it.time)
                 }, {
                     Loggly.e(PLAYER_VIEW_MODEL, it, "Encountered an error when locating a paused startingTime for: $mediaId")
-                    subscriber.onError(it)
+                    subscriber.onSuccess(0)
                 }, {
                     Loggly.i(PLAYER_VIEW_MODEL, "Could not find a paused startingTime for: $mediaId")
-                    subscriber.onError(Throwable("No paused startingTime found"))
+                    subscriber.onSuccess(0)
                 })
 
         disposable.add(subscription)

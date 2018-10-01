@@ -11,6 +11,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import tech.oliver.branhamplayer.android.sermons.SermonConstants
+import tech.oliver.branhamplayer.android.sermons.models.PlayerUpdateModel
 import tech.oliver.branhamplayer.android.sermons.services.media.AudioFocus
 import tech.oliver.branhamplayer.android.sermons.services.media.Library
 import tech.oliver.branhamplayer.android.sermons.services.media.Player
@@ -61,19 +62,26 @@ class SermonService : MediaBrowserServiceCompat(), AudioFocus.Callback, Player.C
 
     // region AudioFocus.Callback
 
-    override fun onAudioFocusChanged(change: AudioFocus.ChangeType) = when (change) {
-        AudioFocus.ChangeType.DUCK -> {
-            player.setVolume(SermonConstants.Player.Volume.FocusLost)
-        }
+    override fun onAudioFocusChanged(change: AudioFocus.ChangeType) {
+        when (change) {
+            AudioFocus.ChangeType.DUCK -> {
+                player.setVolume(SermonConstants.Player.Volume.FocusLost)
+            }
 
-        AudioFocus.ChangeType.PAUSE -> {
-            player.pause()
-            player.setVolume(SermonConstants.Player.Volume.FocusGained)
-        }
+            AudioFocus.ChangeType.PAUSE -> {
+                player.pause()
+                player.setVolume(SermonConstants.Player.Volume.FocusGained)
+            }
 
-        AudioFocus.ChangeType.PLAY -> {
-            player.resumeCurrent()
-            player.setVolume(SermonConstants.Player.Volume.FocusGained)
+            AudioFocus.ChangeType.PLAY -> {
+                player.resumeCurrent()
+                        .andThen {
+                            player.setVolume(SermonConstants.Player.Volume.FocusGained)
+                        }
+                        .subscribeOn(bg)
+                        .observeOn(ui)
+                        .subscribe({}, {})
+            }
         }
     }
 
@@ -81,33 +89,38 @@ class SermonService : MediaBrowserServiceCompat(), AudioFocus.Callback, Player.C
 
     // region Player.Callback
 
-    override fun onPlayerStateChanged(state: PlaybackStateCompat, mediaId: String?, duration: Int) = when (state.state) {
-        PlaybackStateCompat.STATE_PAUSED -> {
-            val sermon = library.getCurrentOrFirst()
 
-            focus.release()
-            notification.update(sermon, state, sessionToken)
-            session.setMetadata(sermon)
-            session.setPlaybackState(state)
-            viewModel.savePausedDuration(mediaId, duration)
+    override fun onPlayerStateChanged(update: PlayerUpdateModel) {
+
+        library.setCurrentByMediaId(update.newSermon.id)
+        val sermon = library.currentOrFirst
+        val state = update.state
+
+        notification.update(sermon, state, sessionToken)
+        session.setMetadata(sermon)
+        session.setPlaybackState(state)
+        viewModel.saveMostRecentSermon(update.newSermon.id)
+
+        if (update.oldSermon.id != null) {
+            viewModel.savePausedDuration(update.oldSermon.id, update.oldSermon.duration)
         }
 
-        PlaybackStateCompat.STATE_PLAYING -> {
-            val sermon = library.getCurrentOrFirst()
+        when (state.state) {
+            PlaybackStateCompat.STATE_PAUSED -> {
+                focus.release()
+            }
 
-            focus.obtain()
-            notification.update(sermon, state, sessionToken)
-            session.setMetadata(sermon)
-            session.setPlaybackState(state)
-            viewModel.saveMostRecentSermon(mediaId)
+            PlaybackStateCompat.STATE_PLAYING -> {
+                focus.obtain()
+            }
+
+            else -> Unit
         }
-
-        else -> Unit
     }
 
-    override fun onSermonCompleted(mediaId: String?) {
-        viewModel.savePausedDuration(mediaId, 0)
-        player.setCurrentWithoutPlaying(mediaId, 0)
+    override fun onSermonCompleted(sermonId: String?) {
+        viewModel.savePausedDuration(sermonId, 0)
+        player.setCurrentWithoutPlaying(sermonId, 0)
     }
 
     // endregion
@@ -132,13 +145,13 @@ class SermonService : MediaBrowserServiceCompat(), AudioFocus.Callback, Player.C
     }
 
     private fun restoreFromLastSession() {
-        var mediaId = ""
+        var sermonId = ""
         val subscription = viewModel.getMostRecentSermonAsync()
                 .flatMap {
-                    mediaId = it
-                    viewModel.getPausedDurationAsync(mediaId)
-                }.flatMap { startingTime ->
-                    player.setCurrentWithoutPlaying(mediaId, startingTime)
+                    sermonId = it
+                    viewModel.getPausedDurationAsync(sermonId)
+                }.flatMapCompletable { startingTime ->
+                    player.setCurrentWithoutPlaying(sermonId, startingTime)
                 }
                 .subscribeOn(bg)
                 .observeOn(ui)
@@ -151,27 +164,42 @@ class SermonService : MediaBrowserServiceCompat(), AudioFocus.Callback, Player.C
 
     inner class MediaSessionCallback : MediaSessionCompat.Callback() {
 
-        override fun onPlay() = onPlayFromMediaId(library.getCurrentOrFirst()?.id, null)
+        override fun onPlay() = loadSermon(library.currentOrFirst?.id, true)
+        override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) = loadSermon(mediaId, true)
         override fun onPause() = player.pause()
-        override fun onSkipToNext() = onPlayFromMediaId(library.next()?.id, null)
-        override fun onSkipToPrevious() = onPlayFromMediaId(library.previous()?.id, null)
+        override fun onSkipToNext() = loadSermon(library.next?.id)
+        override fun onSkipToPrevious() = loadSermon(library.previous?.id)
 
-        override fun onCustomAction(action: String?, extras: Bundle?) = when (action) {
-            SermonConstants.Player.CustomActions.Restart -> player.restartCurrentFromBeginning()
-            else -> Unit
+        override fun onCustomAction(action: String?, extras: Bundle?) {
+            when (action) {
+                SermonConstants.Player.CustomActions.Restart -> {
+                    val subscription = player.restartCurrentFromBeginning()
+                            .subscribeOn(bg)
+                            .observeOn(ui)
+                            .subscribe({}, {})
+
+                    disposable.add(subscription)
+                }
+
+                else -> Unit
+            }
         }
 
-        override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) {
-            player.pause()
+        private fun loadSermon(sermonId: String?, forcePlay: Boolean = false) {
+            val shouldPlayWhenReady = forcePlay || player.state == PlaybackStateCompat.STATE_PLAYING
 
-            val subscription = viewModel.getPausedDurationAsync(mediaId)
+            val subscription = viewModel.getPausedDurationAsync(sermonId)
+                    .flatMapCompletable { startingTime ->
+                        if (shouldPlayWhenReady) {
+                            player.pause(false)
+                            player.play(sermonId, startingTime)
+                        } else {
+                            player.setCurrentWithoutPlaying(sermonId, startingTime)
+                        }
+                    }
                     .subscribeOn(bg)
                     .observeOn(ui)
-                    .subscribe({ startingTime ->
-                        player.play(mediaId, startingTime)
-                    }, {
-                        player.play(mediaId, 0)
-                    })
+                    .subscribe({}, {})
 
             disposable.add(subscription)
         }
