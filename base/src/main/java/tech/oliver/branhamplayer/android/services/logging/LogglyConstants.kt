@@ -8,6 +8,7 @@ object LogglyConstants {
 
     enum class Tags(val tagName: String) {
         NOTIFICATION("notification"),
+        PERMISSIONS("permissions"),
         PLAYER("player"),
         PLAYER_VIEW_MODEL("player-view-model"),
         REPOSITORY("repository"),

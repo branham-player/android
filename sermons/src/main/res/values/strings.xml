@@ -15,4 +15,10 @@
     <string name="player_restart">Restart</string>
 
     <!-- endregion -->
+
+    <!-- region Sermon List -->
+
+    <string name="permission_denied_message">This permission is necessary for the Branham Player to work properly</string>
+
+    <!-- endregion -->
 </resources>
