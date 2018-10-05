@@ -4,6 +4,7 @@ import android.app.Application
 import com.github.tony19.timber.loggly.LogglyTree
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import tech.oliver.branhamplayer.android.services.firebase.RemoteConfigService
 import timber.log.Timber
 
 @Suppress("unused")
@@ -12,6 +13,7 @@ class App : Application() {
         super.onCreate()
 
         Logger.addLogAdapter(AndroidLogAdapter())
+        RemoteConfigService.initializeInstance()
         Timber.plant(LogglyTree(BuildConfig.LOGGLY_KEY))
     }
 }

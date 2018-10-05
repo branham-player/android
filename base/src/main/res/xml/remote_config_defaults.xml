@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>log_level</key>
+        <value>warn</value>
+    </entry>
+</defaultsMap>
