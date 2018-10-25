@@ -14,7 +14,7 @@ class SermonMapper : Mapper<File, SermonModel> {
     override fun map(input: List<File>?): LiveData<List<SermonModel>>? {
         val update = MutableLiveData<List<SermonModel>>()
 
-        update.value = input?.map {
+        update.value = input?.asSequence()?.map {
             SermonModel(
                     artist = "William Branham",
                     date = buildDate(it.name),
@@ -26,7 +26,7 @@ class SermonMapper : Mapper<File, SermonModel> {
             it.date
         }.thenBy {
             it.name
-        })
+        })?.toList()
 
         return update
     }

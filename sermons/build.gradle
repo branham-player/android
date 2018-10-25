@@ -29,14 +29,14 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
     // Dexter
-    implementation 'com.karumi:dexter:5.0.0'
+    //implementation 'com.karumi:dexter:5.0.0' // TODO: Add back in, related https://github.com/googlesamples/easypermissions/issues/221
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // JUnit
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta02'
+    androidTestImplementation 'androidx.test:runner:1.1.0-beta02'
     testImplementation 'junit:junit:4.12'
 
     // Room
