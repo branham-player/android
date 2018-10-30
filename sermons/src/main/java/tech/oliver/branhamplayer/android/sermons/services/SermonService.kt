@@ -55,7 +55,7 @@ class SermonService : MediaBrowserServiceCompat(), AudioFocus.Callback, Player.C
             BrowserRoot(SermonConstants.Service.Root, null)
 
     override fun onLoadChildren(parentId: String, result: Result<MutableList<MediaItem>>) {
-        result.sendResult(library.buildMediaBrowserMenu())
+        result.sendResult(library.buildMediaBrowserMenu(parentId))
     }
 
     // endregion
@@ -93,7 +93,7 @@ class SermonService : MediaBrowserServiceCompat(), AudioFocus.Callback, Player.C
     override fun onPlayerStateChanged(update: PlayerUpdateModel) {
 
         library.setCurrentByMediaId(update.newSermon.id)
-        val sermon = library.currentOrFirst
+        val sermon = library.currentOrNull
         val state = update.state
 
         notification.update(sermon, state, sessionToken)
@@ -129,7 +129,7 @@ class SermonService : MediaBrowserServiceCompat(), AudioFocus.Callback, Player.C
 
     private fun initDependencies(callback: MediaSessionCallback) {
         focus = AudioFocus(applicationContext, this)
-        library = Library()
+        library = Library(applicationContext)
         notification = SermonNotification(this, callback)
         player = Player(applicationContext, this)
         viewModel = PlayerViewModel(applicationContext)
@@ -164,7 +164,7 @@ class SermonService : MediaBrowserServiceCompat(), AudioFocus.Callback, Player.C
 
     inner class MediaSessionCallback : MediaSessionCompat.Callback() {
 
-        override fun onPlay() = loadSermon(library.currentOrFirst?.id, true)
+        override fun onPlay() = loadSermon(library.currentOrNull?.id, true)
         override fun onPlayFromMediaId(mediaId: String?, extras: Bundle?) = loadSermon(mediaId, true)
         override fun onPause() = player.pause()
         override fun onSkipToNext() = loadSermon(library.next?.id)

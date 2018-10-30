@@ -1,111 +1,185 @@
 package tech.oliver.branhamplayer.android.sermons.services.media
 
+import android.content.Context
 import android.media.MediaMetadataRetriever
-import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaBrowserCompat.MediaItem
 import android.support.v4.media.MediaMetadataCompat
-import tech.oliver.branhamplayer.android.sermons.mappers.SermonMapper
+import tech.oliver.branhamplayer.android.sermons.mappers.DrawerMapper
+import tech.oliver.branhamplayer.android.sermons.models.DrawerItemModel
 import tech.oliver.branhamplayer.android.sermons.repositories.SermonsRepository
 import tech.oliver.branhamplayer.android.services.logging.Loggly
 import tech.oliver.branhamplayer.android.services.logging.LogglyConstants.Tags.SERMON_LIBRARY
+import java.util.Stack
 
 class Library(
+        context: Context?,
         repository: SermonsRepository = SermonsRepository(),
-        mapper: SermonMapper = SermonMapper()
+        drawerListMapper: DrawerMapper = DrawerMapper(context)
 ) {
 
-    private var currentSermon: MediaMetadataCompat? = null
-    private var currentSermonIndex = 0
-    private val sermonListMetadata: List<MediaMetadataCompat>
+    private var currentSermon: DrawerItemModel? = null
+    private var currentSermonIndex: Int = 0
+    private val rootSermon: DrawerItemModel
 
     init {
-        val sermons = mapper.map(repository.getSermons().value)
-
-        val metadata = sermons?.value?.map {
-            var durationInMs = 0
-            val metadata = MediaMetadataRetriever()
-
-            try {
-                metadata.setDataSource(it.path)
-                durationInMs = metadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toInt()
-
-                Loggly.d(SERMON_LIBRARY, "Found starting time of sermon: ${it.path}, duration: $durationInMs")
-            } catch (e: Exception) {
-                Loggly.e(SERMON_LIBRARY, e, "Could not determine the startingTime of ${it.path}")
-            } finally {
-                metadata.release()
-            }
-
-            MediaMetadataCompat.Builder()
-                    .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, it.formattedDate)
-                    .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, it.path)
-                    .putString(MediaMetadataCompat.METADATA_KEY_TITLE, it.name)
-                    .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, durationInMs.toLong())
-                    .build()
-        }
-
-        sermonListMetadata = metadata ?: emptyList()
+        val sermonsOnDisk = repository.getSermons().value
+        rootSermon = drawerListMapper.map(sermonsOnDisk)
     }
 
     // region Browsing
 
-    fun buildMediaBrowserMenu() = sermonListMetadata.asSequence().map {
-        MediaBrowserCompat.MediaItem(it.description, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE)
-    }.toMutableList()
+    fun buildMediaBrowserMenu(parentId: String) = findChildrenByParentId(parentId)
+            ?.asSequence()
+            ?.map { item ->
+                if (item.type == DrawerItemModel.DrawerItemType.FOLDER) {
+                    item.toBrowsableMediaItem()
+                } else {
+                    item.toPlayableMediaItem()
+                }
+            }?.toMutableList() ?: mutableListOf()
 
     // endregion
 
     // region Player Navigation
 
-    val currentOrFirst: MediaMetadataCompat?
-        get() {
-            currentSermon?.let {
-                return it
-            }
-
-            currentSermon = sermonListMetadata.firstOrNull()
-            currentSermonIndex = 0
-            return currentSermon
-        }
+    val currentOrNull: MediaMetadataCompat?
+        get() = currentSermon?.toPlayableMetadata()
 
     val next: MediaMetadataCompat?
         get() {
-            if (sermonListMetadata.isEmpty()) return null
+            if (currentSermon?.parent == null) return null
 
             ++currentSermonIndex
 
-            if (currentSermonIndex == sermonListMetadata.size) {
+            if (currentSermonIndex == currentSermon?.parent?.children?.size) {
                 currentSermonIndex = 0
             }
 
-            currentSermon = sermonListMetadata[currentSermonIndex]
-
-            return currentSermon
+            currentSermon = currentSermon?.parent?.children?.get(currentSermonIndex)
+            return currentSermon?.toPlayableMetadata()
         }
 
     val previous: MediaMetadataCompat?
         get() {
-            if (sermonListMetadata.isEmpty()) return null
+            if (currentSermon?.parent == null) return null
 
             --currentSermonIndex
 
             if (currentSermonIndex == -1) {
-                currentSermonIndex = sermonListMetadata.size - 1
+                currentSermonIndex = currentSermon?.parent?.children?.size?.minus(1) ?: 0
             }
 
-            currentSermon = sermonListMetadata[currentSermonIndex]
-
-            return currentSermon
+            currentSermon = currentSermon?.parent?.children?.get(currentSermonIndex)
+            return currentSermon?.toPlayableMetadata()
         }
 
     fun setCurrentByMediaId(mediaId: String?) {
-        val index = sermonListMetadata.indexOfFirst {
-            it.description?.mediaId == mediaId
+        currentSermon = findSermonInTreeByMediaId(mediaId)
+
+        if (currentSermon == null) return
+        currentSermonIndex = getIndexOfCurrentSermon()
+    }
+
+    // endregion
+
+    // region Private Methods
+
+    private fun findChildrenByParentId(parentId: String): MutableList<DrawerItemModel>? { // DFS
+        val stack = Stack<DrawerItemModel>()
+        stack.push(rootSermon)
+
+        var currentItem: DrawerItemModel?
+
+        while (!stack.empty()) {
+            currentItem = stack.pop()
+
+            if (currentItem?.id == parentId) {
+                return currentItem.children
+            }
+
+            currentItem.children.forEach { item ->
+                stack.add(item)
+            }
         }
 
-        if (index != -1) {
-            currentSermonIndex = index
-            currentSermon = sermonListMetadata[currentSermonIndex]
+        return null
+    }
+
+    private fun findSermonInTreeByMediaId(mediaId: String?): DrawerItemModel? { // DFS
+        val stack = Stack<DrawerItemModel>()
+        stack.push(rootSermon)
+
+        var currentItem: DrawerItemModel?
+
+        while (!stack.empty()) {
+            currentItem = stack.pop()
+
+            if (currentItem?.id == mediaId) {
+                return currentItem
+            }
+
+            currentItem.children.forEach { item ->
+                stack.add(item)
+            }
         }
+
+        return null
+    }
+
+    private fun getIndexOfCurrentSermon(): Int {
+        currentSermon?.parent?.children?.forEachIndexed { index, sermon ->
+            if (sermon.id == currentSermon?.id) {
+                return index
+            }
+        }
+
+        return 0
+    }
+
+    // endregion
+
+    // region Extension Functions
+
+    private fun DrawerItemModel.toBrowsableMediaItem(): MediaItem {
+        val sermonMetadata = MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, subtitle)
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, id)
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, title)
+                .build()
+
+        return MediaItem(
+                sermonMetadata.description,
+                MediaItem.FLAG_BROWSABLE
+        )
+    }
+
+    private fun DrawerItemModel.toPlayableMediaItem() = MediaItem(
+            toPlayableMetadata().description,
+            MediaItem.FLAG_PLAYABLE
+    )
+
+    private fun DrawerItemModel.toPlayableMetadata(): MediaMetadataCompat {
+        val audioFileMetadata = MediaMetadataRetriever()
+        var durationInMs = 0
+        val filePath = id
+
+        try {
+            audioFileMetadata.setDataSource(filePath)
+            durationInMs = audioFileMetadata.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION).toInt()
+
+            Loggly.d(SERMON_LIBRARY, "Found duration of sermon: $filePath, duration: $durationInMs")
+        } catch (e: Exception) {
+            Loggly.e(SERMON_LIBRARY, e, "Could not determine the duration of $filePath")
+        } finally {
+            audioFileMetadata.release()
+        }
+
+        return MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, subtitle)
+                .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, filePath)
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, title)
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, durationInMs.toLong())
+                .build()
     }
 
     // endregion

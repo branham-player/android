@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- region Android Auto Drawer -->
+
+    <string name="drawer_decade">%1$ds</string> <!-- 1950s -->
+    <string name="drawer_sermon">%1$d sermon</string> <!-- 1 sermon -->
+    <string name="drawer_sermons">%1$d sermons</string> <!-- 2 sermons -->
+
+    <!-- endregion -->
+
     <!-- region Notification -->
 
     <string name="notification_next">Next</string>
