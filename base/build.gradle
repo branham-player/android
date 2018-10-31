@@ -49,6 +49,9 @@ dependencies {
     implementation 'com.github.tony19:timber-loggly:1.0.1'
     implementation 'com.orhanobut:logger:2.2.0'
     implementation 'com.squareup.retrofit:retrofit:1.9.0'
+
+    // ReKotlin
+    implementation 'org.rekotlin:rekotlin:1.0.0'
 }
 
 // Keep at the bottom
