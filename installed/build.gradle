@@ -4,6 +4,11 @@ apply plugin: 'io.fabric'
 android {
     compileSdkVersion compile_sdk_version
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     defaultConfig {
         applicationId application_id
 
@@ -12,11 +17,17 @@ android {
 
         versionCode version_code
         versionName version_name
+
+        manifestPlaceholders = [
+                auth0Domain: BRANHAM_PLAYER_ANDROID_AUTH0_DOMAIN,
+                auth0Scheme: application_id
+        ]
     }
 
     buildTypes {
         debug {
-            applicationIdSuffix '.dev'
+            applicationIdSuffix application_id_dev_suffix
+            manifestPlaceholders += [auth0Scheme: "$application_id$application_id_dev_suffix"]
         }
 
         release {
@@ -29,6 +40,7 @@ android {
 dependencies {
     implementation project(':base')
     implementation project(':sermons')
+    implementation project(':startup')
 }
 
 // Keep at the bottom

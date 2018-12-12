@@ -9,15 +9,11 @@
 
     <application
         android:usesCleartextTraffic="true"
-        tools:ignore="UnusedAttribute"> <!-- TODO: We shouldn't need this flag -->
+        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"> <!-- TODO: We shouldn't need this flag -->
+
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -32,7 +28,17 @@
 
                 <data
                     android:host="oliver.tech"
+                    android:pathPattern="/branham-player/sermons"
+                    android:scheme="https" />
+
+                <data
+                    android:host="oliver.tech"
                     android:pathPattern="/branham-player/android"
+                    android:scheme="https" />
+
+                <data
+                    android:host="oliver.tech"
+                    android:pathPattern="/branham-player/android/sermons"
                     android:scheme="https" />
             </intent-filter>
         </activity>
