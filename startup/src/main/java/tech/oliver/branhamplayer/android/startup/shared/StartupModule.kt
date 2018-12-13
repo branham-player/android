@@ -11,16 +11,29 @@ import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.RouterTransaction
 import org.koin.dsl.module.module
 import tech.oliver.branhamplayer.android.startup.BuildConfig
-import tech.oliver.branhamplayer.android.startup.StartUpActivity
+import tech.oliver.branhamplayer.android.startup.StartupActivity
 import tech.oliver.branhamplayer.android.startup.StartupActivityImpl
 import tech.oliver.branhamplayer.android.startup.controllers.AuthenticationController
 import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import com.auth0.android.authentication.storage.CredentialsManager
 import com.auth0.android.authentication.AuthenticationAPIClient
 
-val startupModule = module {
+val activityManagementModule = module {
 
-    // region Auth0
+    single(override = true) { (activity: StartupActivity) ->
+        StartupActivityImpl(activity)
+    }
+
+    single(override = true) { (activity: StartupActivity, container: ViewGroup, savedInstanceState: Bundle) ->
+        Conductor.attachRouter(activity, container, savedInstanceState)
+    }
+
+    single(override = true) {
+        RouterTransaction.with(AuthenticationController())
+    }
+}
+
+val auth0Module = module {
 
     factory(override = true) {
         val auth0 = Auth0(BuildConfig.AUTH0_CLIENT_ID, BuildConfig.AUTH0_DOMAIN)
@@ -37,30 +50,13 @@ val startupModule = module {
 
         CredentialsManager(apiClient, SharedPreferencesStorage(context))
     }
+}
 
-    // endregion
+val routingModule = module {
 
-    // region Routing
-
-    factory {
+    factory(override = true) {
         Intent(Intent.ACTION_VIEW, Uri.parse("https://oliver.tech/branham-player/sermons"))
     }
-
-    // endregion
-
-    // region Start Up Activity Creation and Routing
-
-    single { (activity: StartUpActivity) ->
-        StartupActivityImpl(activity)
-    }
-
-    single { (activity: StartUpActivity, container: ViewGroup, savedInstanceState: Bundle) ->
-        Conductor.attachRouter(activity, container, savedInstanceState)
-    }
-
-    single {
-        RouterTransaction.with(AuthenticationController())
-    }
-
-    // endregion
 }
+
+val startupModule = listOf(activityManagementModule, auth0Module, routingModule)

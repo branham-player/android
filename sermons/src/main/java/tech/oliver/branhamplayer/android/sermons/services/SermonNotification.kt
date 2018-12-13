@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat
 import tech.oliver.branhamplayer.android.sermons.R
 import tech.oliver.branhamplayer.android.sermons.SermonConstants.Notification
 import tech.oliver.branhamplayer.android.sermons.SermonConstants.Notification.Actions
-import tech.oliver.branhamplayer.android.sermons.ui.MainActivity
+import tech.oliver.branhamplayer.android.sermons.SermonsActivity
 import tech.oliver.branhamplayer.android.services.logging.Loggly
 import tech.oliver.branhamplayer.android.services.logging.LogglyConstants.Tags.NOTIFICATION
 
@@ -210,7 +210,7 @@ class SermonNotification(
     }
 
     private fun createContentIntent(): PendingIntent {
-        val openApp = Intent(service.applicationContext, MainActivity::class.java)
+        val openApp = Intent(service.applicationContext, SermonsActivity::class.java)
         openApp.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
 
         return PendingIntent.getActivity(

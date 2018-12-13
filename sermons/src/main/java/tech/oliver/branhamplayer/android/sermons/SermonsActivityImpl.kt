@@ -1,4 +1,4 @@
-package tech.oliver.branhamplayer.android.startup
+package tech.oliver.branhamplayer.android.sermons
 
 import android.os.Bundle
 import com.bluelinelabs.conductor.Router
@@ -7,16 +7,16 @@ import org.koin.core.parameter.parametersOf
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 
-class StartupActivityImpl(private val activity: StartupActivity) : KoinComponent {
+class SermonsActivityImpl(private val activity: SermonsActivity) : KoinComponent {
 
-    private val router: Router by inject { parametersOf(activity, activity.findViewById(R.id.start_up_container), savedInstanceState) }
+    private val router: Router by inject { parametersOf(activity, activity.findViewById(R.id.sermons_container), savedInstanceState) }
     private val splashScreenRoute: RouterTransaction by inject()
 
     private var savedInstanceState: Bundle? = null
 
     fun onCreate(savedInstanceState: Bundle?) {
         this.savedInstanceState = savedInstanceState
-        activity.setContentView(R.layout.start_up_activity)
+        activity.setContentView(R.layout.sermons_activity)
 
         if (!router.hasRootController()) {
             router.setRoot(splashScreenRoute)

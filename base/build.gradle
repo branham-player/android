@@ -44,6 +44,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-config:16.1.2'
     implementation 'com.google.firebase:firebase-core:16.0.6'
 
+    // Koin
+    implementation 'org.koin:koin-core:1.0.2'
+    implementation 'org.koin:koin-android:1.0.2'
+
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 

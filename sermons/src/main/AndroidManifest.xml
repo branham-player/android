@@ -12,7 +12,7 @@
         tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"> <!-- TODO: We shouldn't need this flag -->
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".SermonsActivity"
             android:label="@string/app_name">
 
             <intent-filter>

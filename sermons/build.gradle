@@ -26,11 +26,22 @@ dependencies {
     implementation 'androidx.media:media:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
+    // Conductor
+    implementation 'com.bluelinelabs:conductor:2.1.5'
+    implementation 'com.bluelinelabs:conductor-archlifecycle:2.1.5'
+
     // Dexter
     //implementation 'com.karumi:dexter:5.0.0' // TODO: Add back in, related https://github.com/googlesamples/easypermissions/issues/221
 
+    // Koin
+    implementation 'org.koin:koin-core:1.0.2'
+    implementation 'org.koin:koin-android:1.0.2'
+
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    // ReKotlin
+    implementation 'org.rekotlin:rekotlin:1.0.0'
 
     // Room
     implementation 'androidx.room:room-runtime:2.0.0'

@@ -10,7 +10,7 @@ class StartupReducer {
         fun reduce(action: Action, startupState: StartupState?): StartupState {
             var state = startupState ?: StartupState()
 
-            when(action) {
+            when (action) {
                 is RoutingAction -> {
                     state = RoutingReducer.reduce(action, state)
                 }

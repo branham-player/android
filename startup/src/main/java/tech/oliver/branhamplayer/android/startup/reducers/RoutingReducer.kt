@@ -11,9 +11,7 @@ class RoutingReducer {
 
         fun reduce(action: RoutingAction, startupState: StartupState): StartupState {
             when (action) {
-                is RoutingAction.NavigateToSermonsAction -> {
-                    navigateToSermons(action.context)
-                }
+                is RoutingAction.NavigateToSermonsAction -> navigateToSermons(action.context)
             }
 
             return startupState
