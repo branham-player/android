@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import com.auth0.android.authentication.storage.CredentialsManager
 import com.bluelinelabs.conductor.Controller
 import org.koin.core.parameter.parametersOf
@@ -17,13 +18,16 @@ import tech.oliver.branhamplayer.android.startup.shared.startupStore
 class AuthenticationController : Controller(), KoinComponent {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
-        val view = inflater.inflate(R.layout.splash_screen_controller, container, false)
-        val loginButton: Button = view.findViewById(R.id.start_up_login)
+        val view = inflater.inflate(R.layout.authentication_controller, container, false)
+        val loginButton: Button? = view.findViewById(R.id.login_button)
+        val registerLink: TextView? = view.findViewById(R.id.login_register)
 
-        loginButton.setOnClickListener {
-            activity?.let { activity ->
-                startupStore.dispatch(AuthenticationAction.DoLoginAction(activity))
-            }
+        loginButton?.setOnClickListener {
+            loginOrRegister()
+        }
+
+        registerLink?.setOnClickListener {
+            loginOrRegister()
         }
 
         return view
@@ -38,6 +42,12 @@ class AuthenticationController : Controller(), KoinComponent {
             if (userCredentials.hasValidCredentials()) {
                 startupStore.dispatch(RoutingAction.NavigateToSermonsAction(it))
             }
+        }
+    }
+
+    private fun loginOrRegister() {
+        activity?.let {
+            startupStore.dispatch(AuthenticationAction.DoLoginAction(it))
         }
     }
 }

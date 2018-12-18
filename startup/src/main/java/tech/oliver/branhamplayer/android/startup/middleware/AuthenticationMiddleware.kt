@@ -3,9 +3,11 @@ package tech.oliver.branhamplayer.android.startup.middleware
 import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.authentication.storage.CredentialsManager
 import com.auth0.android.provider.AuthCallback
+import com.auth0.android.provider.CustomTabsOptions
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import org.koin.core.parameter.parametersOf
@@ -13,6 +15,8 @@ import org.koin.standalone.StandAloneContext
 import org.koin.standalone.get
 import org.rekotlin.DispatchFunction
 import org.rekotlin.Middleware
+import tech.oliver.branhamplayer.android.startup.BuildConfig
+import tech.oliver.branhamplayer.android.startup.R
 import tech.oliver.branhamplayer.android.startup.actions.AuthenticationAction
 import tech.oliver.branhamplayer.android.startup.actions.RoutingAction
 import tech.oliver.branhamplayer.android.startup.states.StartupState
@@ -34,20 +38,30 @@ class AuthenticationMiddleware {
         }
 
         private fun doLogin(activity: Activity, dispatch: DispatchFunction) {
-            val auth0: WebAuthProvider.Builder = StandAloneContext.getKoin().koinContext.get()
+            val auth0: Auth0 = StandAloneContext.getKoin().koinContext.get { parametersOf(BuildConfig.AUTH0_CLIENT_ID, BuildConfig.AUTH0_DOMAIN) }
+            auth0.isOIDCConformant = true
 
-            auth0.start(activity, object : AuthCallback {
-                override fun onSuccess(credentials: Credentials) {
-                    dispatch(AuthenticationAction.SaveCredentialsAction(activity.applicationContext, credentials))
-                    dispatch(RoutingAction.NavigateToSermonsAction(activity.applicationContext))
-                }
+            val customTabsOptionsBuilder: CustomTabsOptions.Builder = StandAloneContext.getKoin().koinContext.get()
+            val customTabsOptions = customTabsOptionsBuilder.withToolbarColor(R.color.toolbar_background).build()
 
-                override fun onFailure(dialog: Dialog) =
-                        dispatch(RoutingAction.ShowLoginErrorAction())
+            val webAuthProvider: WebAuthProvider.Builder = StandAloneContext.getKoin().koinContext.get { parametersOf(auth0) }
 
-                override fun onFailure(exception: AuthenticationException?) =
-                        dispatch(RoutingAction.ShowLoginErrorAction())
-            })
+            webAuthProvider
+                    .withCustomTabsOptions(customTabsOptions)
+                    .withScheme(BuildConfig.AUTH0_SCHEME)
+                    .withAudience("https://${BuildConfig.AUTH0_DOMAIN}/userinfo")
+                    .start(activity, object : AuthCallback {
+                        override fun onSuccess(credentials: Credentials) {
+                            dispatch(AuthenticationAction.SaveCredentialsAction(activity.applicationContext, credentials))
+                            dispatch(RoutingAction.NavigateToSermonsAction(activity.applicationContext))
+                        }
+
+                        override fun onFailure(dialog: Dialog) =
+                                dispatch(RoutingAction.ShowLoginErrorAction())
+
+                        override fun onFailure(exception: AuthenticationException?) =
+                                dispatch(RoutingAction.ShowLoginErrorAction())
+                    })
         }
 
         private fun saveCredentials(context: Context, credentials: Credentials) {

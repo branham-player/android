@@ -17,6 +17,7 @@ import tech.oliver.branhamplayer.android.startup.controllers.AuthenticationContr
 import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import com.auth0.android.authentication.storage.CredentialsManager
 import com.auth0.android.authentication.AuthenticationAPIClient
+import com.auth0.android.provider.CustomTabsOptions
 
 val activityManagementModule = module {
 
@@ -35,13 +36,16 @@ val activityManagementModule = module {
 
 val auth0Module = module {
 
-    factory(override = true) {
-        val auth0 = Auth0(BuildConfig.AUTH0_CLIENT_ID, BuildConfig.AUTH0_DOMAIN)
-        auth0.isOIDCConformant = true
+    factory(override = true) { (clientId: String, domain: String) ->
+        Auth0(clientId, domain)
+    }
 
+    factory(override = true) {
+        CustomTabsOptions.newBuilder()
+    }
+
+    factory(override = true) { (auth0: Auth0) ->
         WebAuthProvider.init(auth0)
-                .withScheme(BuildConfig.AUTH0_SCHEME)
-                .withAudience("https://${BuildConfig.AUTH0_DOMAIN}/userinfo")
     }
 
     factory(override = true) { (context: Context) ->
