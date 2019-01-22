@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatTextView
 import com.auth0.android.authentication.storage.CredentialsManager
 import com.bluelinelabs.conductor.Controller
 import org.koin.core.parameter.parametersOf
@@ -19,8 +21,8 @@ class AuthenticationController : Controller(), KoinComponent {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View {
         val view = inflater.inflate(R.layout.authentication_controller, container, false)
-        val loginButton: Button? = view.findViewById(R.id.login_button)
-        val registerLink: TextView? = view.findViewById(R.id.login_register)
+        val loginButton: AppCompatButton? = view.findViewById(R.id.login_button)
+        val registerLink: AppCompatTextView? = view.findViewById(R.id.login_register)
 
         loginButton?.setOnClickListener {
             loginOrRegister()

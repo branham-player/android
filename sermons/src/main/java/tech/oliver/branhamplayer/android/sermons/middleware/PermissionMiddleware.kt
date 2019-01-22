@@ -1,13 +1,16 @@
 package tech.oliver.branhamplayer.android.sermons.middleware
 
 import android.app.Activity
+import android.content.Context
+import android.widget.Toast
 import io.reactivex.Scheduler
+import org.koin.core.parameter.parametersOf
 import org.koin.standalone.StandAloneContext
 import org.rekotlin.DispatchFunction
 import org.rekotlin.Middleware
+import tech.oliver.branhamplayer.android.sermons.R
 import tech.oliver.branhamplayer.android.sermons.actions.DataAction
 import tech.oliver.branhamplayer.android.sermons.actions.PermissionAction
-import tech.oliver.branhamplayer.android.sermons.actions.AlertAction
 import tech.oliver.branhamplayer.android.sermons.shared.SermonsModuleConstants
 import tech.oliver.branhamplayer.android.sermons.states.SermonsState
 import tech.oliver.branhamplayer.android.sermons.utils.permissions.PermissionConstants
@@ -21,6 +24,7 @@ class PermissionMiddleware {
                 { action ->
                     when (action) {
                         is PermissionAction.GetFileReadPermissionAction -> getFileReadPermission(action.activity, dispatcher)
+                        is PermissionAction.ShowPermissionDeniedErrorAction -> showPermissionDeniedError(action.context)
                     }
 
                     next(action)
@@ -41,11 +45,19 @@ class PermissionMiddleware {
                         if (hasPermission) {
                             dispatcher(DataAction.FetchSermonListAction())
                         } else {
-                            dispatcher(AlertAction.ShowPermissionDeniedErrorAction(activity.applicationContext))
+                            dispatcher(PermissionAction.ShowPermissionDeniedErrorAction(activity.applicationContext))
                         }
                     }, {
-                        dispatcher(AlertAction.ShowPermissionDeniedErrorAction(activity.applicationContext))
+                        dispatcher(PermissionAction.ShowPermissionDeniedErrorAction(activity.applicationContext))
                     })
+        }
+
+        private fun showPermissionDeniedError(context: Context) {
+            val toast: Toast = StandAloneContext.getKoin().koinContext.get {
+                parametersOf(context, R.string.permission_denied_message, Toast.LENGTH_LONG)
+            }
+
+            toast.show()
         }
     }
 }

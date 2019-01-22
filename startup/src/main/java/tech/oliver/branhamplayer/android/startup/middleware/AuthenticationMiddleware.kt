@@ -2,17 +2,14 @@ package tech.oliver.branhamplayer.android.startup.middleware
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationException
-import com.auth0.android.authentication.storage.CredentialsManager
 import com.auth0.android.provider.AuthCallback
 import com.auth0.android.provider.CustomTabsOptions
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import org.koin.core.parameter.parametersOf
 import org.koin.standalone.StandAloneContext
-import org.koin.standalone.get
 import org.rekotlin.DispatchFunction
 import org.rekotlin.Middleware
 import tech.oliver.branhamplayer.android.startup.BuildConfig
@@ -29,7 +26,6 @@ class AuthenticationMiddleware {
                 { action ->
                     when (action) {
                         is AuthenticationAction.DoLoginAction -> doLogin(action.activity, dispatcher)
-                        is AuthenticationAction.SaveCredentialsAction -> saveCredentials(action.context, action.credentials)
                     }
 
                     next(action)
@@ -38,7 +34,7 @@ class AuthenticationMiddleware {
         }
 
         private fun doLogin(activity: Activity, dispatch: DispatchFunction) {
-            val auth0: Auth0 = StandAloneContext.getKoin().koinContext.get { parametersOf(BuildConfig.AUTH0_CLIENT_ID, BuildConfig.AUTH0_DOMAIN) }
+            val auth0: Auth0 = StandAloneContext.getKoin().koinContext.get()
             auth0.isOIDCConformant = true
 
             val customTabsOptionsBuilder: CustomTabsOptions.Builder = StandAloneContext.getKoin().koinContext.get()
@@ -49,6 +45,7 @@ class AuthenticationMiddleware {
             webAuthProvider
                     .withCustomTabsOptions(customTabsOptions)
                     .withScheme(BuildConfig.AUTH0_SCHEME)
+                    .withScope("openid profile email")
                     .withAudience("https://${BuildConfig.AUTH0_DOMAIN}/userinfo")
                     .start(activity, object : AuthCallback {
                         override fun onSuccess(credentials: Credentials) {
@@ -62,11 +59,6 @@ class AuthenticationMiddleware {
                         override fun onFailure(exception: AuthenticationException?) =
                                 dispatch(RoutingAction.ShowLoginErrorAction())
                     })
-        }
-
-        private fun saveCredentials(context: Context, credentials: Credentials) {
-            val userCredentials: CredentialsManager = StandAloneContext.getKoin().koinContext.get { parametersOf(context) }
-            userCredentials.saveCredentials(credentials)
         }
     }
 }

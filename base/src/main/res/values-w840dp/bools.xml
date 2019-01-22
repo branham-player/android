@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- region Device Definitions -->
+
+    <bool name="is_phone">false</bool>
+    <bool name="is_large_tablet">true</bool>
+    <bool name="is_small_tablet">false</bool>
+    <bool name="is_tablet">true</bool>
+
+    <!-- endregion -->
+</resources>

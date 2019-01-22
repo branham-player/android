@@ -9,6 +9,11 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.RouterTransaction
+import com.mikepenz.materialdrawer.AccountHeaderBuilder
+import com.mikepenz.materialdrawer.DrawerBuilder
+import com.mikepenz.materialdrawer.model.DividerDrawerItem
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -19,6 +24,8 @@ import tech.oliver.branhamplayer.android.sermons.adapters.SermonsAdapter
 import tech.oliver.branhamplayer.android.sermons.controllers.SermonsController
 import tech.oliver.branhamplayer.android.sermons.mappers.SermonMapper
 import tech.oliver.branhamplayer.android.sermons.repositories.SermonsRepository
+import tech.oliver.branhamplayer.android.sermons.ui.DrawerItemsConstants
+import tech.oliver.branhamplayer.android.services.auth0.Auth0Service
 
 @SuppressLint("ShowToast")
 val activityManagementModule = module {
@@ -40,6 +47,13 @@ val activityManagementModule = module {
     }
 }
 
+val auth0Module = module {
+
+    factory(override = true) {
+        Auth0Service()
+    }
+}
+
 val dataModule = module {
 
     single(override = true) {
@@ -48,6 +62,49 @@ val dataModule = module {
 
     single(override = true) {
         SermonsRepository()
+    }
+}
+
+val drawerModule = module {
+
+    factory(override = true) {
+        AccountHeaderBuilder()
+    }
+
+    factory(override = true) {
+        DividerDrawerItem()
+    }
+
+    factory(override = true) {
+        DrawerBuilder()
+    }
+
+    factory(override = true) {
+        DrawerItemsConstants.MenuItem.Account()
+    }
+
+    factory(override = true) {
+        DrawerItemsConstants.Divider()
+    }
+
+    factory(override = true) {
+        DrawerItemsConstants.MenuItem.Downloads()
+    }
+
+    factory(override = true) {
+        DrawerItemsConstants.MenuItem.Logout()
+    }
+
+    factory(override = true) {
+        DrawerItemsConstants.MenuItem.Sermons()
+    }
+
+    factory(override = true) {
+        PrimaryDrawerItem()
+    }
+
+    factory(override = true) {
+        ProfileDrawerItem()
     }
 }
 
@@ -77,4 +134,4 @@ val rxJavaModule = module {
     }
 }
 
-val sermonsModule = listOf(activityManagementModule, dataModule, recyclerViewModule, rxJavaModule)
+val sermonsModule = listOf(activityManagementModule, auth0Module, dataModule, drawerModule, recyclerViewModule, rxJavaModule)

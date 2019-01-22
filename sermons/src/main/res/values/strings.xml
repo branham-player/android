@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <!-- region Android Auto Drawer -->
 
     <string name="drawer_decade">%1$ds</string> <!-- 1950s -->

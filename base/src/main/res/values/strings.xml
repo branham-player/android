@@ -6,4 +6,13 @@
     <string name="app_slogan">A flexible audio player for all of your Android devices</string>
 
     <!-- endregion -->
+
+    <!-- region Bottom Navigation -->
+
+    <string name="navigation_account">Account</string>
+    <string name="navigation_downloads">Downloads</string>
+    <string name="navigation_logout">Logout</string>
+    <string name="navigation_sermons">Sermons</string>
+
+    <!-- endregion -->
 </resources>
