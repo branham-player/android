@@ -1,9 +1,9 @@
-package tech.oliver.branhamplayer.android.services.firebase
+package com.branhamplayer.android.services.firebase
 
+import com.branhamplayer.android.BuildConfig
+import com.branhamplayer.android.R
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
-import tech.oliver.branhamplayer.android.BuildConfig
-import tech.oliver.branhamplayer.android.R
 
 class RemoteConfigService {
 

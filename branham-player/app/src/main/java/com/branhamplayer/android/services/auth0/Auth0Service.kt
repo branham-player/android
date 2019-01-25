@@ -1,4 +1,4 @@
-package tech.oliver.branhamplayer.android.services.auth0
+package com.branhamplayer.android.services.auth0
 
 import android.content.Context
 import com.auth0.android.authentication.AuthenticationAPIClient

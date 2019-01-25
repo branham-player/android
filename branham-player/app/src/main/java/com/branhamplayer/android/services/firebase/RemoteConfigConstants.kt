@@ -1,4 +1,4 @@
-package tech.oliver.branhamplayer.android.services.firebase
+package com.branhamplayer.android.services.firebase
 
 object RemoteConfigConstants {
 

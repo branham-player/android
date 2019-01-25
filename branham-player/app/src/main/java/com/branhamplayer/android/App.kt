@@ -1,11 +1,11 @@
-package tech.oliver.branhamplayer.android
+package com.branhamplayer.android
 
 import android.app.Application
+import com.branhamplayer.android.services.firebase.RemoteConfigService
+import com.branhamplayer.android.shared.sharedModule
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 import org.koin.android.ext.android.startKoin
-import tech.oliver.branhamplayer.android.services.firebase.RemoteConfigService
-import tech.oliver.branhamplayer.android.shared.sharedModule
 
 @Suppress("unused")
 class App : Application() {

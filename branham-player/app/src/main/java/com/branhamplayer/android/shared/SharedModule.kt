@@ -1,12 +1,12 @@
-package tech.oliver.branhamplayer.android.shared
+package com.branhamplayer.android.shared
 
 import android.content.Context
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.storage.CredentialsManager
 import com.auth0.android.authentication.storage.SharedPreferencesStorage
+import com.branhamplayer.android.BuildConfig
 import org.koin.dsl.module.module
-import tech.oliver.branhamplayer.android.BuildConfig
 
 val auth0Module = module {
 

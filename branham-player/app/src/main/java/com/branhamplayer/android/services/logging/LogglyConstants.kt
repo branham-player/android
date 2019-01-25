@@ -1,6 +1,6 @@
-package tech.oliver.branhamplayer.android.services.logging
+package com.branhamplayer.android.services.logging
 
-import tech.oliver.branhamplayer.android.BuildConfig
+import com.branhamplayer.android.BuildConfig
 
 object LogglyConstants {
 

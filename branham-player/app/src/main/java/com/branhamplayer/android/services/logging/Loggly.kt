@@ -1,8 +1,8 @@
-package tech.oliver.branhamplayer.android.services.logging
+package com.branhamplayer.android.services.logging
 
 import com.orhanobut.logger.Logger
-import tech.oliver.branhamplayer.android.services.firebase.RemoteConfigConstants
-import tech.oliver.branhamplayer.android.services.firebase.RemoteConfigService
+import com.branhamplayer.android.services.firebase.RemoteConfigConstants
+import com.branhamplayer.android.services.firebase.RemoteConfigService
 import timber.log.Timber
 
 class Loggly {
