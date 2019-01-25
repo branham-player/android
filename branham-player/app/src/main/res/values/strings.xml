@@ -1,3 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- region Global -->
+
     <string name="app_name">Branham Player</string>
+    <string name="app_slogan">A flexible audio player for all of your Android devices</string>
+
+    <!-- endregion -->
+
+    <!-- region Application Modules -->
+
+    <string name="application_base">@string/app_name</string>
+
+    <!-- region Bottom Navigation -->
+
+    <string name="navigation_account">Account</string>
+    <string name="navigation_downloads">Downloads</string>
+    <string name="navigation_logout">Logout</string>
+    <string name="navigation_sermons">Sermons</string>
+
+    <!-- endregion -->
 </resources>
