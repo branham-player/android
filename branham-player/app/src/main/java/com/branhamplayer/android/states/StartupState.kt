@@ -1,4 +1,4 @@
-package tech.oliver.branhamplayer.android.startup.states
+package com.branhamplayer.android.states
 
 import org.rekotlin.StateType
 

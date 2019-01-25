@@ -1,9 +1,9 @@
-package tech.oliver.branhamplayer.android.startup.reducers
+package com.branhamplayer.android.reducers
 
+import com.branhamplayer.android.actions.AuthenticationAction
+import com.branhamplayer.android.actions.RoutingAction
+import com.branhamplayer.android.states.StartupState
 import org.rekotlin.Action
-import tech.oliver.branhamplayer.android.startup.actions.AuthenticationAction
-import tech.oliver.branhamplayer.android.startup.actions.RoutingAction
-import tech.oliver.branhamplayer.android.startup.states.StartupState
 
 class StartupReducer {
     companion object {

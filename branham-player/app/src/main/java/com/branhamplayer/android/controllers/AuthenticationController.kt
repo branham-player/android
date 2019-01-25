@@ -1,21 +1,19 @@
-package tech.oliver.branhamplayer.android.startup.controllers
+package com.branhamplayer.android.controllers
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatTextView
 import com.auth0.android.authentication.storage.CredentialsManager
 import com.bluelinelabs.conductor.Controller
+import com.branhamplayer.android.R
+import com.branhamplayer.android.actions.AuthenticationAction
+import com.branhamplayer.android.actions.RoutingAction
+import com.branhamplayer.android.shared.startupStore
 import org.koin.core.parameter.parametersOf
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.get
-import tech.oliver.branhamplayer.android.startup.R
-import tech.oliver.branhamplayer.android.startup.actions.AuthenticationAction
-import tech.oliver.branhamplayer.android.startup.actions.RoutingAction
-import tech.oliver.branhamplayer.android.startup.shared.startupStore
 
 class AuthenticationController : Controller(), KoinComponent {
 

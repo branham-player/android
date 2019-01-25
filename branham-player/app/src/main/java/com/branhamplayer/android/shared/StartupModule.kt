@@ -1,4 +1,4 @@
-package tech.oliver.branhamplayer.android.startup.shared
+package com.branhamplayer.android.shared
 
 import android.content.Context
 import android.content.Intent
@@ -13,19 +13,19 @@ import com.auth0.android.provider.CustomTabsOptions
 import com.auth0.android.provider.WebAuthProvider
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.RouterTransaction
+import com.branhamplayer.android.BuildConfig
+import com.branhamplayer.android.MainActivity
+import com.branhamplayer.android.MainActivityImpl
+import com.branhamplayer.android.controllers.AuthenticationController
 import org.koin.dsl.module.module
-import tech.oliver.branhamplayer.android.startup.BuildConfig
-import tech.oliver.branhamplayer.android.startup.StartupActivity
-import tech.oliver.branhamplayer.android.startup.StartupActivityImpl
-import tech.oliver.branhamplayer.android.startup.controllers.AuthenticationController
 
 val activityManagementModule = module {
 
-    single(override = true) { (activity: StartupActivity) ->
-        StartupActivityImpl(activity)
+    single(override = true) { (activity: MainActivity) ->
+        MainActivityImpl(activity)
     }
 
-    single(override = true) { (activity: StartupActivity, container: ViewGroup, savedInstanceState: Bundle) ->
+    single(override = true) { (activity: MainActivity, container: ViewGroup, savedInstanceState: Bundle) ->
         Conductor.attachRouter(activity, container, savedInstanceState)
     }
 

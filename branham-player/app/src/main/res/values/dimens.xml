@@ -14,4 +14,10 @@
     <dimen name="toolbar_secondary_height">?attr/actionBarSize</dimen>
 
     <!-- endregion -->
+
+    <!-- region Login -->
+
+    <dimen name="login_card_margin_top">0dp</dimen>
+
+    <!-- endregion -->
 </resources>

@@ -1,4 +1,4 @@
-package tech.oliver.branhamplayer.android.startup.middleware
+package com.branhamplayer.android.middleware
 
 import android.app.Activity
 import android.app.Dialog
@@ -8,15 +8,15 @@ import com.auth0.android.provider.AuthCallback
 import com.auth0.android.provider.CustomTabsOptions
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
+import com.branhamplayer.android.BuildConfig
+import com.branhamplayer.android.R
+import com.branhamplayer.android.actions.AuthenticationAction
+import com.branhamplayer.android.actions.RoutingAction
+import com.branhamplayer.android.states.StartupState
 import org.koin.core.parameter.parametersOf
 import org.koin.standalone.StandAloneContext
 import org.rekotlin.DispatchFunction
 import org.rekotlin.Middleware
-import tech.oliver.branhamplayer.android.startup.BuildConfig
-import tech.oliver.branhamplayer.android.startup.R
-import tech.oliver.branhamplayer.android.startup.actions.AuthenticationAction
-import tech.oliver.branhamplayer.android.startup.actions.RoutingAction
-import tech.oliver.branhamplayer.android.startup.states.StartupState
 
 class AuthenticationMiddleware {
     companion object {

@@ -1,12 +1,12 @@
-package tech.oliver.branhamplayer.android.startup.reducers
+package com.branhamplayer.android.reducers
 
 import android.content.Context
 import com.auth0.android.authentication.storage.CredentialsManager
 import com.auth0.android.result.Credentials
+import com.branhamplayer.android.actions.AuthenticationAction
+import com.branhamplayer.android.states.StartupState
 import org.koin.core.parameter.parametersOf
 import org.koin.standalone.StandAloneContext
-import tech.oliver.branhamplayer.android.startup.actions.AuthenticationAction
-import tech.oliver.branhamplayer.android.startup.states.StartupState
 
 class AuthenticationReducer {
     companion object {

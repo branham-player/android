@@ -1,7 +1,8 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'io.fabric'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion compile_sdk_version
@@ -27,6 +28,8 @@ android {
 
         buildConfigField "String", "AUTH0_CLIENT_ID", "\"$BRANHAM_PLAYER_ANDROID_AUTH0_PRD_CLIENT_ID\""
         buildConfigField "String", "AUTH0_DOMAIN", "\"$BRANHAM_PLAYER_ANDROID_AUTH0_DOMAIN\""
+        buildConfigField "String", "AUTH0_SCHEME", "\"$application_id\""
+
         buildConfigField "String", "LOGGLY_ENVIRONMENT", '"development"'
         buildConfigField "String", "LOGGLY_KEY", BRANHAM_PLAYER_ANDROID_DEV_LOGGLY_KEY
     }
@@ -34,6 +37,10 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix application_id_dev_suffix
+
+            buildConfigField "String", "AUTH0_CLIENT_ID", "\"$BRANHAM_PLAYER_ANDROID_AUTH0_DEV_CLIENT_ID\""
+            buildConfigField "String", "AUTH0_SCHEME", "\"$application_id$application_id_dev_suffix\""
+
             manifestPlaceholders += [auth0Scheme: "$application_id$application_id_dev_suffix"]
         }
 
@@ -44,6 +51,18 @@ android {
     }
 }
 
+buildscript {
+    dependencies {
+        // Butter Knife
+        classpath 'com.jakewharton:butterknife-gradle-plugin:10.0.0'
+    }
+
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
 crashlytics {
     instantAppSupport true
 }
@@ -51,11 +70,20 @@ crashlytics {
 dependencies {
     // Android Support Libraries
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
+    implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'com.google.android.material:material:1.1.0-alpha02'
 
     // Auth0
     implementation 'com.auth0.android:auth0:1.14.1'
+
+    // Butter Knife
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.0.0'
+
+    // Conductor
+    implementation 'com.bluelinelabs:conductor:2.1.5'
+    implementation 'com.bluelinelabs:conductor-archlifecycle:2.1.5'
 
     // Firebase
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.8'
@@ -73,6 +101,9 @@ dependencies {
     implementation 'com.github.tony19:timber-loggly:1.0.1'
     implementation 'com.orhanobut:logger:2.2.0'
     implementation 'com.squareup.retrofit:retrofit:2.0.0-beta2'
+
+    // ReKotlin
+    implementation 'org.rekotlin:rekotlin:1.0.0'
 
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'

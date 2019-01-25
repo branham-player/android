@@ -1,4 +1,4 @@
-package tech.oliver.branhamplayer.android.startup.actions
+package com.branhamplayer.android.actions
 
 import android.content.Context
 import org.rekotlin.Action

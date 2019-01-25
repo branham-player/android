@@ -11,12 +11,23 @@
 
     <string name="application_base">@string/app_name</string>
 
+    <!-- endregion -->
+
     <!-- region Bottom Navigation -->
 
     <string name="navigation_account">Account</string>
     <string name="navigation_downloads">Downloads</string>
     <string name="navigation_logout">Logout</string>
     <string name="navigation_sermons">Sermons</string>
+
+    <!-- endregion -->
+
+    <!-- region Login -->
+
+    <string name="login_screen_branham_player_logo">Branham Player Logo</string>
+    <string name="login_screen_login">Login</string>
+    <string name="login_screen_registration_prompt">New to Branham Player?</string>
+    <string name="login_screen_register">Register</string>
 
     <!-- endregion -->
 </resources>

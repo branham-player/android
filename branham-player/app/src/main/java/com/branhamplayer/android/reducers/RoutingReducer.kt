@@ -1,10 +1,10 @@
-package tech.oliver.branhamplayer.android.startup.reducers
+package com.branhamplayer.android.reducers
 
 import android.content.Context
 import android.content.Intent
+import com.branhamplayer.android.actions.RoutingAction
+import com.branhamplayer.android.states.StartupState
 import org.koin.standalone.StandAloneContext
-import tech.oliver.branhamplayer.android.startup.actions.RoutingAction
-import tech.oliver.branhamplayer.android.startup.states.StartupState
 
 class RoutingReducer {
     companion object {
