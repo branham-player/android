@@ -10,6 +10,7 @@
     <!-- region Application Modules -->
 
     <string name="application_base">@string/app_name</string>
+    <string name="module_sermons">Sermons</string>
 
     <!-- endregion -->
 
