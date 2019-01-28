@@ -60,7 +60,7 @@ val auth0Module = module {
 val routingModule = module {
 
     factory(override = true) {
-        Intent(Intent.ACTION_VIEW, Uri.parse("https://oliver.tech/branham-player/sermons"))
+        Intent(Intent.ACTION_VIEW, Uri.parse("https://branhamplayer.com/sermons"))
     }
 }
 

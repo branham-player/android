@@ -1,10 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.branhamplayer.android.sermons">
 
     <dist:module
         dist:instant="true"
-        dist:onDemand="false"
+        dist:onDemand="true"
         dist:title="@string/module_sermons">
 
         <dist:fusing dist:include="true" />
@@ -14,7 +15,31 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
-    <application>
+    <application
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher">
+
+        <activity
+            android:name=".SermonsActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+
+                <data android:host="branhamplayer.app" />
+                <data android:host="branhamplayer.com" />
+
+                <data android:pathPattern="/sermons" />
+                <data android:pathPattern="/sermon-list" />
+            </intent-filter>
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.car.application"
@@ -23,7 +48,8 @@
         <service
             android:name=".services.SermonService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            tools:ignore="ExportedService">
 
             <intent-filter>
                 <action android:name="android.media.action.MEDIA_PLAY_FROM_SEARCH" />
@@ -31,5 +57,4 @@
             </intent-filter>
         </service>
     </application>
-
 </manifest>
