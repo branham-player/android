@@ -1,10 +1,10 @@
 buildscript {
     ext {
-        application_id = 'tech.oliver.branhamplayer.android'
+        application_id = 'com.branhamplayer.android'
         application_id_dev_suffix = '.dev'
 
         compile_sdk_version = 28
-        kotlin_version = '1.3.11'
+        kotlin_version = '1.3.20'
         min_sdk_version = 21
         target_sdk_version = 28
 
@@ -13,12 +13,15 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0-alpha01'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-        // Firebase
+        // Firebase & Crashlytics
         classpath 'com.google.gms:google-services:4.2.0'
-        classpath 'io.fabric.tools:gradle:1.25.4'
+        classpath 'io.fabric.tools:gradle:1.26.1'
+
+        // Gradle
+        classpath 'com.android.tools.build:gradle:3.5.0-alpha02'
+
+        // Kotlin
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 
     repositories {
