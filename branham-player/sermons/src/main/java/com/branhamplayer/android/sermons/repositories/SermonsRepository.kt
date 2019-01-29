@@ -3,7 +3,7 @@ package com.branhamplayer.android.sermons.repositories
 import android.os.Environment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.branhamplayer.android.repositories.Repository
+import com.branhamplayer.android.base.repositories.Repository
 import com.branhamplayer.android.services.logging.Loggly
 import com.branhamplayer.android.services.logging.LogglyConstants.Tags.REPOSITORY
 import java.io.File

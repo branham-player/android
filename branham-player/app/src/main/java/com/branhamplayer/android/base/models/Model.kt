@@ -1,3 +1,3 @@
-package com.branhamplayer.android.models
+package com.branhamplayer.android.base.models
 
 interface Model
