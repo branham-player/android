@@ -1,20 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
-    package="tech.oliver.branhamplayer.android.sermons">
+    package="com.branhamplayer.android.sermons">
+
+    <dist:module
+        dist:instant="true"
+        dist:onDemand="true"
+        dist:title="@string/module_sermons">
+
+        <dist:fusing dist:include="true" />
+    </dist:module>
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:usesCleartextTraffic="true"
-        tools:ignore="GoogleAppIndexingWarning,UnusedAttribute"> <!-- TODO: We shouldn't need this flag -->
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher">
 
         <activity
             android:name=".SermonsActivity"
-            android:label="@string/app_name"
-            android:theme="@style/SermonsListTheme">
+            android:label="@string/app_name">
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -22,25 +29,14 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data
-                    android:host="oliver.tech"
-                    android:pathPattern="/branham-player"
-                    android:scheme="https" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
 
-                <data
-                    android:host="oliver.tech"
-                    android:pathPattern="/branham-player/sermons"
-                    android:scheme="https" />
+                <data android:host="branhamplayer.app" />
+                <data android:host="branhamplayer.com" />
 
-                <data
-                    android:host="oliver.tech"
-                    android:pathPattern="/branham-player/android"
-                    android:scheme="https" />
-
-                <data
-                    android:host="oliver.tech"
-                    android:pathPattern="/branham-player/android/sermons"
-                    android:scheme="https" />
+                <data android:pathPattern="/sermons" />
+                <data android:pathPattern="/sermon-list" />
             </intent-filter>
         </activity>
 
