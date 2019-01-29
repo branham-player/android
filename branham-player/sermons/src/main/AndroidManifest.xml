@@ -17,8 +17,7 @@
 
     <application
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
-        android:supportsRtl="true">
+        android:icon="@mipmap/ic_launcher">
 
         <activity
             android:name=".SermonsActivity"

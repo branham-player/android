@@ -28,9 +28,25 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+
+                <data android:host="branhamplayer.app" />
+                <data android:host="branhamplayer.com" />
+
+                <data android:pathPattern="/login" />
+                <data android:pathPattern="/register" />
+                <data android:pathPattern="/startup" />
+                <data android:pathPattern="/start-up" />
             </intent-filter>
         </activity>
     </application>
