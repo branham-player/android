@@ -11,7 +11,7 @@ steps:
 - task: CmdLine@2
   displayName: Test
   inputs:
-    script: 'echo $ORG_GRADLE_PROJECT_BRANHAM_PLAYER_ANDROID_AUTH0_SCHEME'
+    script: 'echo "$ORG_GRADLE_PROJECT_BRANHAM_PLAYER_ANDROID_AUTH0_SCHEME"'
 
 - task: CmdLine@2
   displayName: Accept Android SDK Licenses
