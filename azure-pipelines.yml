@@ -1,0 +1,18 @@
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+steps:
+- task: Gradle@2
+  inputs:
+    workingDirectory: ''
+    gradleWrapperFile: 'gradlew'
+    gradleOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: false
+    tasks: 'assembleDebug'
+- task: PublishPipelineArtifact@0
+  inputs:
+    artifactName: 'app-debug.apk'
+    targetPath: 'app/build/outputs/apk/debug/app-debug.apk'
