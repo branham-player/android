@@ -5,13 +5,7 @@ steps:
 - task: CmdLine@2
   displayName: Accept Android SDK Licenses
   inputs:
-    script: |
-    ls /usr/local/lib
-    ls /usr/local/lib/android
-    ls /usr/local/lib/android/sdk
-    ls /usr/local/lib/android/sdk/tools
-    ls /usr/local/lib/android/sdk/tools/bin
-    yes | sudo /usr/local/lib/android/sdk/tools/bin/sdkmanager --licenses
+    script: 'ls /usr/local/lib; ls /usr/local/lib/android; ls /usr/local/lib/android/sdk; ls /usr/local/lib/android/sdk/tools; ls /usr/local/lib/android/sdk/tools/bin'
     
 - task: Gradle@2
   displayName: Build Debug Application
