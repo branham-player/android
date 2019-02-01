@@ -1,6 +1,12 @@
 pool:
   vmImage: 'macOS-10.13'
 
+pr:
+  none
+
+variables:
+- group: Gradle Configuration
+
 steps:
 - task: CmdLine@2
   displayName: Accept Android SDK Licenses
