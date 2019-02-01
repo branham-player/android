@@ -2,7 +2,13 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 steps:
+- task: CmdLine@2
+  displayName: Accept Android SDK Licenses
+  inputs:
+    script: 'yes | sudo /usr/local/lib/android/sdk/tools/bin/sdkmanager --licenses' 
+    
 - task: Gradle@2
+  displayName: Build Debug Application
   inputs:
     workingDirectory: ''
     gradleWrapperFile: 'gradlew'
@@ -12,7 +18,9 @@ steps:
     jdkArchitectureOption: 'x64'
     publishJUnitResults: false
     tasks: 'assembleDebug'
+
 - task: PublishPipelineArtifact@0
+  displayName: Save APK
   inputs:
     artifactName: 'app-debug.apk'
     targetPath: 'app/build/outputs/apk/debug/app-debug.apk'
