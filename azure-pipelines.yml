@@ -21,7 +21,7 @@ steps:
 - task: CmdLine@2
   displayName: Copy google-service.json
   inputs:
-    script: 'cp $(DOWNLOADSECUREFILE1_SECUREFILEPATH) ./app'
+    script: 'cp $(DOWNLOADSECUREFILE_SECUREFILEPATH) ./app'
     
 - task: Gradle@2
   displayName: Build Debug Application
