@@ -44,4 +44,4 @@ jobs:
         displayName: Save APK
         inputs:
           artifactName: 'app-debug.apk'
-          targetPath: 'app/build/outputs/apk/debug/
+          targetPath: 'app/build/outputs/apk/debug
