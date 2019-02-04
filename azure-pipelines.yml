@@ -5,7 +5,7 @@ jobs:
   - job: Dependencies
     pool:
       vmImage: 'macOS-10.13'
-    ariables:
+    variables:
       - group: gradle
     steps:
       - task: Bash@3
