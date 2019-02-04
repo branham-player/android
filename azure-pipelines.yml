@@ -1,0 +1,47 @@
+name: $(SourceBranchName) $(Rev:r)
+pr: none
+
+jobs:
+  - job: Dependencies
+    pool:
+      vmImage: 'macOS-10.13'
+    variables:
+      - group: gradle
+    steps:
+      - task: Bash@3
+        displayName: Accept Android SDK Licenses
+        inputs:
+          targetType: inline
+          script: 'echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --licenses'
+
+  - job: Build
+    dependsOn: Dependencies
+    pool:
+      vmImage: 'macOS-10.13'
+    steps:
+      - task: DownloadSecureFile@1
+        displayName: Download google-service.json
+        inputs:
+          secureFile: google-services.json
+      - task: Bash@3
+        displayName: Copy google-service.json
+        inputs:
+          targetType: inline
+          script: 'cp "$DOWNLOADSECUREFILE_SECUREFILEPATH" ./app'
+      - task: Gradle@2
+        displayName: Build Debug Application
+        inputs:
+          workingDirectory: ''
+          gradleWrapperFile: 'gradlew'
+          gradleOptions: '-Xmx3072m'
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '1.11'
+          jdkArchitectureOption: 'x64'
+          publishJUnitResults: false
+          tasks: 'assembleDebug'
+          options: '-PBRANHAM_PLAYER_ANDROID_AUTH0_DEV_CLIENT_ID=$(BRANHAM_PLAYER_ANDROID_AUTH0_DEV_CLIENT_ID) -PBRANHAM_PLAYER_ANDROID_AUTH0_PRD_CLIENT_ID=$(BRANHAM_PLAYER_ANDROID_AUTH0_PRD_CLIENT_ID) -PBRANHAM_PLAYER_ANDROID_AUTH0_SCHEME=$(BRANHAM_PLAYER_ANDROID_AUTH0_SCHEME) -PBRANHAM_PLAYER_ANDROID_AUTH0_DOMAIN=$(BRANHAM_PLAYER_ANDROID_AUTH0_DOMAIN) -PBRANHAM_PLAYER_ANDROID_DEV_LOGGLY_KEY="$(BRANHAM_PLAYER_ANDROID_DEV_LOGGLY_KEY)"'
+      - task: PublishPipelineArtifact@0
+        displayName: Save APK
+        inputs:
+          artifactName: 'app-debug.apk'
+          targetPath: 'app/build/outputs/apk/debug'
