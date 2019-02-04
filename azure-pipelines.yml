@@ -1,8 +1,8 @@
-name: $(SourceBranchName) \#$(Rev:.r)
+name: $(SourceBranchName) $(Rev:.r)
 pr: none
 
 jobs:
-  - job: Obtain Dependencies
+  - job: Dependencies
     pool:
       vmImage: 'win1803'
     variables:
@@ -20,8 +20,8 @@ jobs:
         displayName: Copy google-service.json
         inputs:
             script: 'cp "$DOWNLOADSECUREFILE_SECUREFILEPATH" ./app'
-  - job: Build Application
-    dependsOn: Obtain Dependencies
+  - job: Build
+    dependsOn: Dependencies
     pool:
       vmImage: 'win1803'
     steps:
@@ -37,8 +37,8 @@ jobs:
           publishJUnitResults: false
           tasks: 'assembleDebug'
           options: '-PBRANHAM_PLAYER_ANDROID_AUTH0_DEV_CLIENT_ID=$(AUTH0_DEV_CLIENT_ID) -PBRANHAM_PLAYER_ANDROID_AUTH0_PRD_CLIENT_ID=$(AUTH0_PRD_CLIENT_ID) -PBRANHAM_PLAYER_ANDROID_AUTH0_SCHEME=$(AUTH0_SCHEME) -PBRANHAM_PLAYER_ANDROID_AUTH0_DOMAIN=$(AUTH0_DOMAIN) -PBRANHAM_PLAYER_ANDROID_DEV_LOGGLY_KEY="$(LOGGLY_DEV_KEY)"'
-  - job: Publish Artifacts
-    dependsOn: Build Application
+  - job: Publish
+    dependsOn: Build
     pool:
       vmImage: 'win1803'
     steps:
