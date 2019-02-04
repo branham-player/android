@@ -13,6 +13,12 @@ jobs:
         inputs:
           targetType: inline
           script: 'echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --licenses'
+
+  - job: Build
+    dependsOn: Dependencies
+    pool:
+      vmImage: 'macOS-10.13'
+    steps:
       - task: DownloadSecureFile@1
         displayName: Download google-service.json
         inputs:
@@ -22,12 +28,6 @@ jobs:
         inputs:
           targetType: inline
           script: 'cp "$DOWNLOADSECUREFILE_SECUREFILEPATH" ./app'
-
-  - job: Build
-    dependsOn: Dependencies
-    pool:
-      vmImage: 'macOS-10.13'
-    steps:
       - task: Gradle@2
         displayName: Build Debug Application
         inputs:
