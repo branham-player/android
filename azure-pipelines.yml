@@ -4,40 +4,43 @@ pool:
 pr:
   none
 
-variables:
-- group: gradle
-
-steps:
-- task: CmdLine@2
-  displayName: Accept Android SDK Licenses
-  inputs:
-    script: 'echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --licenses'
-
-- task: DownloadSecureFile@1
-  displayName: Download google-service.json
-  inputs:
-    secureFile: google-services.json
-
-- task: CmdLine@2
-  displayName: Copy google-service.json
-  inputs:
-    script: 'cp "$DOWNLOADSECUREFILE_SECUREFILEPATH" ./app'
-    
-- task: Gradle@2
-  displayName: Build Debug Application
-  inputs:
-    workingDirectory: ''
-    gradleWrapperFile: 'gradlew'
-    gradleOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: false
-    tasks: 'assembleDebug'
-    options: '-PBRANHAM_PLAYER_ANDROID_AUTH0_DEV_CLIENT_ID=$(AUTH0_DEV_CLIENT_ID) -PBRANHAM_PLAYER_ANDROID_AUTH0_PRD_CLIENT_ID=$(AUTH0_PRD_CLIENT_ID) -PBRANHAM_PLAYER_ANDROID_AUTH0_SCHEME=$(AUTH0_SCHEME) -PBRANHAM_PLAYER_ANDROID_AUTH0_DOMAIN=$(AUTH0_DOMAIN) -PBRANHAM_PLAYER_ANDROID_DEV_LOGGLY_KEY="$(LOGGLY_DEV_KEY)"'
-
-- task: PublishPipelineArtifact@0
-  displayName: Save APK
-  inputs:
-    artifactName: 'app-debug.apk'
-    targetPath: 'app/build/outputs/apk/debug/app-debug.apk'
+jobs:
+  - job: Obtain Dependencies
+    variables:
+      - group: gradle
+    steps:
+      - task: Bash@3
+        displayName: Accept Android SDK Licenses
+        inputs:
+          script: 'echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --licenses'
+      - task: DownloadSecureFile@1
+        displayName: Download google-service.json
+          inputs:
+            secureFile: google-services.json
+      - task: Bash@3
+        displayName: Copy google-service.json
+          inputs:
+            script: 'cp "$DOWNLOADSECUREFILE_SECUREFILEPATH" ./app'
+  - job: Build Application
+    dependsOn: Obtain Dependencies
+    steps:
+      - task: Gradle@2
+        displayName: Build Debug Application
+        inputs:
+          workingDirectory: ''
+          gradleWrapperFile: 'gradlew'
+          gradleOptions: '-Xmx3072m'
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '1.11'
+          jdkArchitectureOption: 'x64'
+          publishJUnitResults: false
+          tasks: 'assembleDebug'
+          options: '-PBRANHAM_PLAYER_ANDROID_AUTH0_DEV_CLIENT_ID=$(AUTH0_DEV_CLIENT_ID) -PBRANHAM_PLAYER_ANDROID_AUTH0_PRD_CLIENT_ID=$(AUTH0_PRD_CLIENT_ID) -PBRANHAM_PLAYER_ANDROID_AUTH0_SCHEME=$(AUTH0_SCHEME) -PBRANHAM_PLAYER_ANDROID_AUTH0_DOMAIN=$(AUTH0_DOMAIN) -PBRANHAM_PLAYER_ANDROID_DEV_LOGGLY_KEY="$(LOGGLY_DEV_KEY)"'
+  - job: Publish Artifacts
+    dependsOn: Build Application
+    steps:
+      - task: PublishPipelineArtifact@0
+        displayName: Save APK
+        inputs:
+          artifactName: 'app-debug.apk'
+          targetPath: 'app/build/outputs/apk/debug/app-debug.apk'
