@@ -21,16 +21,7 @@ jobs:
         displayName: Copy google-service.json
         inputs:
           targetType: inline
-          script: 'cp "$DOWNLOADSECUREFILE1_SECUREFILEPATH" ./app'
-      - task: DownloadSecureFile@1
-        displayName: Download gradle.properties
-        inputs:
-          secureFile: gradle.properties
-      - task: Bash@3
-        displayName: Copy gradle.properties
-        inputs:
-          targetType: inline
-          script: 'mkdir -p ~/.gradle; cp "$DOWNLOADSECUREFILE2_SECUREFILEPATH" ~/.gradle'
+          script: 'cp "$DOWNLOADSECUREFILE_SECUREFILEPATH" ./app'
 
   - job: Build
     dependsOn: Dependencies
@@ -60,12 +51,3 @@ jobs:
         inputs:
           artifactName: 'app-debug.apk'
           targetPath: 'app/build/outputs/apk/debug/app-debug.apk'
-  - job: Clean
-    dependsOn: Build
-    condition: always()
-    steps:
-      - task: Bash@3
-        displayName: Delete gradle.properties
-        inputs:
-          targetType: inline
-          script: 'rm -f ~/.gradle/gradle.properties'
