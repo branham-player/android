@@ -15,11 +15,11 @@ jobs:
           script: 'echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --licenses'
       - task: DownloadSecureFile@1
         displayName: Download google-service.json
-          inputs:
+        inputs:
             secureFile: google-services.json
       - task: Bash@3
         displayName: Copy google-service.json
-          inputs:
+        inputs:
             script: 'cp "$DOWNLOADSECUREFILE_SECUREFILEPATH" ./app'
   - job: Build Application
     dependsOn: Obtain Dependencies
