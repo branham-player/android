@@ -4,26 +4,28 @@ pr: none
 jobs:
   - job: Dependencies
     pool:
-      vmImage: 'macOS-10.13'
+      vmImage: 'win1803'
     variables:
       - group: gradle
     steps:
-      - task: CmdLine@2
+      - task: Bash@3
         displayName: Accept Android SDK Licenses
         inputs:
+          targetType: inline
           script: 'echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --licenses'
       - task: DownloadSecureFile@1
         displayName: Download google-service.json
         inputs:
             secureFile: google-services.json
-      - task: CmdLine@2
+      - task: Bash@3
         displayName: Copy google-service.json
         inputs:
-            script: 'cp "$DOWNLOADSECUREFILE_SECUREFILEPATH" ./app'
+          targetType: inline
+          script: 'cp "$DOWNLOADSECUREFILE_SECUREFILEPATH" ./app'
   - job: Build
     dependsOn: Dependencies
     pool:
-      vmImage: 'macOS-10.13'
+      vmImage: 'win1803'
     steps:
       - task: Gradle@2
         displayName: Build Debug Application
@@ -40,7 +42,7 @@ jobs:
   - job: Publish
     dependsOn: Build
     pool:
-      vmImage: 'macOS-10.13'
+      vmImage: 'win1803'
     steps:
       - task: PublishPipelineArtifact@0
         displayName: Save APK
