@@ -4,7 +4,7 @@ pr: none
 jobs:
   - job: Dependencies
     pool:
-      vmImage: 'win1803'
+      vmImage: 'macOS-10.13'
     variables:
       - group: gradle
     steps:
@@ -25,7 +25,7 @@ jobs:
   - job: Build
     dependsOn: Dependencies
     pool:
-      vmImage: 'win1803'
+      vmImage: 'macOS-10.13'
     steps:
       - task: Gradle@2
         displayName: Build Debug Application
@@ -42,7 +42,7 @@ jobs:
   - job: Publish
     dependsOn: Build
     pool:
-      vmImage: 'win1803'
+      vmImage: 'macOS-10.13'
     steps:
       - task: PublishPipelineArtifact@0
         displayName: Save APK
