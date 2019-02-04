@@ -5,6 +5,8 @@ jobs:
   - job: Dependencies
     pool:
       vmImage: 'macOS-10.13'
+    ariables:
+      - group: gradle
     steps:
       - task: Bash@3
         displayName: Accept Android SDK Licenses
