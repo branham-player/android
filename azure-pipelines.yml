@@ -5,8 +5,6 @@ jobs:
   - job: Dependencies
     pool:
       vmImage: 'macOS-10.13'
-    variables:
-      - group: gradle
     steps:
       - task: Bash@3
         displayName: Accept Android SDK Licenses
@@ -16,12 +14,21 @@ jobs:
       - task: DownloadSecureFile@1
         displayName: Download google-service.json
         inputs:
-            secureFile: google-services.json
+          secureFile: google-services.json
       - task: Bash@3
         displayName: Copy google-service.json
         inputs:
           targetType: inline
-          script: 'cp "$DOWNLOADSECUREFILE_SECUREFILEPATH" ./app'
+          script: 'cp "$DOWNLOADSECUREFILE1_SECUREFILEPATH" ./app'
+      - task: DownloadSecureFile@1
+        displayName: Download gradle.properties
+        inputs:
+          secureFile: gradle.properties
+      - task: Bash@3
+        displayName: Copy gradle.properties
+        inputs:
+          targetType: inline
+          script: 'mkdir -p ~/.gradle; cp "$DOWNLOADSECUREFILE2_SECUREFILEPATH" ~/.gradle'
   - job: Build
     dependsOn: Dependencies
     pool:
@@ -38,7 +45,6 @@ jobs:
           jdkArchitectureOption: 'x64'
           publishJUnitResults: false
           tasks: 'assembleDebug'
-          options: '-PBRANHAM_PLAYER_ANDROID_AUTH0_DEV_CLIENT_ID=$(AUTH0_DEV_CLIENT_ID) -PBRANHAM_PLAYER_ANDROID_AUTH0_PRD_CLIENT_ID=$(AUTH0_PRD_CLIENT_ID) -PBRANHAM_PLAYER_ANDROID_AUTH0_SCHEME=$(AUTH0_SCHEME) -PBRANHAM_PLAYER_ANDROID_AUTH0_DOMAIN=$(AUTH0_DOMAIN) -PBRANHAM_PLAYER_ANDROID_DEV_LOGGLY_KEY="$(LOGGLY_DEV_KEY)"'
   - job: Publish
     dependsOn: Build
     pool:
@@ -49,3 +55,12 @@ jobs:
         inputs:
           artifactName: 'app-debug.apk'
           targetPath: 'app/build/outputs/apk/debug/app-debug.apk'
+  - job: Clean
+    dependsOn: Build
+    condition: always()
+    steps:
+      - task: Bash@3
+        displayName: Delete gradle.properties
+        inputs:
+          targetType: inline
+          script: 'rm -f ~/.gradle/gradle.properties'
