@@ -13,9 +13,16 @@
 
     <!-- endregion -->
 
-    <!-- region Icon Colors -->
+    <!-- region Launcher Icon -->
 
-    <color name="icon_background_color">@color/colorPrimary</color>
+    <color name="launcher_icon_background_color">@color/colorPrimary</color>
+
+    <!-- endregion -->
+
+    <!-- region Navigation Menu Colors -->
+
+    <color name="navigation_menu_item_selected_color">@color/colorPrimary</color>
+    <color name="navigation_menu_item_unselected_color">#808080</color>
 
     <!-- endregion -->
 </resources>

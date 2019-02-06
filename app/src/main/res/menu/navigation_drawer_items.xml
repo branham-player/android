@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/navigation_top_group"
+           android:checkableBehavior="single">
+
+        <item android:id="@+id/navigation_sermons"
+              android:icon="@drawable/ic_sermons"
+              android:title="@string/navigation_sermons"/>
+
+        <item android:id="@+id/navigation_downloads"
+              android:icon="@drawable/ic_downloads"
+              android:title="@string/navigation_downloads"/>
+
+        <item android:id="@+id/navigation_account"
+              android:icon="@drawable/ic_account"
+              android:title="@string/navigation_account"/>
+    </group>
+
+    <group android:id="@+id/navigation_bottom_group"
+           android:checkableBehavior="single">
+
+        <item android:id="@+id/navigation_logout"
+              android:icon="@drawable/ic_logout"
+              android:title="@string/navigation_logout"/>
+    </group>
+</menu>

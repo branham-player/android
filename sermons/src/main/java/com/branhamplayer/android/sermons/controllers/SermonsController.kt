@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,9 +49,10 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
             sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction(compatActivity))
 
             if (isTablet) {
-                val toolbar: Toolbar = it.findViewById(R.id.primary_toolbar)
+                val actionbar: ActionBar? = compatActivity.supportActionBar
 
-                sermonsStore.dispatch(DrawerAction.CreateDrawerWithoutProfileAction(compatActivity, toolbar, savedViewState, 0))
+                actionbar?.setDisplayHomeAsUpEnabled(true)
+                actionbar?.setHomeButtonEnabled(true)
                 sermonsStore.dispatch(ProfileAction.GetUserProfileAction(it.applicationContext))
             }
         }

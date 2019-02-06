@@ -1,63 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/large_screen_background"
-    tools:context=".SermonsActivity">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/primary_toolbar"
+<androidx.drawerlayout.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_primary_height"
-        android:background="@color/toolbar_background"
-        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light" />
+        android:layout_height="match_parent"
+        android:background="@color/large_screen_background"
+        tools:context=".SermonsActivity">
 
-    <android.widget.Space
-        android:id="@+id/primary_toolbar_spacer"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintBottom_toBottomOf="@+id/primary_toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="@dimen/card_distance_from_edges_no_shadow_padding"
-        android:layout_marginEnd="@dimen/card_distance_from_edges_no_shadow_padding"
-        android:maxWidth="@dimen/card_max_width"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/primary_toolbar_spacer">
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/sermon_list_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/toolbar_background"
-            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light" />
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/card_shadow_padding"
-            android:layout_marginEnd="@dimen/card_shadow_padding"
-            android:background="@color/card_background"
-            app:cardCornerRadius="0dp">
-
-            <com.bluelinelabs.conductor.ChangeHandlerFrameLayout
-                android:id="@+id/sermon_list_container"
+                android:id="@+id/primary_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </androidx.cardview.widget.CardView>
-    </androidx.appcompat.widget.LinearLayoutCompat>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                android:layout_height="@dimen/toolbar_primary_height"
+                android:background="@color/toolbar_background"
+                android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"/>
+
+        <android.widget.Space
+                android:id="@+id/primary_toolbar_spacer"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_constraintBottom_toBottomOf="@+id/primary_toolbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/card_distance_from_edges_no_shadow_padding"
+                android:layout_marginEnd="@dimen/card_distance_from_edges_no_shadow_padding"
+                android:maxWidth="@dimen/card_max_width"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/primary_toolbar_spacer">
+
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/sermon_list_toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/toolbar_background"
+                    android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+                    app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"/>
+
+            <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/card_shadow_padding"
+                    android:layout_marginEnd="@dimen/card_shadow_padding"
+                    android:background="@color/card_background"
+                    app:cardCornerRadius="0dp">
+
+                <com.bluelinelabs.conductor.ChangeHandlerFrameLayout
+                        android:id="@+id/sermon_list_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+            </androidx.cardview.widget.CardView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:menu="@menu/navigation_drawer_items"/>
+</androidx.drawerlayout.widget.DrawerLayout>
