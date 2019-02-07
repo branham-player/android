@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bluelinelabs.conductor.RestoreViewOnCreateController
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.actions.DataAction
-import com.branhamplayer.android.sermons.actions.DrawerAction
 import com.branhamplayer.android.sermons.actions.PermissionAction
 import com.branhamplayer.android.sermons.actions.ProfileAction
 import com.branhamplayer.android.sermons.adapters.SermonsAdapter
