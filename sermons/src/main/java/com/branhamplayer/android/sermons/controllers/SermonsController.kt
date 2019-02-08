@@ -44,7 +44,7 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View {
         val view = inflater.inflate(R.layout.sermons_controller, container, false)
 
-        setUpComponents()
+        setUpComponents(view)
         sermonsStore.subscribe(this)
 
         activity?.let {
@@ -70,7 +70,6 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
 
         val drawerUserEmail: AppCompatTextView? = activity?.findViewById(RBase.id.navigation_drawer_header_email)
         val drawerUserName: AppCompatTextView? = activity?.findViewById(RBase.id.navigation_drawer_header_name)
-        val isTablet = resources?.getBoolean(RBase.bool.is_tablet) == true
 
         drawer?.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
 
@@ -91,7 +90,7 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
 
     // endregion
 
-    private fun setUpComponents() {
+    private fun setUpComponents(view: View) {
         val linearLayoutManager: LinearLayoutManager = get { parametersOf(applicationContext) }
 
         drawer = activity?.findViewById(R.id.navigation_drawer)
