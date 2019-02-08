@@ -6,17 +6,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bluelinelabs.conductor.RestoreViewOnCreateController
+import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.actions.DataAction
+import com.branhamplayer.android.sermons.actions.DrawerAction
 import com.branhamplayer.android.sermons.actions.PermissionAction
 import com.branhamplayer.android.sermons.actions.ProfileAction
 import com.branhamplayer.android.sermons.adapters.SermonsAdapter
 import com.branhamplayer.android.sermons.shared.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
+import com.google.android.material.navigation.NavigationView
 import org.koin.core.parameter.parametersOf
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.get
@@ -44,7 +48,7 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
             val compatActivity = it as AppCompatActivity
             val isTablet = resources?.getBoolean(com.branhamplayer.android.R.bool.is_tablet) == true
 
-            sermonsStore.dispatch(DataAction.SetTitleAction(it.applicationContext, com.branhamplayer.android.R.string.navigation_sermons))
+            sermonsStore.dispatch(DataAction.SetTitleAction(it, RBase.string.navigation_sermons))
             sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction(compatActivity))
 
             if (isTablet) {
@@ -52,7 +56,9 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
 
                 actionbar?.setDisplayHomeAsUpEnabled(true)
                 actionbar?.setHomeButtonEnabled(true)
-                sermonsStore.dispatch(ProfileAction.GetUserProfileAction(it.applicationContext))
+
+                sermonsStore.dispatch(DrawerAction.SetSelectedItemAction(0))
+                sermonsStore.dispatch(ProfileAction.GetUserProfileAction(it))
             }
         }
 
@@ -64,7 +70,18 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
     // region StoreSubscriber
 
     override fun newState(state: SermonsState) {
+
+        val drawer: NavigationView? = activity?.findViewById(R.id.navigation_drawer)
+        val drawerUserEmail: AppCompatTextView? = activity?.findViewById(RBase.id.navigation_drawer_header_email)
+        val drawerUserName: AppCompatTextView? = activity?.findViewById(RBase.id.navigation_drawer_header_name)
         val toolbar: Toolbar? = activity?.findViewById(R.id.sermon_list_toolbar)
+
+        drawer?.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
+
+        state.profile?.let {
+            drawerUserEmail?.text = it.email
+            drawerUserName?.text = it.name
+        }
 
         state.sermonList?.let {
             sermonAdapter.setSermons(it)
