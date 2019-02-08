@@ -36,25 +36,16 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
     private var drawer: NavigationView? = null
     private var drawerLayout: DrawerLayout? = null
     private var primaryToolbar: Toolbar? = null
-    private var secondaryToolbar: Toolbar? = null
+    private var sermonsListToolbar: Toolbar? = null
     private var sermonsRecyclerView: RecyclerView? = null
 
     // region Controller
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View {
         val view = inflater.inflate(R.layout.sermons_controller, container, false)
-        val linearLayoutManager: LinearLayoutManager = get { parametersOf(applicationContext) }
 
+        setUpComponents()
         sermonsStore.subscribe(this)
-
-        drawer = activity?.findViewById(R.id.navigation_drawer)
-        drawerLayout = activity?.findViewById(R.id.navigation_drawer_layout)
-        primaryToolbar = activity?.findViewById(R.id.primary_toolbar)
-        secondaryToolbar = activity?.findViewById(R.id.sermon_list_toolbar)
-        sermonsRecyclerView = view?.findViewById(R.id.sermon_list)
-
-        sermonsRecyclerView?.adapter = sermonAdapter
-        sermonsRecyclerView?.layoutManager = linearLayoutManager
 
         activity?.let {
             val compatActivity = it as AppCompatActivity
@@ -64,22 +55,7 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
             sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction(compatActivity))
 
             if (isTablet) {
-                drawerToggle = ActionBarDrawerToggle(
-                    activity,
-                    drawerLayout,
-                    primaryToolbar,
-                    RBase.string.navigation_drawer_open,
-                    RBase.string.navigation_drawer_close
-                )
-
-                drawerToggle?.let {
-                    drawerLayout?.addDrawerListener(it)
-                }
-
-                drawerToggle?.syncState()
-
-                sermonsStore.dispatch(DrawerAction.SetSelectedItemAction(0))
-                sermonsStore.dispatch(ProfileAction.GetUserProfileAction(it))
+                setUpDrawer(it)
             }
         }
 
@@ -94,6 +70,7 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
 
         val drawerUserEmail: AppCompatTextView? = activity?.findViewById(RBase.id.navigation_drawer_header_email)
         val drawerUserName: AppCompatTextView? = activity?.findViewById(RBase.id.navigation_drawer_header_name)
+        val isTablet = resources?.getBoolean(RBase.bool.is_tablet) == true
 
         drawer?.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
 
@@ -108,9 +85,41 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
         }
 
         state.title?.let {
-            secondaryToolbar?.title = it
+            sermonsListToolbar?.title = it
         }
     }
 
     // endregion
+
+    private fun setUpComponents() {
+        val linearLayoutManager: LinearLayoutManager = get { parametersOf(applicationContext) }
+
+        drawer = activity?.findViewById(R.id.navigation_drawer)
+        drawerLayout = activity?.findViewById(R.id.navigation_drawer_layout)
+        primaryToolbar = activity?.findViewById(R.id.primary_toolbar)
+        sermonsListToolbar = activity?.findViewById(R.id.sermon_list_toolbar)
+        sermonsRecyclerView = view?.findViewById(R.id.sermon_list)
+
+        sermonsRecyclerView?.adapter = sermonAdapter
+        sermonsRecyclerView?.layoutManager = linearLayoutManager
+    }
+
+    private fun setUpDrawer(activity: AppCompatActivity) {
+
+        drawerToggle = ActionBarDrawerToggle(
+            activity,
+            drawerLayout,
+            primaryToolbar,
+            RBase.string.navigation_drawer_open,
+            RBase.string.navigation_drawer_close
+        )
+
+        drawerToggle?.let {
+            drawerLayout?.addDrawerListener(it)
+        }
+
+        drawerToggle?.syncState()
+        sermonsStore.dispatch(DrawerAction.SetSelectedItemAction(0))
+        sermonsStore.dispatch(ProfileAction.GetUserProfileAction(activity))
+    }
 }

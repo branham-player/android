@@ -89,8 +89,8 @@ dependencies {
     implementation 'com.auth0.android:auth0:1.15.1'
 
     // Butter Knife
-    //implementation 'com.jakewharton:butterknife:10.0.0'
-    //kapt 'com.jakewharton:butterknife-compiler:10.0.0'
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.0.0'
 
     // Conductor
     implementation 'com.bluelinelabs:conductor:3.0.0-rc1'
