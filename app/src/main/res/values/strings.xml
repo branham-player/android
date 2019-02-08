@@ -5,6 +5,9 @@
     <string name="app_name">Branham Player</string>
     <string name="app_slogan">A flexible audio player for all of your Android devices</string>
 
+    <string name="navigation_drawer_close">Close Sesame</string>
+    <string name="navigation_drawer_open">Open Sesame</string>
+
     <!-- endregion -->
 
     <!-- region Application Modules -->
