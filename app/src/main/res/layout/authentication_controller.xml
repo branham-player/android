@@ -49,7 +49,7 @@
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="96dp"
-        android:background="@drawable/button_background"
+        android:background="@drawable/diagonal_gradient_background"
         android:text="@string/login_screen_login"
         android:textColor="@android:color/white"
         android:textSize="16sp"

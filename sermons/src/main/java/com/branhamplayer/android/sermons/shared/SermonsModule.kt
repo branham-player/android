@@ -15,13 +15,7 @@ import com.branhamplayer.android.sermons.adapters.SermonsAdapter
 import com.branhamplayer.android.sermons.controllers.SermonsController
 import com.branhamplayer.android.sermons.mappers.SermonMapper
 import com.branhamplayer.android.sermons.repositories.SermonsRepository
-import com.branhamplayer.android.sermons.ui.DrawerItemsConstants
 import com.branhamplayer.android.services.auth0.Auth0Service
-import com.mikepenz.materialdrawer.AccountHeaderBuilder
-import com.mikepenz.materialdrawer.DrawerBuilder
-import com.mikepenz.materialdrawer.model.DividerDrawerItem
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -65,49 +59,6 @@ val dataModule = module {
     }
 }
 
-val drawerModule = module {
-
-    factory(override = true) {
-        AccountHeaderBuilder()
-    }
-
-    factory(override = true) {
-        DividerDrawerItem()
-    }
-
-    factory(override = true) {
-        DrawerBuilder()
-    }
-
-    factory(override = true) {
-        DrawerItemsConstants.MenuItem.Account()
-    }
-
-    factory(override = true) {
-        DrawerItemsConstants.Divider
-    }
-
-    factory(override = true) {
-        DrawerItemsConstants.MenuItem.Downloads()
-    }
-
-    factory(override = true) {
-        DrawerItemsConstants.MenuItem.Logout()
-    }
-
-    factory(override = true) {
-        DrawerItemsConstants.MenuItem.Sermons()
-    }
-
-    factory(override = true) {
-        PrimaryDrawerItem()
-    }
-
-    factory(override = true) {
-        ProfileDrawerItem()
-    }
-}
-
 val recyclerViewModule = module {
 
     factory(override = true) { (context: Context?) ->
@@ -134,4 +85,4 @@ val rxJavaModule = module {
     }
 }
 
-val sermonsModule = listOf(activityManagementModule, auth0Module, dataModule, drawerModule, recyclerViewModule, rxJavaModule)
+val sermonsModule = listOf(activityManagementModule, auth0Module, dataModule, recyclerViewModule, rxJavaModule)

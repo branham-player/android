@@ -13,6 +13,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.SermonConstants
 import com.branhamplayer.android.sermons.SermonsActivity
@@ -163,7 +164,7 @@ class SermonNotification(
                 0L
             }
 
-            color = ContextCompat.getColor(service.applicationContext, R.color.colorPrimary)
+            color = ContextCompat.getColor(service.applicationContext, RBase.color.colorPrimary)
 
             setChannelId(SermonConstants.Notification.Channel.ID)
             setContentIntent(createContentIntent())

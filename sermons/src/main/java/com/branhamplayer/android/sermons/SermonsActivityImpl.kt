@@ -9,7 +9,13 @@ import org.koin.standalone.inject
 
 class SermonsActivityImpl(private val activity: SermonsActivity) : KoinComponent {
 
-    private val router: Router by inject { parametersOf(activity, activity.findViewById(R.id.sermon_list_container), savedInstanceState) }
+    private val router: Router by inject {
+        parametersOf(
+            activity,
+            activity.findViewById(R.id.sermon_list_container),
+            savedInstanceState
+        )
+    }
     private val splashScreenRoute: RouterTransaction by inject()
 
     private var savedInstanceState: Bundle? = null
@@ -21,5 +27,8 @@ class SermonsActivityImpl(private val activity: SermonsActivity) : KoinComponent
         if (!router.hasRootController()) {
             router.setRoot(splashScreenRoute)
         }
+
+        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        activity.supportActionBar?.setHomeButtonEnabled(true)
     }
 }
