@@ -54,10 +54,10 @@ class AuthenticationMiddleware {
                         }
 
                         override fun onFailure(dialog: Dialog) =
-                                dispatch(RoutingAction.ShowLoginErrorAction())
+                                dispatch(RoutingAction.ShowLoginErrorAction)
 
                         override fun onFailure(exception: AuthenticationException?) =
-                                dispatch(RoutingAction.ShowLoginErrorAction())
+                                dispatch(RoutingAction.ShowLoginErrorAction)
                     })
         }
     }

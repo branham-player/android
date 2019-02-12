@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:background="@color/large_screen_background"
     android:layout_height="match_parent"
-    android:background="@color/large_screen_background">
+    android:layout_width="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="240dp"
             android:background="@color/toolbar_background"
+            android:layout_height="240dp"
+            android:layout_width="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:theme="@style/ThemeOverlay.AppCompat.ActionBar" />
+            app:theme="@style/ThemeOverlay.AppCompat.ActionBar"/>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="560dp"
-            android:layout_height="480dp"
-            android:layout_marginTop="@dimen/login_card_margin_top"
-            android:layout_marginBottom="60dp"
             android:background="@color/card_background"
+            android:layout_height="480dp"
+            android:layout_marginBottom="60dp"
+            android:layout_marginTop="@dimen/login_card_margin_top"
+            android:layout_width="560dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.bluelinelabs.conductor.ChangeHandlerFrameLayout
+            <FrameLayout
                 android:id="@+id/start_up_container"
-                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:context=".StartupActivity" />
-
+                android:layout_width="match_parent"
+                tools:context=".StartupActivity"/>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
