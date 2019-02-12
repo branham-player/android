@@ -47,7 +47,9 @@ android {
             buildConfigField "String", "AUTH0_CLIENT_ID", "\"$auth0DevClientId\""
             buildConfigField "String", "AUTH0_SCHEME", "\"$application_id$application_id_dev_suffix\""
 
-            manifestPlaceholders += [auth0Scheme: "$application_id$application_id_dev_suffix"]
+            manifestPlaceholders += [
+                    auth0Scheme: "$application_id$application_id_dev_suffix"
+            ]
         }
 
         release {
@@ -59,18 +61,6 @@ android {
     dynamicFeatures = [
             ":sermons"
     ]
-}
-
-buildscript {
-    dependencies {
-        // Butter Knife
-        classpath 'com.jakewharton:butterknife-gradle-plugin:10.0.0'
-    }
-
-    repositories {
-        google()
-        jcenter()
-    }
 }
 
 crashlytics {

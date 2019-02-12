@@ -24,7 +24,7 @@ class AuthenticationFragment : Fragment(), KoinComponent {
     // region Fragment
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.authentication_controller, container, false)
+        val view = inflater.inflate(R.layout.authentication_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
 
         return view
@@ -50,14 +50,12 @@ class AuthenticationFragment : Fragment(), KoinComponent {
     // endregion
 
     @OnClick(R.id.login_button)
-    fun login() {
-        activity?.let {
-            startupStore.dispatch(AuthenticationAction.DoLoginAction(it))
-        }
-    }
+    fun login() = launchAuth0()
 
     @OnClick(R.id.login_register)
-    fun register() {
+    fun register() = launchAuth0()
+
+    private fun launchAuth0() {
         activity?.let {
             startupStore.dispatch(AuthenticationAction.DoLoginAction(it))
         }

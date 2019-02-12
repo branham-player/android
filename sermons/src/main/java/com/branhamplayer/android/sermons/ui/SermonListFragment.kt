@@ -1,4 +1,4 @@
-package com.branhamplayer.android.sermons.controllers
+package com.branhamplayer.android.sermons.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,10 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bluelinelabs.conductor.RestoreViewOnCreateController
-import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.actions.DataAction
 import com.branhamplayer.android.sermons.actions.DrawerAction
@@ -28,10 +27,10 @@ import org.koin.standalone.get
 import org.koin.standalone.inject
 import org.rekotlin.StoreSubscriber
 
-class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreSubscriber<SermonsState> {
+class SermonListFragment : Fragment(), KoinComponent, StoreSubscriber<SermonsState> {
 
     private var drawerToggle: ActionBarDrawerToggle? = null
-    private val sermonAdapter: SermonsAdapter by inject { parametersOf(applicationContext) }
+    private val sermonAdapter: SermonsAdapter by inject { parametersOf(context) }
 
     private var drawer: NavigationView? = null
     private var drawerLayout: DrawerLayout? = null
@@ -41,17 +40,17 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
 
     // region Controller
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup, savedViewState: Bundle?): View {
-        val view = inflater.inflate(R.layout.sermons_controller, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.sermon_list_fragment, container, false)
 
         setUpComponents(view)
         sermonsStore.subscribe(this)
 
         activity?.let {
             val compatActivity = it as AppCompatActivity
-            val isTablet = resources?.getBoolean(RBase.bool.is_tablet) == true
+            val isTablet = resources.getBoolean(com.branhamplayer.android.R.bool.is_tablet)
 
-            sermonsStore.dispatch(DataAction.SetTitleAction(it, RBase.string.navigation_sermons))
+            sermonsStore.dispatch(DataAction.SetTitleAction(it, com.branhamplayer.android.R.string.navigation_sermons))
             sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction(compatActivity))
 
             if (isTablet) {
@@ -68,8 +67,8 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
 
     override fun newState(state: SermonsState) {
 
-        val drawerUserEmail: AppCompatTextView? = activity?.findViewById(RBase.id.navigation_drawer_header_email)
-        val drawerUserName: AppCompatTextView? = activity?.findViewById(RBase.id.navigation_drawer_header_name)
+        val drawerUserEmail: AppCompatTextView? = activity?.findViewById(com.branhamplayer.android.R.id.navigation_drawer_header_email)
+        val drawerUserName: AppCompatTextView? = activity?.findViewById(com.branhamplayer.android.R.id.navigation_drawer_header_name)
 
         drawer?.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
 
@@ -91,13 +90,13 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
     // endregion
 
     private fun setUpComponents(view: View) {
-        val linearLayoutManager: LinearLayoutManager = get { parametersOf(applicationContext) }
+        val linearLayoutManager: LinearLayoutManager = get { parametersOf(context) }
 
         drawer = activity?.findViewById(R.id.navigation_drawer)
         drawerLayout = activity?.findViewById(R.id.navigation_drawer_layout)
         primaryToolbar = activity?.findViewById(R.id.primary_toolbar)
         sermonsListToolbar = activity?.findViewById(R.id.sermon_list_toolbar)
-        sermonsRecyclerView = view?.findViewById(R.id.sermon_list)
+        sermonsRecyclerView = view.findViewById(R.id.sermon_list)
 
         sermonsRecyclerView?.adapter = sermonAdapter
         sermonsRecyclerView?.layoutManager = linearLayoutManager
@@ -109,8 +108,8 @@ class SermonsController : RestoreViewOnCreateController(), KoinComponent, StoreS
             activity,
             drawerLayout,
             primaryToolbar,
-            RBase.string.navigation_drawer_open,
-            RBase.string.navigation_drawer_close
+            com.branhamplayer.android.R.string.navigation_drawer_open,
+            com.branhamplayer.android.R.string.navigation_drawer_close
         )
 
         drawerToggle?.let {

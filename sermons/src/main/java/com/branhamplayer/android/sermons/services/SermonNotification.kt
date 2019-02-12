@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat
 import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.SermonConstants
-import com.branhamplayer.android.sermons.SermonsActivity
+import com.branhamplayer.android.sermons.ui.SermonsActivity
 import com.branhamplayer.android.services.logging.Loggly
 import com.branhamplayer.android.services.logging.LogglyConstants.Tags.NOTIFICATION
 
