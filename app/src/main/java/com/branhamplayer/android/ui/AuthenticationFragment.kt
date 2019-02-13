@@ -49,11 +49,15 @@ class AuthenticationFragment : Fragment(), KoinComponent {
 
     // endregion
 
+    // region Event Listeners
+
     @OnClick(R.id.login_button)
     fun login() = launchAuth0()
 
     @OnClick(R.id.login_register)
     fun register() = launchAuth0()
+
+    // endregion
 
     private fun launchAuth0() {
         activity?.let {

@@ -41,6 +41,10 @@ dependencies {
     // Auth0
     implementation 'com.auth0.android:auth0:1.15.1'
 
+    // Butter Knife
+    implementation 'com.jakewharton:butterknife:10.0.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.0.0'
+
     // Koin
     implementation 'org.koin:koin-core:1.0.2'
     implementation 'org.koin:koin-android:1.0.2'
