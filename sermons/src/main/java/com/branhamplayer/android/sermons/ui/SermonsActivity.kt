@@ -3,7 +3,6 @@ package com.branhamplayer.android.sermons.ui
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.commit
@@ -19,6 +18,7 @@ import com.branhamplayer.android.sermons.actions.ProfileAction
 import com.branhamplayer.android.sermons.shared.sermonsModule
 import com.branhamplayer.android.sermons.shared.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
+import com.branhamplayer.android.ui.DrawerHeaderViewBinder
 import com.google.android.material.navigation.NavigationView
 import org.koin.android.ext.android.inject
 import org.koin.standalone.StandAloneContext
@@ -28,7 +28,9 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
     private var drawerToggle: ActionBarDrawerToggle? = null
     private val sermonListFragment: SermonListFragment by inject()
-    private var unbinder: Unbinder? = null
+
+    private var activityUnbinder: Unbinder? = null
+    private val drawerHeaderBinder: DrawerHeaderViewBinder by inject()
 
     // region Components
 
@@ -39,14 +41,6 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
     @JvmField
     @BindView(R.id.navigation_drawer_layout)
     var drawerLayout: DrawerLayout? = null
-
-    @JvmField
-    @BindView(RBase.id.navigation_drawer_header_email)
-    var drawerUserEmail: AppCompatTextView? = null
-
-    @JvmField
-    @BindView(RBase.id.navigation_drawer_header_name)
-    var drawerUserName: AppCompatTextView? = null
 
     @JvmField
     @BindView(R.id.primary_toolbar)
@@ -66,7 +60,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         StandAloneContext.loadKoinModules(sermonsModule)
         setContentView(R.layout.sermons_activity)
 
-        unbinder = ButterKnife.bind(this)
+        activityUnbinder = ButterKnife.bind(this)
         sermonsStore.subscribe(this)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -88,7 +82,9 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
     override fun onDestroy() {
         super.onDestroy()
-        unbinder?.unbind()
+
+        drawerHeaderBinder.unbind()
+        activityUnbinder?.unbind()
     }
 
     // endregion
@@ -100,8 +96,8 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         drawer?.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
 
         state.profile?.let {
-            drawerUserEmail?.text = it.email
-            drawerUserName?.text = it.name
+            drawerHeaderBinder.email?.text = it.email
+            drawerHeaderBinder.name?.text = it.name
         }
 
         state.title?.let {
@@ -126,6 +122,13 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         }
 
         drawerToggle?.syncState()
+
+        if (drawer?.headerCount == 1) {
+            drawer?.getHeaderView(0)?.let {
+                drawerHeaderBinder.bind(it)
+            }
+        }
+
         sermonsStore.dispatch(DrawerAction.SetSelectedItemAction(0))
         sermonsStore.dispatch(ProfileAction.GetUserProfileAction(this))
     }

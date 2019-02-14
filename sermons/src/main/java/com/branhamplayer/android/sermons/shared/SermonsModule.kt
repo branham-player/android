@@ -10,6 +10,7 @@ import com.branhamplayer.android.sermons.mappers.SermonMapper
 import com.branhamplayer.android.sermons.repositories.SermonsRepository
 import com.branhamplayer.android.sermons.ui.SermonListFragment
 import com.branhamplayer.android.services.auth0.Auth0Service
+import com.branhamplayer.android.ui.DrawerHeaderViewBinder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -17,6 +18,10 @@ import org.koin.dsl.module.module
 
 @SuppressLint("ShowToast")
 val activityManagementModule = module {
+
+    factory(override = true) {
+        DrawerHeaderViewBinder()
+    }
 
     factory(override = true) {
         SermonListFragment()
