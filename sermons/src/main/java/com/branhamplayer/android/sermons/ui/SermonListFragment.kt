@@ -13,7 +13,7 @@ import butterknife.Unbinder
 import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.adapters.SermonsAdapter
-import com.branhamplayer.android.sermons.shared.sermonsStore
+import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
 import org.koin.core.parameter.parametersOf
 import org.koin.standalone.KoinComponent

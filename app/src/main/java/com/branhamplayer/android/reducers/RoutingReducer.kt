@@ -10,6 +10,7 @@ class RoutingReducer : TypedReducer<RoutingAction, StartupState> {
     override fun invoke(action: RoutingAction, oldState: StartupState): StartupState {
         when (action) {
             is RoutingAction.NavigateToSermonsAction -> navigateToSermons(action)
+            is RoutingAction.ShowLoginErrorAction -> Unit
         }
 
         return oldState
