@@ -3,34 +3,20 @@ package com.branhamplayer.android.shared
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
-import android.view.ViewGroup
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.storage.CredentialsManager
 import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import com.auth0.android.provider.CustomTabsOptions
 import com.auth0.android.provider.WebAuthProvider
-import com.bluelinelabs.conductor.Conductor
-import com.bluelinelabs.conductor.RouterTransaction
 import com.branhamplayer.android.BuildConfig
-import com.branhamplayer.android.MainActivity
-import com.branhamplayer.android.MainActivityImpl
-import com.branhamplayer.android.controllers.AuthenticationController
+import com.branhamplayer.android.ui.AuthenticationFragment
 import org.koin.dsl.module.module
 
 val activityManagementModule = module {
 
-    single(override = true) { (activity: MainActivity) ->
-        MainActivityImpl(activity)
-    }
-
-    single(override = true) { (activity: MainActivity, container: ViewGroup, savedInstanceState: Bundle) ->
-        Conductor.attachRouter(activity, container, savedInstanceState)
-    }
-
-    single(override = true) {
-        RouterTransaction.with(AuthenticationController())
+    factory(override = true) {
+        AuthenticationFragment()
     }
 }
 

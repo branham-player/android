@@ -7,7 +7,7 @@
     android:background="@color/large_screen_background"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".SermonsActivity">
+    tools:context=".ui.SermonsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:background="@color/large_screen_background"
@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 app:cardCornerRadius="0dp">
 
-                <com.bluelinelabs.conductor.ChangeHandlerFrameLayout
+                <FrameLayout
                     android:id="@+id/sermon_list_container"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent"/>
@@ -95,7 +95,7 @@
                     android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
                     app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"/>
 
-                <com.bluelinelabs.conductor.ChangeHandlerFrameLayout
+                <FrameLayout
                     android:id="@+id/sermons_details_container"
                     android:layout_height="match_parent"
                     android:layout_width="match_parent"/>
