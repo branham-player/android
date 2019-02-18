@@ -1,6 +1,5 @@
 package com.branhamplayer.android.sermons.middleware
 
-import android.content.Context
 import com.branhamplayer.android.sermons.actions.ProfileAction
 import com.branhamplayer.android.sermons.shared.SermonsModuleConstants
 import com.branhamplayer.android.sermons.states.SermonsState
@@ -10,35 +9,35 @@ import org.koin.standalone.StandAloneContext
 import org.rekotlin.DispatchFunction
 import org.rekotlin.Middleware
 
-class ProfileMiddleware {
-    companion object {
+class ProfileMiddleware : Middleware<SermonsState> {
 
-        fun process(): Middleware<SermonsState> = { dispatcher, getState ->
-            { next ->
-                { action ->
-                    when (action) {
-                        is ProfileAction.GetUserProfileAction -> getUserProfile(action.context, dispatcher, getState())
-                    }
-
-                    next(action)
-                }
+    override fun invoke(
+        dispatch: DispatchFunction,
+        getState: () -> SermonsState?
+    ): (DispatchFunction) -> DispatchFunction = { next ->
+        { action ->
+            when (action) {
+                is ProfileAction.GetUserProfileAction -> getUserProfile(action, dispatch)
             }
-        }
 
-        private fun getUserProfile(context: Context, dispatch: DispatchFunction, state: SermonsState?) {
-            val auth0: Auth0Service = StandAloneContext.getKoin().koinContext.get()
-            val bg: Scheduler = StandAloneContext.getKoin().koinContext.get(SermonsModuleConstants.BG_THREAD)
-            val ui: Scheduler = StandAloneContext.getKoin().koinContext.get(SermonsModuleConstants.UI_THREAD)
-
-            // TODO: Use a disposable
-            auth0.getUserProfileInformation(context)
-                    .subscribeOn(bg)
-                    .observeOn(ui)
-                    .subscribe({ profile ->
-                        dispatch(ProfileAction.SaveUserProfileAction(profile))
-                    }, {
-                        // TODO: Do nothing?
-                    })
+            next(action)
         }
+    }
+
+    private fun getUserProfile(action: ProfileAction.GetUserProfileAction, dispatch: DispatchFunction) {
+
+        val auth0: Auth0Service = StandAloneContext.getKoin().koinContext.get()
+        val bg: Scheduler = StandAloneContext.getKoin().koinContext.get(SermonsModuleConstants.BG_THREAD)
+        val ui: Scheduler = StandAloneContext.getKoin().koinContext.get(SermonsModuleConstants.UI_THREAD)
+
+        // TODO: Use a disposable
+        auth0.getUserProfileInformation(action.context)
+            .subscribeOn(bg)
+            .observeOn(ui)
+            .subscribe({ profile ->
+                dispatch(ProfileAction.SaveUserProfileAction(profile))
+            }, {
+                // TODO: Do nothing?
+            })
     }
 }

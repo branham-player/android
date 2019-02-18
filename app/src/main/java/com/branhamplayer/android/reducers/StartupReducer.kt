@@ -4,18 +4,21 @@ import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.RoutingAction
 import com.branhamplayer.android.states.StartupState
 import org.rekotlin.Action
+import org.rekotlin.Reducer
 
-class StartupReducer {
-    companion object {
+class StartupReducer : Reducer<StartupState> {
 
-        fun reduce(action: Action, startupState: StartupState?): StartupState {
-            val state = startupState ?: StartupState()
+    // TODO: Move these to Dagger, when implemented
+    private val authenticationReducer = AuthenticationReducer()
+    private val routingReducer = RoutingReducer()
 
-            return when (action) {
-                is AuthenticationAction -> AuthenticationReducer.reduce(action, state)
-                is RoutingAction -> RoutingReducer.reduce(action, state)
-                else -> state
-            }
+    override fun invoke(action: Action, startupState: StartupState?): StartupState {
+        val oldState = startupState ?: StartupState()
+
+        return when (action) {
+            is AuthenticationAction -> authenticationReducer.invoke(action, oldState)
+            is RoutingAction -> routingReducer.invoke(action, oldState)
+            else -> oldState
         }
     }
 }

@@ -12,7 +12,7 @@ import com.auth0.android.authentication.storage.CredentialsManager
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.RoutingAction
-import com.branhamplayer.android.shared.startupStore
+import com.branhamplayer.android.store.startupStore
 import org.koin.core.parameter.parametersOf
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.get
