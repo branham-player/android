@@ -9,15 +9,20 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import butterknife.Unbinder
 import com.auth0.android.authentication.storage.CredentialsManager
+import com.branhamplayer.android.App
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.RoutingAction
+import com.branhamplayer.android.base.di.ApplicationComponent
+import com.branhamplayer.android.di.AuthenticationModule
 import com.branhamplayer.android.store.startupStore
-import org.koin.core.parameter.parametersOf
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.get
+import javax.inject.Inject
 
-class AuthenticationFragment : Fragment(), KoinComponent {
+class AuthenticationFragment : Fragment() {
+
+//    @JvmField
+//    @Inject
+    var credentialsManager: CredentialsManager? = null
 
     private var unbinder: Unbinder? = null
 
@@ -27,6 +32,10 @@ class AuthenticationFragment : Fragment(), KoinComponent {
         val view = inflater.inflate(R.layout.authentication_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
 
+        getApplicationComponent()
+            .newAuthenticationComponent(AuthenticationModule())
+            .inject(this)
+
         return view
     }
 
@@ -34,9 +43,7 @@ class AuthenticationFragment : Fragment(), KoinComponent {
         super.onResume()
 
         context?.let {
-            val userCredentials: CredentialsManager = get { parametersOf(it) }
-
-            if (userCredentials.hasValidCredentials()) {
+            if (credentialsManager?.hasValidCredentials() == true) {
                 startupStore.dispatch(RoutingAction.NavigateToSermonsAction(it))
             }
         }
@@ -58,6 +65,12 @@ class AuthenticationFragment : Fragment(), KoinComponent {
     fun register() = launchAuth0()
 
     // endregion
+
+    private fun getApplicationComponent(): ApplicationComponent {
+        val app = activity?.application as App
+
+        return app.getApplicationComponent()
+    }
 
     private fun launchAuth0() {
         activity?.let {

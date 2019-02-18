@@ -10,15 +10,7 @@ import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import com.auth0.android.provider.CustomTabsOptions
 import com.auth0.android.provider.WebAuthProvider
 import com.branhamplayer.android.BuildConfig
-import com.branhamplayer.android.ui.AuthenticationFragment
 import org.koin.dsl.module.module
-
-val activityManagementModule = module {
-
-    factory(override = true) {
-        AuthenticationFragment()
-    }
-}
 
 val auth0Module = module {
 
@@ -50,4 +42,4 @@ val routingModule = module {
     }
 }
 
-val startupModule = listOf(activityManagementModule, auth0Module, routingModule)
+val startupModule = listOf(auth0Module, routingModule)
