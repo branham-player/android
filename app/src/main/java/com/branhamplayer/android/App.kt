@@ -26,6 +26,6 @@ class App : Application() {
 
     fun getApplicationComponent(): ApplicationComponent = applicationComponent ?: DaggerApplicationComponent
         .builder()
-        .applicationModule(ApplicationModule(this))
+        .applicationModule(ApplicationModule(this.applicationContext))
         .build()
 }

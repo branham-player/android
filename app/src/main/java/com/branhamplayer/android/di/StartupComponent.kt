@@ -5,5 +5,5 @@ import dagger.Subcomponent
 
 @Subcomponent(modules = [StartupModule::class])
 interface StartupComponent {
-    fun inject(mainActivity: MainActivity)
+    fun inject(activity: MainActivity)
 }

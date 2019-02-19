@@ -5,5 +5,5 @@ import dagger.Subcomponent
 
 @Subcomponent(modules = [AuthenticationModule::class])
 interface AuthenticationComponent {
-    fun inject(mainActivity: AuthenticationFragment)
+    fun inject(fragment: AuthenticationFragment)
 }
