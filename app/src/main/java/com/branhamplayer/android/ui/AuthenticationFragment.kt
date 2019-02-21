@@ -13,8 +13,8 @@ import com.branhamplayer.android.App
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.RoutingAction
-import com.branhamplayer.android.base.di.ApplicationComponent
 import com.branhamplayer.android.di.AuthenticationModule
+import com.branhamplayer.android.di.DaggerAuthenticationComponent
 import com.branhamplayer.android.store.startupStore
 import javax.inject.Inject
 
@@ -31,9 +31,13 @@ class AuthenticationFragment : Fragment() {
         val view = inflater.inflate(R.layout.authentication_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
 
-        getApplicationComponent()
-            .newAuthenticationComponent(AuthenticationModule())
-            .inject(this)
+        context?.let {
+            DaggerAuthenticationComponent
+                .builder()
+                .authenticationModule(AuthenticationModule(it))
+                .build()
+                .inject(this)
+        }
 
         return view
     }
@@ -64,12 +68,6 @@ class AuthenticationFragment : Fragment() {
     fun register() = launchAuth0()
 
     // endregion
-
-    private fun getApplicationComponent(): ApplicationComponent {
-        val app = activity?.application as App
-
-        return app.getApplicationComponent()
-    }
 
     private fun launchAuth0() {
         activity?.let {

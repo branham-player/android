@@ -11,13 +11,26 @@ import com.branhamplayer.android.BuildConfig
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.RoutingAction
+import com.branhamplayer.android.di.AuthenticationModule
+import com.branhamplayer.android.di.DaggerAuthenticationComponent
 import com.branhamplayer.android.states.StartupState
-import org.koin.core.parameter.parametersOf
-import org.koin.standalone.StandAloneContext
 import org.rekotlin.DispatchFunction
 import org.rekotlin.Middleware
+import javax.inject.Inject
 
 class AuthenticationMiddleware : Middleware<StartupState> {
+
+    @JvmField
+    @Inject
+    var auth0: Auth0? = null
+
+    @JvmField
+    @Inject
+    var customTabsOptionsBuilder: CustomTabsOptions.Builder? = null
+
+    @JvmField
+    @Inject
+    var webAuthProvider: WebAuthProvider.Builder? = null
 
     override fun invoke(
         dispatch: DispatchFunction,
@@ -34,22 +47,23 @@ class AuthenticationMiddleware : Middleware<StartupState> {
 
     private fun doLogin(action: AuthenticationAction.DoLoginAction, dispatch: DispatchFunction) {
 
+        DaggerAuthenticationComponent
+            .builder()
+            .authenticationModule(AuthenticationModule(action.activity))
+            .build()
+            .inject(this)
+
+        auth0?.isOIDCConformant = true
+
         val activity = action.activity
-        val auth0: Auth0 = StandAloneContext.getKoin().koinContext.get()
-        auth0.isOIDCConformant = true
-
-        val customTabsOptionsBuilder: CustomTabsOptions.Builder = StandAloneContext.getKoin().koinContext.get()
-        val customTabsOptions = customTabsOptionsBuilder.withToolbarColor(R.color.toolbar_background).build()
-
-        val webAuthProvider: WebAuthProvider.Builder =
-            StandAloneContext.getKoin().koinContext.get { parametersOf(auth0) }
+        val customTabsOptions = customTabsOptionsBuilder?.withToolbarColor(R.color.toolbar_background).build()
 
         webAuthProvider
-            .withCustomTabsOptions(customTabsOptions)
-            .withScheme(BuildConfig.AUTH0_SCHEME)
-            .withScope("openid profile email")
-            .withAudience("https://${BuildConfig.AUTH0_DOMAIN}/userinfo")
-            .start(activity, object : AuthCallback {
+            ?.withCustomTabsOptions(customTabsOptions)
+            ?.withScheme(BuildConfig.AUTH0_SCHEME)
+            ?.withScope("openid profile email")
+            ?.withAudience("https://${BuildConfig.AUTH0_DOMAIN}/userinfo")
+            ?.start(activity, object : AuthCallback {
                 override fun onSuccess(credentials: Credentials) {
                     dispatch(AuthenticationAction.SaveCredentialsAction(activity.applicationContext, credentials))
                     dispatch(RoutingAction.NavigateToSermonsAction(activity.applicationContext))
