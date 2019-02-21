@@ -56,7 +56,7 @@ class AuthenticationMiddleware : Middleware<StartupState> {
         auth0?.isOIDCConformant = true
 
         val activity = action.activity
-        val customTabsOptions = customTabsOptionsBuilder?.withToolbarColor(R.color.toolbar_background).build()
+        val customTabsOptions = customTabsOptionsBuilder?.withToolbarColor(R.color.toolbar_background)?.build()
 
         webAuthProvider
             ?.withCustomTabsOptions(customTabsOptions)
