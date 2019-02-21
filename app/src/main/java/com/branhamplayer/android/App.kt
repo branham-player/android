@@ -2,7 +2,6 @@ package com.branhamplayer.android
 
 import android.app.Application
 import com.branhamplayer.android.base.di.ApplicationComponent
-import com.branhamplayer.android.base.di.ApplicationModule
 import com.branhamplayer.android.base.di.DaggerApplicationComponent
 import com.branhamplayer.android.services.firebase.RemoteConfigService
 import com.branhamplayer.android.shared.startupModule
@@ -24,8 +23,17 @@ class App : Application() {
         startKoin(applicationContext, startupModule)
     }
 
-    fun getApplicationComponent(): ApplicationComponent = applicationComponent ?: DaggerApplicationComponent
-        .builder()
-        .applicationModule(ApplicationModule(this.applicationContext))
-        .build()
+    fun getApplicationComponent(): ApplicationComponent {
+        var component = applicationComponent
+
+        if (component != null) return component
+
+        component = DaggerApplicationComponent
+            .builder()
+            .build()
+
+        applicationComponent = component
+
+        return component
+    }
 }

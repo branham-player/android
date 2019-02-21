@@ -11,9 +11,8 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    @JvmField
     @Inject
-    var authenticationFragment: AuthenticationFragment? = null
+    lateinit var authenticationFragment: AuthenticationFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -24,10 +23,8 @@ class MainActivity : AppCompatActivity() {
             .newStartupComponent(StartupModule())
             .inject(this)
 
-        authenticationFragment?.let {
-            supportFragmentManager.commit(allowStateLoss = true) {
-                replace(R.id.start_up_container, it)
-            }
+        supportFragmentManager.commit(allowStateLoss = true) {
+            replace(R.id.start_up_container, authenticationFragment)
         }
     }
 

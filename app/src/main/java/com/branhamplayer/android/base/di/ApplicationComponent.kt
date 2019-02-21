@@ -6,6 +6,7 @@ import com.branhamplayer.android.di.StartupComponent
 import com.branhamplayer.android.di.StartupModule
 import dagger.Component
 
+@ApplicationScope
 @Component(modules = [ApplicationModule::class])
 interface ApplicationComponent {
 

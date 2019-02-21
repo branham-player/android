@@ -20,9 +20,8 @@ import javax.inject.Inject
 
 class AuthenticationFragment : Fragment() {
 
-//    @JvmField
-//    @Inject
-    var credentialsManager: CredentialsManager? = null
+    @Inject
+    lateinit var credentialsManager: CredentialsManager
 
     private var unbinder: Unbinder? = null
 
@@ -43,7 +42,7 @@ class AuthenticationFragment : Fragment() {
         super.onResume()
 
         context?.let {
-            if (credentialsManager?.hasValidCredentials() == true) {
+            if (credentialsManager.hasValidCredentials()) {
                 startupStore.dispatch(RoutingAction.NavigateToSermonsAction(it))
             }
         }
