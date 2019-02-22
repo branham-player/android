@@ -58,22 +58,24 @@ class AuthenticationMiddleware : Middleware<StartupState> {
         val activity = action.activity
         val customTabsOptions = customTabsOptionsBuilder?.withToolbarColor(R.color.toolbar_background)?.build()
 
-        webAuthProvider
-            ?.withCustomTabsOptions(customTabsOptions)
-            ?.withScheme(BuildConfig.AUTH0_SCHEME)
-            ?.withScope("openid profile email")
-            ?.withAudience("https://${BuildConfig.AUTH0_DOMAIN}/userinfo")
-            ?.start(activity, object : AuthCallback {
-                override fun onSuccess(credentials: Credentials) {
-                    dispatch(AuthenticationAction.SaveCredentialsAction(activity.applicationContext, credentials))
-                    dispatch(RoutingAction.NavigateToSermonsAction(activity.applicationContext))
-                }
+        customTabsOptions?.let {
+            webAuthProvider
+                ?.withCustomTabsOptions(it)
+                ?.withScheme(BuildConfig.AUTH0_SCHEME)
+                ?.withScope("openid profile email")
+                ?.withAudience("https://${BuildConfig.AUTH0_DOMAIN}/userinfo")
+                ?.start(activity, object : AuthCallback {
+                    override fun onSuccess(credentials: Credentials) {
+                        dispatch(AuthenticationAction.SaveCredentialsAction(activity.applicationContext, credentials))
+                        dispatch(RoutingAction.NavigateToSermonsAction(activity.applicationContext))
+                    }
 
-                override fun onFailure(dialog: Dialog) =
-                    dispatch(RoutingAction.ShowLoginErrorAction)
+                    override fun onFailure(dialog: Dialog) =
+                        dispatch(RoutingAction.ShowLoginErrorAction)
 
-                override fun onFailure(exception: AuthenticationException?) =
-                    dispatch(RoutingAction.ShowLoginErrorAction)
-            })
+                    override fun onFailure(exception: AuthenticationException?) =
+                        dispatch(RoutingAction.ShowLoginErrorAction)
+                })
+        }
     }
 }
