@@ -1,5 +1,6 @@
 package com.branhamplayer.android.di
 
+import android.app.Activity
 import android.content.Context
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
@@ -8,16 +9,17 @@ import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import com.auth0.android.provider.CustomTabsOptions
 import com.auth0.android.provider.WebAuthProvider
 import com.branhamplayer.android.BuildConfig
-import com.branhamplayer.android.base.di.FragmentScope
-import com.branhamplayer.android.base.di.MiddlewareScope
 import dagger.Module
 import dagger.Provides
 
 @Module
-class AuthenticationModule(private val context: Context) {
+class AuthenticationModule(private val activity: Activity) {
 
     @Provides
-    fun getContext() = context
+    fun getActivity() = activity
+
+    @Provides
+    fun getContext(): Context = activity.applicationContext
 
     @Provides
     fun getAuth0() = Auth0(BuildConfig.AUTH0_CLIENT_ID, BuildConfig.AUTH0_DOMAIN)

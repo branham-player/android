@@ -9,19 +9,18 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import butterknife.Unbinder
 import com.auth0.android.authentication.storage.CredentialsManager
-import com.branhamplayer.android.App
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.RoutingAction
-import com.branhamplayer.android.di.AuthenticationModule
-import com.branhamplayer.android.di.DaggerAuthenticationComponent
+import com.branhamplayer.android.di.DaggerInjector
 import com.branhamplayer.android.store.startupStore
 import javax.inject.Inject
 
 class AuthenticationFragment : Fragment() {
 
     @Inject
-    lateinit var credentialsManager: CredentialsManager
+    @JvmField
+    var credentialsManager: CredentialsManager? = null
 
     private var unbinder: Unbinder? = null
 
@@ -31,11 +30,11 @@ class AuthenticationFragment : Fragment() {
         val view = inflater.inflate(R.layout.authentication_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
 
-        context?.let {
-            DaggerAuthenticationComponent
-                .builder()
-                .authenticationModule(AuthenticationModule(it))
-                .build()
+        val mainActivity = activity as MainActivity?
+
+        mainActivity?.let {
+            DaggerInjector
+                .buildAuthenticationComponent(it)
                 .inject(this)
         }
 
@@ -46,7 +45,7 @@ class AuthenticationFragment : Fragment() {
         super.onResume()
 
         context?.let {
-            if (credentialsManager.hasValidCredentials()) {
+            if (credentialsManager?.hasValidCredentials() == true) {
                 startupStore.dispatch(RoutingAction.NavigateToSermonsAction(it))
             }
         }
@@ -69,9 +68,6 @@ class AuthenticationFragment : Fragment() {
 
     // endregion
 
-    private fun launchAuth0() {
-        activity?.let {
-            startupStore.dispatch(AuthenticationAction.DoLoginAction(it))
-        }
-    }
+    private fun launchAuth0() =
+        startupStore.dispatch(AuthenticationAction.DoLoginAction)
 }
