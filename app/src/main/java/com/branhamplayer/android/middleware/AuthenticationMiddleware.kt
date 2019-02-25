@@ -21,24 +21,24 @@ import javax.inject.Inject
 
 class AuthenticationMiddleware : Middleware<StartupState> {
 
-    @JvmField
     @Inject
+    @JvmField
     var activity: Activity? = null
 
-    @JvmField
     @Inject
+    @JvmField
     var auth0: Auth0? = null
 
-    @JvmField
     @Inject
+    @JvmField
     var context: Context? = null
 
-    @JvmField
     @Inject
+    @JvmField
     var customTabsOptionsBuilder: CustomTabsOptions.Builder? = null
 
-    @JvmField
     @Inject
+    @JvmField
     var webAuthProvider: WebAuthProvider.Builder? = null
 
     override fun invoke(
@@ -64,30 +64,31 @@ class AuthenticationMiddleware : Middleware<StartupState> {
         val requiredContext = context
         val requiredWebAuthProvider = webAuthProvider
 
-        if (customTabsOptions != null && requiredActivity != null && requiredContext != null && requiredWebAuthProvider != null) {
-            requiredWebAuthProvider
-                .withCustomTabsOptions(customTabsOptions)
-                .withScheme(BuildConfig.AUTH0_SCHEME)
-                .withScope("openid profile email")
-                .withAudience("https://${BuildConfig.AUTH0_DOMAIN}/userinfo")
-                .start(requiredActivity, object : AuthCallback {
-                    override fun onSuccess(credentials: Credentials) {
-                        dispatch(AuthenticationAction.SaveCredentialsAction(requiredContext, credentials))
-                        dispatch(RoutingAction.NavigateToSermonsAction(requiredContext))
-                    }
-
-                    override fun onFailure(dialog: Dialog) =
-                        dispatch(RoutingAction.ShowLoginErrorAction)
-
-                    override fun onFailure(exception: AuthenticationException?) =
-                        dispatch(RoutingAction.ShowLoginErrorAction)
-                })
-        } else {
+        if (customTabsOptions == null || requiredActivity == null || requiredContext == null || requiredWebAuthProvider == null) {
             dispatch(RoutingAction.ShowLoginErrorAction)
+            return
         }
+
+        requiredWebAuthProvider
+            .withCustomTabsOptions(customTabsOptions)
+            .withScheme(BuildConfig.AUTH0_SCHEME)
+            .withScope("openid profile email")
+            .withAudience("https://${BuildConfig.AUTH0_DOMAIN}/userinfo")
+            .start(requiredActivity, object : AuthCallback {
+                override fun onSuccess(credentials: Credentials) {
+                    dispatch(AuthenticationAction.SaveCredentialsAction(credentials))
+                    dispatch(RoutingAction.NavigateToSermonsAction(requiredContext))
+                }
+
+                override fun onFailure(dialog: Dialog) =
+                    dispatch(RoutingAction.ShowLoginErrorAction)
+
+                override fun onFailure(exception: AuthenticationException?) =
+                    dispatch(RoutingAction.ShowLoginErrorAction)
+            })
     }
 
-    fun inject() {
+    private fun inject() {
         DaggerInjector.authenticationComponent?.inject(this)
     }
 }
