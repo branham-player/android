@@ -4,7 +4,7 @@ pr: none
 jobs:
   - job: Dependencies
     pool:
-      vmImage: 'ubuntu-16.04'
+      vmImage: 'macOS-10.13'
     variables:
       - group: gradle
     steps:
@@ -17,7 +17,7 @@ jobs:
   - job: Build
     dependsOn: Dependencies
     pool:
-      vmImage: 'ubuntu-16.04'
+      vmImage: 'macOS-10.13'
     steps:
       - task: DownloadSecureFile@1
         displayName: Download google-service.json
