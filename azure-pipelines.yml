@@ -35,7 +35,7 @@ jobs:
           gradleWrapperFile: 'gradlew'
           gradleOptions: '-Xmx3072m'
           javaHomeOption: 'JDKVersion'
-          jdkVersionOption: '1.8.0_202'
+          jdkVersionOption: '1.8'
           jdkArchitectureOption: 'x64'
           publishJUnitResults: false
           tasks: 'assembleDebug'
