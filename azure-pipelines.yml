@@ -4,7 +4,7 @@ pr: none
 jobs:
   - job: Dependencies
     pool:
-      vmImage: 'macOS-10.13'
+      vmImage: 'windows-2019'
     variables:
       - group: gradle
     steps:
@@ -17,7 +17,7 @@ jobs:
   - job: Build
     dependsOn: Dependencies
     pool:
-      vmImage: 'macOS-10.13'
+      vmImage: 'windows-2019'
     steps:
       - task: DownloadSecureFile@1
         displayName: Download google-service.json
