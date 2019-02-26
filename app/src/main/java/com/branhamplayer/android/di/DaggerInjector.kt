@@ -1,9 +1,12 @@
 package com.branhamplayer.android.di
 
 import android.app.Activity
+import android.content.Context
 
 class DaggerInjector {
     companion object {
+
+        // region Authentication
 
         var authenticationComponent: AuthenticationComponent? = null
             private set
@@ -18,5 +21,25 @@ class DaggerInjector {
             authenticationComponent = component
             return component
         }
+
+        // endregion
+
+        // region Routing
+
+        var routingComponent: RoutingComponent? = null
+            private set
+
+
+        fun buildRoutingComponent(context: Context): RoutingComponent  {
+            val component = routingComponent ?: DaggerRoutingComponent
+                .builder()
+                .routingModule(RoutingModule(context))
+                .build()
+
+            routingComponent = component
+            return component
+        }
+
+        // endregion
     }
 }

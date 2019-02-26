@@ -31,10 +31,6 @@ class AuthenticationMiddleware : Middleware<StartupState> {
 
     @Inject
     @JvmField
-    var context: Context? = null
-
-    @Inject
-    @JvmField
     var customTabsOptionsBuilder: CustomTabsOptions.Builder? = null
 
     @Inject
@@ -61,10 +57,9 @@ class AuthenticationMiddleware : Middleware<StartupState> {
 
         val customTabsOptions = customTabsOptionsBuilder?.withToolbarColor(R.color.toolbar_background)?.build()
         val requiredActivity = activity
-        val requiredContext = context
         val requiredWebAuthProvider = webAuthProvider
 
-        if (customTabsOptions == null || requiredActivity == null || requiredContext == null || requiredWebAuthProvider == null) {
+        if (customTabsOptions == null || requiredActivity == null || requiredWebAuthProvider == null) {
             dispatch(RoutingAction.ShowLoginErrorAction)
             return
         }
@@ -77,7 +72,7 @@ class AuthenticationMiddleware : Middleware<StartupState> {
             .start(requiredActivity, object : AuthCallback {
                 override fun onSuccess(credentials: Credentials) {
                     dispatch(AuthenticationAction.SaveCredentialsAction(credentials))
-                    dispatch(RoutingAction.NavigateToSermonsAction(requiredContext))
+                    dispatch(RoutingAction.NavigateToSermonsAction)
                 }
 
                 override fun onFailure(dialog: Dialog) =

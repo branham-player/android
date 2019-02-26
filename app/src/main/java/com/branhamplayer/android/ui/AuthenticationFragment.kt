@@ -33,9 +33,8 @@ class AuthenticationFragment : Fragment() {
         val mainActivity = activity as MainActivity?
 
         mainActivity?.let {
-            DaggerInjector
-                .buildAuthenticationComponent(it)
-                .inject(this)
+            DaggerInjector.buildAuthenticationComponent(it).inject(this)
+            DaggerInjector.buildRoutingComponent(it)
         }
 
         return view
@@ -44,10 +43,8 @@ class AuthenticationFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        context?.let {
-            if (credentialsManager?.hasValidCredentials() == true) {
-                startupStore.dispatch(RoutingAction.NavigateToSermonsAction(it))
-            }
+        if (credentialsManager?.hasValidCredentials() == true) {
+            startupStore.dispatch(RoutingAction.NavigateToSermonsAction)
         }
     }
 
