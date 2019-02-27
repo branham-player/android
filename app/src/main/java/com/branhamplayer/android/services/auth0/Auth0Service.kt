@@ -1,6 +1,5 @@
 package com.branhamplayer.android.services.auth0
 
-import android.content.Context
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.authentication.storage.CredentialsManager
@@ -8,22 +7,25 @@ import com.auth0.android.authentication.storage.CredentialsManagerException
 import com.auth0.android.callback.BaseCallback
 import com.auth0.android.result.Credentials
 import com.auth0.android.result.UserProfile
+import com.branhamplayer.android.di.DaggerInjector
 import io.reactivex.Single
-import org.koin.core.parameter.parametersOf
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.get
-import org.koin.standalone.inject
+import javax.inject.Inject
 
-class Auth0Service : KoinComponent {
+class Auth0Service {
 
-    private val authClient: AuthenticationAPIClient by inject()
+    @Inject
+    @JvmField
+    var authClient: AuthenticationAPIClient? = null
 
-    fun getUserProfileInformation(context: Context): Single<UserProfile> {
+    @Inject
+    @JvmField
+    var credentialsManager: CredentialsManager? = null
 
-        val credentialsManager: CredentialsManager = get { parametersOf(context) }
+    fun getUserProfileInformation(): Single<UserProfile> {
+        inject()
 
         return Single.create<Credentials> { subscriber ->
-            credentialsManager.getCredentials(object : BaseCallback<Credentials, CredentialsManagerException> {
+            credentialsManager?.getCredentials(object : BaseCallback<Credentials, CredentialsManagerException> {
                 override fun onFailure(error: CredentialsManagerException?) {
                     subscriber.onError(Throwable(error))
                 }
@@ -41,7 +43,7 @@ class Auth0Service : KoinComponent {
                     return@create
                 }
 
-                authClient.userInfo(accessToken).start(object : BaseCallback<UserProfile, AuthenticationException> {
+                authClient?.userInfo(accessToken)?.start(object : BaseCallback<UserProfile, AuthenticationException> {
                     override fun onFailure(error: AuthenticationException?) {
                         subscriber.onError(Throwable(error))
                     }
@@ -57,5 +59,9 @@ class Auth0Service : KoinComponent {
                 })
             }
         }
+    }
+
+    private fun inject() {
+        DaggerInjector.authenticationComponent?.inject(this)
     }
 }

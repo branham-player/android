@@ -130,6 +130,6 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         }
 
         sermonsStore.dispatch(DrawerAction.SetSelectedItemAction(0))
-        sermonsStore.dispatch(ProfileAction.GetUserProfileAction(this))
+        sermonsStore.dispatch(ProfileAction.GetUserProfileAction)
     }
 }

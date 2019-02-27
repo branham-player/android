@@ -17,21 +17,21 @@ class ProfileMiddleware : Middleware<SermonsState> {
     ): (DispatchFunction) -> DispatchFunction = { next ->
         { action ->
             when (action) {
-                is ProfileAction.GetUserProfileAction -> getUserProfile(action, dispatch)
+                is ProfileAction.GetUserProfileAction -> getUserProfile(dispatch)
             }
 
             next(action)
         }
     }
 
-    private fun getUserProfile(action: ProfileAction.GetUserProfileAction, dispatch: DispatchFunction) {
+    private fun getUserProfile(dispatch: DispatchFunction) {
 
         val auth0: Auth0Service = StandAloneContext.getKoin().koinContext.get()
         val bg: Scheduler = StandAloneContext.getKoin().koinContext.get(SermonsModuleConstants.BG_THREAD)
         val ui: Scheduler = StandAloneContext.getKoin().koinContext.get(SermonsModuleConstants.UI_THREAD)
 
         // TODO: Use a disposable
-        auth0.getUserProfileInformation(action.context)
+        auth0.getUserProfileInformation()
             .subscribeOn(bg)
             .observeOn(ui)
             .subscribe({ profile ->
