@@ -9,8 +9,6 @@ import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.utils.permissions.PermissionConstants
 import com.branhamplayer.android.sermons.utils.permissions.PermissionManager
 import io.reactivex.Scheduler
-import org.koin.core.parameter.parametersOf
-import org.koin.standalone.StandAloneContext
 import org.rekotlin.DispatchFunction
 import org.rekotlin.Middleware
 

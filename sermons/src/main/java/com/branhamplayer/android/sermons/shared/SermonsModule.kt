@@ -61,19 +61,4 @@ val recyclerViewModule = module {
     }
 }
 
-val rxJavaModule = module {
-
-    factory(name = SermonsModuleConstants.UI_THREAD, override = true) {
-        AndroidSchedulers.mainThread()
-    }
-
-    factory(name = SermonsModuleConstants.BG_THREAD, override = true) {
-        Schedulers.io()
-    }
-
-    factory(override = true) {
-        CompositeDisposable()
-    }
-}
-
-val sermonsModule = listOf(activityManagementModule, auth0Module, dataModule, recyclerViewModule, rxJavaModule)
+val sermonsModule = listOf(activityManagementModule, auth0Module, dataModule, recyclerViewModule)
