@@ -11,7 +11,6 @@ class DaggerInjector {
         var authenticationComponent: AuthenticationComponent? = null
             private set
 
-
         fun buildAuthenticationComponent(activity: Activity): AuthenticationComponent {
             val component = authenticationComponent ?: DaggerAuthenticationComponent
                 .builder()
@@ -24,29 +23,10 @@ class DaggerInjector {
 
         // endregion
 
-        // region Middleware
-
-        var middlewareComponent: MiddlewareComponent? = null
-            private set
-
-
-        fun buildMiddlewareComponent(activity: Activity): MiddlewareComponent {
-            val component = middlewareComponent ?: DaggerMiddlewareComponent
-                .builder()
-                .middlewareModule(MiddlewareModule(activity))
-                .build()
-
-            middlewareComponent = component
-            return component
-        }
-
-        // endregion
-
         // region Routing
 
         var routingComponent: RoutingComponent? = null
             private set
-
 
         fun buildRoutingComponent(context: Context): RoutingComponent {
             val component = routingComponent ?: DaggerRoutingComponent
@@ -55,6 +35,23 @@ class DaggerInjector {
                 .build()
 
             routingComponent = component
+            return component
+        }
+
+        // endregion
+
+        // region Startup Activity & Module-wide Components
+
+        var startupComponent: StartupComponent? = null
+            private set
+
+        fun buildStartupComponent(activity: Activity): StartupComponent {
+            val component = startupComponent ?: DaggerStartupComponent
+                .builder()
+                .startupModule(StartupModule(activity))
+                .build()
+
+            startupComponent = component
             return component
         }
 

@@ -12,10 +12,9 @@ import com.branhamplayer.android.BuildConfig
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.RoutingAction
-import com.branhamplayer.android.di.DaggerInjector
+import com.branhamplayer.android.base.redux.TypedMiddleware
 import com.branhamplayer.android.states.StartupState
 import org.rekotlin.DispatchFunction
-import org.rekotlin.Middleware
 import javax.inject.Inject
 
 class AuthenticationMiddleware @Inject constructor(
@@ -23,24 +22,16 @@ class AuthenticationMiddleware @Inject constructor(
     private val auth0: Auth0,
     private val customTabsOptionsBuilder: CustomTabsOptions.Builder,
     private val webAuthProvider: WebAuthProvider.Builder
-) : Middleware<StartupState> {
+) : TypedMiddleware<AuthenticationAction, StartupState> {
 
-    override fun invoke(
-        dispatch: DispatchFunction,
-        getState: () -> StartupState?
-    ): (DispatchFunction) -> DispatchFunction = { next ->
-        { action ->
-            when (action) {
-                is AuthenticationAction.DoLoginAction -> doLogin(dispatch)
-            }
-
-            next(action)
+    override fun invoke(dispatch: DispatchFunction, action: AuthenticationAction, oldState: StartupState?) {
+        when (action) {
+            is AuthenticationAction.DoLoginAction -> doLogin(dispatch)
+            is AuthenticationAction.SaveCredentialsAction -> Unit
         }
     }
 
     private fun doLogin(dispatch: DispatchFunction) {
-        inject()
-
         auth0.isOIDCConformant = true
 
         val customTabsOptions = customTabsOptionsBuilder.withToolbarColor(R.color.toolbar_background).build()
@@ -62,9 +53,5 @@ class AuthenticationMiddleware @Inject constructor(
                 override fun onFailure(exception: AuthenticationException?) =
                     dispatch(RoutingAction.ShowLoginErrorAction)
             })
-    }
-
-    private fun inject() {
-        DaggerInjector.authenticationComponent?.inject(this)
     }
 }

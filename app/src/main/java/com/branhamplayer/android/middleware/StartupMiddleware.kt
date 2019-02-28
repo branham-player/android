@@ -18,21 +18,18 @@ class StartupMiddleware : Middleware<StartupState> {
         getState: () -> StartupState?
     ): (DispatchFunction) -> DispatchFunction = { next ->
         { action ->
-            val middleware = when (action) {
+            when (action) {
                 is AuthenticationAction -> {
                     inject()
-                    authenticationMiddleware?.invoke(dispatch, getState)
+                    authenticationMiddleware?.invoke(dispatch, action, getState())
                 }
-
-                else -> null
             }
 
-            middleware?.invoke(next)?.invoke(action)
             next(action)
         }
     }
 
     fun inject() {
-        DaggerInjector.middlewareComponent?.inject(this)
+        DaggerInjector.startupComponent?.inject(this)
     }
 }
