@@ -5,6 +5,8 @@ import com.auth0.android.Auth0
 import com.auth0.android.provider.CustomTabsOptions
 import com.auth0.android.provider.WebAuthProvider
 import com.branhamplayer.android.middleware.AuthenticationMiddleware
+import com.branhamplayer.android.reducers.AuthenticationReducer
+import com.branhamplayer.android.reducers.RoutingReducer
 import dagger.Module
 import dagger.Provides
 
@@ -20,4 +22,10 @@ class StartupModule {
     ) = AuthenticationMiddleware(
         activity, auth0, customTabsOptionsBuilder, webAuthProvider
     )
+
+    @Provides
+    fun getAuthenticationReducer() = AuthenticationReducer()
+
+    @Provides
+    fun getRoutingReducer() = RoutingReducer()
 }

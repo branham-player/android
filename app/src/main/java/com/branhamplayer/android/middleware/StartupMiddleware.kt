@@ -29,7 +29,7 @@ class StartupMiddleware : Middleware<StartupState> {
         }
     }
 
-    fun inject() {
+    private fun inject() {
         DaggerInjector.startupComponent?.inject(this)
     }
 }
