@@ -28,7 +28,7 @@ class AuthenticationFragment @Inject constructor(
         val view = inflater.inflate(R.layout.authentication_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
 
-        val mainActivity = activity as MainActivity?
+        val mainActivity = activity as? MainActivity?
 
         mainActivity?.let {
             DaggerInjector.buildAuthenticationComponent(it).inject(this)
@@ -63,6 +63,5 @@ class AuthenticationFragment @Inject constructor(
 
     // endregion
 
-    private fun launchAuth0() =
-        startupStore.dispatch(AuthenticationAction.DoLoginAction)
+    private fun launchAuth0() = startupStore.dispatch(AuthenticationAction.DoLoginAction)
 }

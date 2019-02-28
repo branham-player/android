@@ -2,16 +2,22 @@ package com.branhamplayer.android.di
 
 import android.app.Activity
 import com.auth0.android.Auth0
+import com.auth0.android.authentication.storage.CredentialsManager
 import com.auth0.android.provider.CustomTabsOptions
 import com.auth0.android.provider.WebAuthProvider
 import com.branhamplayer.android.middleware.AuthenticationMiddleware
 import com.branhamplayer.android.reducers.AuthenticationReducer
 import com.branhamplayer.android.reducers.RoutingReducer
+import com.branhamplayer.android.ui.AuthenticationFragment
 import dagger.Module
 import dagger.Provides
 
 @Module
 class StartupModule {
+
+    @Provides
+    fun getAuthenticationFragment(credentialsManager: CredentialsManager) =
+        AuthenticationFragment(credentialsManager)
 
     @Provides
     fun getAuthenticationMiddleware(
