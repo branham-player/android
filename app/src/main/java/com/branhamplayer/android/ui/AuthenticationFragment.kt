@@ -16,11 +16,9 @@ import com.branhamplayer.android.di.DaggerInjector
 import com.branhamplayer.android.store.startupStore
 import javax.inject.Inject
 
-class AuthenticationFragment : Fragment() {
-
-    @Inject
-    @JvmField
-    var credentialsManager: CredentialsManager? = null
+class AuthenticationFragment @Inject constructor(
+    private val credentialsManager: CredentialsManager
+) : Fragment() {
 
     private var unbinder: Unbinder? = null
 
@@ -43,7 +41,7 @@ class AuthenticationFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if (credentialsManager?.hasValidCredentials() == true) {
+        if (credentialsManager.hasValidCredentials()) {
             startupStore.dispatch(RoutingAction.NavigateToSermonsAction)
         }
     }

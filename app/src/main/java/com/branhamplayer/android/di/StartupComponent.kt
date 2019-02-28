@@ -8,7 +8,7 @@ import dagger.Component
 
 @ActivityScope
 @MiddlewareScope
-@Component(modules = [StartupModule::class])
+@Component(modules = [AuthenticationModule::class, StartupModule::class])
 interface StartupComponent {
     fun inject(activity: MainActivity)
     fun inject(rootMiddleware: StartupMiddleware)

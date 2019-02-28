@@ -48,7 +48,8 @@ class DaggerInjector {
         fun buildStartupComponent(activity: Activity): StartupComponent {
             val component = startupComponent ?: DaggerStartupComponent
                 .builder()
-                .startupModule(StartupModule(activity))
+                .authenticationModule(AuthenticationModule(activity))
+                .startupModule(StartupModule())
                 .build()
 
             startupComponent = component

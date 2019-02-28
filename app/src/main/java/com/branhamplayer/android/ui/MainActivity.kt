@@ -20,8 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
-        DaggerInjector.buildStartupComponent(this)
-        DaggerInjector.startupComponent?.inject(this)
+        DaggerInjector.buildStartupComponent(this).inject(this)
 
         supportFragmentManager.commit(allowStateLoss = true) {
             authenticationFragment?.let {

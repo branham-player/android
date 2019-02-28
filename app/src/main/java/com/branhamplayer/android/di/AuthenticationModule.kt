@@ -28,12 +28,12 @@ class AuthenticationModule(private val activity: Activity) {
     fun getAuthenticationAPIClient(auth0: Auth0) = AuthenticationAPIClient(auth0)
 
     @Provides
+    fun getCredentialsManager(authenticationAPIClient: AuthenticationAPIClient, context: Context) =
+        CredentialsManager(authenticationAPIClient, SharedPreferencesStorage(context))
+
+    @Provides
     fun getCustomTabsOptionsBuilder(): CustomTabsOptions.Builder = CustomTabsOptions.newBuilder()
 
     @Provides
     fun getWebAuthProviderBuilder(auth0: Auth0): WebAuthProvider.Builder = WebAuthProvider.init(auth0)
-
-    @Provides
-    fun getCredentialsManager(authenticationAPIClient: AuthenticationAPIClient, context: Context) =
-        CredentialsManager(authenticationAPIClient, SharedPreferencesStorage(context))
 }
