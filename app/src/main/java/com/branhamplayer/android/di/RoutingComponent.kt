@@ -7,5 +7,5 @@ import dagger.Component
 @ReducerScope
 @Component(modules = [RoutingModule::class])
 interface RoutingComponent {
-    fun inject(fragment: RoutingReducer)
+    fun inject(reducer: RoutingReducer)
 }

@@ -1,4 +1,4 @@
-package com.branhamplayer.android.base.di
+package com.branhamplayer.android.sermons.di
 
 import dagger.Module
 import dagger.Provides
@@ -16,13 +16,13 @@ class RxJavaModule {
     }
 
     @Provides
-    @Named(RxJavaModule.BG)
+    @Named(BG)
     fun getBgScheduler() = Schedulers.io()
 
     @Provides
     fun getCompositeDisposable() = CompositeDisposable()
 
     @Provides
-    @Named(RxJavaModule.UI)
+    @Named(UI)
     fun getUiScheduler() = AndroidSchedulers.mainThread()
 }

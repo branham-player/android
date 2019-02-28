@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.branhamplayer.android.R
+import com.branhamplayer.android.di.DaggerInjector
 import com.branhamplayer.android.di.DaggerStartupComponent
 import com.branhamplayer.android.di.StartupModule
 import javax.inject.Inject
@@ -18,6 +19,9 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+
+        DaggerInjector
+            .buildMiddlewareComponent(this)
 
         DaggerStartupComponent
             .builder()
