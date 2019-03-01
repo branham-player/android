@@ -25,8 +25,7 @@ class AuthenticationModule {
     fun provideAuthenticationAPIClient(auth0: Auth0) = AuthenticationAPIClient(auth0)
 
     @Provides
-    fun provideAuthenticationFragment(credentialsManager: CredentialsManager) =
-        AuthenticationFragment(credentialsManager)
+    fun provideAuthenticationFragment() = AuthenticationFragment()
 
     @Provides
     fun provideAuthenticationMiddleware(

@@ -16,9 +16,10 @@ import com.branhamplayer.android.di.DaggerInjector
 import com.branhamplayer.android.store.startupStore
 import javax.inject.Inject
 
-class AuthenticationFragment @Inject constructor(
-    private val credentialsManager: CredentialsManager
-) : Fragment() {
+class AuthenticationFragment : Fragment() {
+
+    @Inject
+    lateinit var credentialsManager: CredentialsManager
 
     private var unbinder: Unbinder? = null
 
@@ -28,7 +29,7 @@ class AuthenticationFragment @Inject constructor(
         val view = inflater.inflate(R.layout.authentication_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
 
-        DaggerInjector.buildAuthenticationComponent()
+        DaggerInjector.buildAuthenticationComponent().inject(this)
         DaggerInjector.buildRoutingComponent()
 
         return view
