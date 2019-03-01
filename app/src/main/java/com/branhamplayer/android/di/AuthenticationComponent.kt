@@ -15,5 +15,4 @@ import dagger.Component
 @Component(dependencies = [StartupComponent::class], modules = [AuthenticationModule::class])
 interface AuthenticationComponent {
     fun inject(fragment: AuthenticationFragment)
-    fun inject(utility: Auth0Service)
 }

@@ -7,61 +7,47 @@ import com.auth0.android.authentication.storage.CredentialsManagerException
 import com.auth0.android.callback.BaseCallback
 import com.auth0.android.result.Credentials
 import com.auth0.android.result.UserProfile
-import com.branhamplayer.android.di.DaggerInjector
 import io.reactivex.Single
 import javax.inject.Inject
 
-class Auth0Service {
+class Auth0Service @Inject constructor(
+    private val authClient: AuthenticationAPIClient,
+    private val credentialsManager: CredentialsManager
+) {
 
-    @Inject
-    @JvmField
-    var authClient: AuthenticationAPIClient? = null
+    fun getUserProfileInformation() = Single.create<Credentials> { subscriber ->
+        credentialsManager.getCredentials(object : BaseCallback<Credentials, CredentialsManagerException> {
+            override fun onFailure(error: CredentialsManagerException?) {
+                subscriber.onError(Throwable(error))
+            }
 
-    @Inject
-    @JvmField
-    var credentialsManager: CredentialsManager? = null
+            override fun onSuccess(payload: Credentials?) {
+                subscriber.onSuccess(payload!!)
+            }
+        })
+    }.flatMap { credentials ->
+        Single.create<UserProfile> { subscriber ->
+            val accessToken = credentials.accessToken
 
-    fun getUserProfileInformation(): Single<UserProfile> {
-        inject()
+            if (accessToken == null) {
+                subscriber.onError(Throwable("Access token is null"))
+                return@create
+            }
 
-        return Single.create<Credentials> { subscriber ->
-            credentialsManager?.getCredentials(object : BaseCallback<Credentials, CredentialsManagerException> {
-                override fun onFailure(error: CredentialsManagerException?) {
+            authClient.userInfo(accessToken).start(object : BaseCallback<UserProfile, AuthenticationException> {
+                override fun onFailure(error: AuthenticationException?) {
                     subscriber.onError(Throwable(error))
                 }
 
-                override fun onSuccess(payload: Credentials?) {
-                    subscriber.onSuccess(payload!!)
+                override fun onSuccess(payload: UserProfile?) {
+                    if (payload == null) {
+                        subscriber.onError(Throwable("Could not get the user's profile"))
+                        return
+                    }
+
+                    subscriber.onSuccess(payload)
                 }
             })
-        }.flatMap { credentials ->
-            Single.create<UserProfile> { subscriber ->
-                val accessToken = credentials.accessToken
-
-                if (accessToken == null) {
-                    subscriber.onError(Throwable("Access token is null"))
-                    return@create
-                }
-
-                authClient?.userInfo(accessToken)?.start(object : BaseCallback<UserProfile, AuthenticationException> {
-                    override fun onFailure(error: AuthenticationException?) {
-                        subscriber.onError(Throwable(error))
-                    }
-
-                    override fun onSuccess(payload: UserProfile?) {
-                        if (payload == null) {
-                            subscriber.onError(Throwable("Could not get the user's profile"))
-                            return
-                        }
-
-                        subscriber.onSuccess(payload)
-                    }
-                })
-            }
         }
-    }
-
-    private fun inject() {
-        DaggerInjector.authenticationComponent?.inject(this)
     }
 }
