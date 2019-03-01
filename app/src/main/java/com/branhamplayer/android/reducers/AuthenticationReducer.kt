@@ -7,11 +7,9 @@ import com.branhamplayer.android.di.DaggerInjector
 import com.branhamplayer.android.states.StartupState
 import javax.inject.Inject
 
-class AuthenticationReducer : TypedReducer<AuthenticationAction, StartupState> {
-
-    @Inject
-    @JvmField
-    var userCredentials: CredentialsManager? = null
+class AuthenticationReducer @Inject constructor(
+    private val userCredentials: CredentialsManager
+) : TypedReducer<AuthenticationAction, StartupState> {
 
     override fun invoke(action: AuthenticationAction, oldState: StartupState): StartupState {
         when (action) {
@@ -22,12 +20,6 @@ class AuthenticationReducer : TypedReducer<AuthenticationAction, StartupState> {
         return oldState
     }
 
-    private fun saveCredentials(action: AuthenticationAction.SaveCredentialsAction) {
-        inject()
-        userCredentials?.saveCredentials(action.credentials)
-    }
-
-    private fun inject() {
-        DaggerInjector.authenticationComponent?.inject(this)
-    }
+    private fun saveCredentials(action: AuthenticationAction.SaveCredentialsAction) =
+        userCredentials.saveCredentials(action.credentials)
 }

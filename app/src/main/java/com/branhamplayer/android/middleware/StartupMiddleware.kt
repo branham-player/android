@@ -10,8 +10,7 @@ import javax.inject.Inject
 class StartupMiddleware : Middleware<StartupState> {
 
     @Inject
-    @JvmField
-    var authenticationMiddleware: AuthenticationMiddleware? = null
+    lateinit var authenticationMiddleware: AuthenticationMiddleware
 
     override fun invoke(
         dispatch: DispatchFunction,
@@ -21,7 +20,7 @@ class StartupMiddleware : Middleware<StartupState> {
             when (action) {
                 is AuthenticationAction -> {
                     inject()
-                    authenticationMiddleware?.invoke(dispatch, action, getState())
+                    authenticationMiddleware.invoke(dispatch, action, getState())
                 }
             }
 

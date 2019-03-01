@@ -5,15 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
 import com.branhamplayer.android.R
 import com.branhamplayer.android.di.DaggerInjector
-import com.branhamplayer.android.di.DaggerStartupComponent
-import com.branhamplayer.android.di.StartupModule
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
     @Inject
-    @JvmField
-    var authenticationFragment: AuthenticationFragment? = null
+    lateinit var authenticationFragment: AuthenticationFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -23,9 +20,7 @@ class MainActivity : AppCompatActivity() {
         DaggerInjector.buildStartupComponent(this).inject(this)
 
         supportFragmentManager.commit(allowStateLoss = true) {
-            authenticationFragment?.let {
-                replace(R.id.start_up_container, it)
-            }
+            replace(R.id.start_up_container, authenticationFragment)
         }
     }
 }

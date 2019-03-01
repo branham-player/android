@@ -1,7 +1,6 @@
 package com.branhamplayer.android.di
 
 import android.app.Activity
-import android.content.Context
 
 object DaggerInjector {
 
@@ -10,10 +9,10 @@ object DaggerInjector {
     var authenticationComponent: AuthenticationComponent? = null
         private set
 
-    fun buildAuthenticationComponent(activity: Activity): AuthenticationComponent {
+    fun buildAuthenticationComponent(): AuthenticationComponent {
         val component = authenticationComponent ?: DaggerAuthenticationComponent
             .builder()
-            .authenticationModule(AuthenticationModule(activity))
+            .startupComponent(startupComponent)
             .build()
 
         authenticationComponent = component
@@ -27,10 +26,10 @@ object DaggerInjector {
     var routingComponent: RoutingComponent? = null
         private set
 
-    fun buildRoutingComponent(context: Context): RoutingComponent {
+    fun buildRoutingComponent(): RoutingComponent {
         val component = routingComponent ?: DaggerRoutingComponent
             .builder()
-            .routingModule(RoutingModule(context))
+            .startupComponent(startupComponent)
             .build()
 
         routingComponent = component
@@ -39,7 +38,7 @@ object DaggerInjector {
 
     // endregion
 
-    // region Startup Activity & Module-wide Components
+    // region Startup Activity & Root Components
 
     var startupComponent: StartupComponent? = null
         private set
@@ -47,8 +46,7 @@ object DaggerInjector {
     fun buildStartupComponent(activity: Activity): StartupComponent {
         val component = startupComponent ?: DaggerStartupComponent
             .builder()
-            .authenticationModule(AuthenticationModule(activity))
-            .startupModule(StartupModule())
+            .startupModule(StartupModule(activity))
             .build()
 
         startupComponent = component

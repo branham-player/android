@@ -11,31 +11,27 @@ import javax.inject.Inject
 class StartupReducer : Reducer<StartupState> {
 
     @Inject
-    @JvmField
-    var authenticationReducer: AuthenticationReducer? = null
+    lateinit var authenticationReducer: AuthenticationReducer
 
     @Inject
-    @JvmField
-    var routingReducer: RoutingReducer? = null
+    lateinit var routingReducer: RoutingReducer
 
     override fun invoke(action: Action, startupState: StartupState?): StartupState {
         val oldState = startupState ?: StartupState()
 
-        val newState = when (action) {
+        return when (action) {
             is AuthenticationAction -> {
                 inject()
-                authenticationReducer?.invoke(action, oldState)
+                authenticationReducer.invoke(action, oldState)
             }
 
             is RoutingAction -> {
                 inject()
-                routingReducer?.invoke(action, oldState)
+                routingReducer.invoke(action, oldState)
             }
 
             else -> oldState
         }
-
-        return newState ?: oldState
     }
 
     private fun inject() {

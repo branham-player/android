@@ -8,15 +8,10 @@ import com.branhamplayer.android.di.DaggerInjector
 import com.branhamplayer.android.states.StartupState
 import javax.inject.Inject
 
-class RoutingReducer : TypedReducer<RoutingAction, StartupState> {
-
-    @Inject
-    @JvmField
-    var context: Context? = null
-
-    @Inject
-    @JvmField
-    var sermonsIntent: Intent? = null
+class RoutingReducer @Inject constructor(
+    private val context: Context,
+    private val sermonsIntent: Intent
+) : TypedReducer<RoutingAction, StartupState> {
 
     override fun invoke(action: RoutingAction, oldState: StartupState): StartupState {
         when (action) {
@@ -28,18 +23,10 @@ class RoutingReducer : TypedReducer<RoutingAction, StartupState> {
     }
 
     private fun navigateToSermons() {
-        inject()
+        sermonsIntent.addCategory(Intent.CATEGORY_BROWSABLE)
+        sermonsIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        sermonsIntent.setPackage(context.packageName)
 
-        sermonsIntent?.addCategory(Intent.CATEGORY_BROWSABLE)
-        sermonsIntent?.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-
-        context?.let {
-            sermonsIntent?.setPackage(it.packageName)
-            it.startActivity(sermonsIntent)
-        }
-    }
-
-    private fun inject() {
-        DaggerInjector.routingComponent?.inject(this)
+        context.startActivity(sermonsIntent)
     }
 }

@@ -9,31 +9,46 @@ import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import com.auth0.android.provider.CustomTabsOptions
 import com.auth0.android.provider.WebAuthProvider
 import com.branhamplayer.android.BuildConfig
+import com.branhamplayer.android.middleware.AuthenticationMiddleware
+import com.branhamplayer.android.reducers.AuthenticationReducer
+import com.branhamplayer.android.ui.AuthenticationFragment
 import dagger.Module
 import dagger.Provides
 
 @Module
-class AuthenticationModule(private val activity: Activity) {
+class AuthenticationModule {
 
     @Provides
-    fun getActivity() = activity
+    fun provideAuth0() = Auth0(BuildConfig.AUTH0_CLIENT_ID, BuildConfig.AUTH0_DOMAIN)
 
     @Provides
-    fun getContext(): Context = activity.applicationContext
+    fun provideAuthenticationAPIClient(auth0: Auth0) = AuthenticationAPIClient(auth0)
 
     @Provides
-    fun getAuth0() = Auth0(BuildConfig.AUTH0_CLIENT_ID, BuildConfig.AUTH0_DOMAIN)
+    fun provideAuthenticationFragment(credentialsManager: CredentialsManager) =
+        AuthenticationFragment(credentialsManager)
 
     @Provides
-    fun getAuthenticationAPIClient(auth0: Auth0) = AuthenticationAPIClient(auth0)
+    fun provideAuthenticationMiddleware(
+        activity: Activity,
+        auth0: Auth0,
+        customTabsOptionsBuilder: CustomTabsOptions.Builder,
+        webAuthProvider: WebAuthProvider.Builder
+    ) = AuthenticationMiddleware(
+        activity, auth0, customTabsOptionsBuilder, webAuthProvider
+    )
 
     @Provides
-    fun getCredentialsManager(authenticationAPIClient: AuthenticationAPIClient, context: Context) =
+    fun provideAuthenticationReducer(userCredentials: CredentialsManager) =
+        AuthenticationReducer(userCredentials)
+
+    @Provides
+    fun provideCredentialsManager(authenticationAPIClient: AuthenticationAPIClient, context: Context) =
         CredentialsManager(authenticationAPIClient, SharedPreferencesStorage(context))
 
     @Provides
-    fun getCustomTabsOptionsBuilder(): CustomTabsOptions.Builder = CustomTabsOptions.newBuilder()
+    fun provideCustomTabsOptionsBuilder(): CustomTabsOptions.Builder = CustomTabsOptions.newBuilder()
 
     @Provides
-    fun getWebAuthProviderBuilder(auth0: Auth0): WebAuthProvider.Builder = WebAuthProvider.init(auth0)
+    fun provideWebAuthProviderBuilder(auth0: Auth0): WebAuthProvider.Builder = WebAuthProvider.init(auth0)
 }
