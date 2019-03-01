@@ -1,6 +1,8 @@
 package com.branhamplayer.android.sermons.di
 
+import com.branhamplayer.android.base.di.MiddlewareScope
 import dagger.Component
 
-@Component(dependencies = [SermonsComponent::class], modules = [RxJavaModule::class])
+@MiddlewareScope
+@Component(modules = [RxJavaModule::class])
 interface PermissionComponent

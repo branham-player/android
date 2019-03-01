@@ -15,6 +15,7 @@ import com.branhamplayer.android.sermons.actions.DataAction
 import com.branhamplayer.android.sermons.actions.DrawerAction
 import com.branhamplayer.android.sermons.actions.PermissionAction
 import com.branhamplayer.android.sermons.actions.ProfileAction
+import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.shared.sermonsModule
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
@@ -56,9 +57,9 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        StandAloneContext.loadKoinModules(sermonsModule)
         setContentView(R.layout.sermons_activity)
+
+        DaggerInjector.buildSermonsComponent(this)
 
         activityUnbinder = ButterKnife.bind(this)
         sermonsStore.subscribe(this)
@@ -70,8 +71,8 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
             replace(R.id.sermon_list_container, sermonListFragment)
         }
 
-        sermonsStore.dispatch(DataAction.SetTitleAction(this, RBase.string.navigation_sermons))
-        sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction(this))
+        sermonsStore.dispatch(DataAction.SetTitleAction(RBase.string.navigation_sermons))
+        sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction)
 
         val isTablet = resources.getBoolean(RBase.bool.is_tablet)
 

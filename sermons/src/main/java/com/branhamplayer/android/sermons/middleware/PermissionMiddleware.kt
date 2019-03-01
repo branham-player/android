@@ -10,9 +10,10 @@ import com.branhamplayer.android.sermons.utils.permissions.PermissionConstants
 import com.branhamplayer.android.sermons.utils.permissions.PermissionManager
 import io.reactivex.Scheduler
 import org.rekotlin.DispatchFunction
+import javax.inject.Inject
 import javax.inject.Named
 
-class PermissionMiddleware(
+class PermissionMiddleware @Inject constructor(
     private val activity: AppCompatActivity,
     @Named(RxJavaModule.BG) private val bg: Scheduler,
     @Named(RxJavaModule.UI) private val ui: Scheduler

@@ -5,6 +5,4 @@ import dagger.Component
 
 @MiddlewareScope
 @Component(modules = [RxJavaModule::class])
-interface RxJavaComponent {
-
-}
+interface ProfileComponent
