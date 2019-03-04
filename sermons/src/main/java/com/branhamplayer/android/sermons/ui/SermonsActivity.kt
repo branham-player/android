@@ -16,13 +16,11 @@ import com.branhamplayer.android.sermons.actions.DrawerAction
 import com.branhamplayer.android.sermons.actions.PermissionAction
 import com.branhamplayer.android.sermons.actions.ProfileAction
 import com.branhamplayer.android.sermons.di.DaggerInjector
-import com.branhamplayer.android.sermons.shared.sermonsModule
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.ui.DrawerHeaderViewBinder
 import com.google.android.material.navigation.NavigationView
 import org.koin.android.ext.android.inject
-import org.koin.standalone.StandAloneContext
 import org.rekotlin.StoreSubscriber
 
 class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {

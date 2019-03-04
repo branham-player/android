@@ -4,8 +4,9 @@ import com.auth0.android.result.UserProfile
 import com.branhamplayer.android.base.redux.TypedReducer
 import com.branhamplayer.android.sermons.actions.ProfileAction
 import com.branhamplayer.android.sermons.states.SermonsState
+import javax.inject.Inject
 
-class ProfileReducer : TypedReducer<ProfileAction, SermonsState> {
+class ProfileReducer @Inject constructor() : TypedReducer<ProfileAction, SermonsState> {
 
     override fun invoke(action: ProfileAction, oldState: SermonsState) = when (action) {
         is ProfileAction.GetUserProfileAction -> oldState

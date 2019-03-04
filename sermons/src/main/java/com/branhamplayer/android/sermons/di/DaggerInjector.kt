@@ -5,22 +5,6 @@ import com.branhamplayer.android.di.AuthenticationModule
 
 object DaggerInjector {
 
-    // region Permissions
-
-    var permissionComponent: PermissionComponent? = null
-        private set
-
-    fun buildPermissionComponent(): PermissionComponent {
-        val component = permissionComponent ?: DaggerPermissionComponent
-            .builder()
-            .build()
-
-        permissionComponent = component
-        return component
-    }
-
-    // endregion
-
     // region Sermons Activity & Root Components
 
     var sermonsComponent: SermonsComponent? = null
