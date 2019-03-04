@@ -15,22 +15,18 @@ import com.branhamplayer.android.sermons.actions.DataAction
 import com.branhamplayer.android.sermons.actions.DrawerAction
 import com.branhamplayer.android.sermons.actions.PermissionAction
 import com.branhamplayer.android.sermons.actions.ProfileAction
-import com.branhamplayer.android.sermons.shared.sermonsModule
+import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.ui.DrawerHeaderViewBinder
 import com.google.android.material.navigation.NavigationView
-import org.koin.android.ext.android.inject
-import org.koin.standalone.StandAloneContext
 import org.rekotlin.StoreSubscriber
+import javax.inject.Inject
 
 class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
-    private var drawerToggle: ActionBarDrawerToggle? = null
-    private val sermonListFragment: SermonListFragment by inject()
-
     private var activityUnbinder: Unbinder? = null
-    private val drawerHeaderBinder: DrawerHeaderViewBinder by inject()
+    private var drawerToggle: ActionBarDrawerToggle? = null
 
     // region Components
 
@@ -52,13 +48,23 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
     // endregion
 
+    // region DI
+
+    @Inject
+    lateinit var drawerHeaderBinder: DrawerHeaderViewBinder
+
+    @Inject
+    lateinit var sermonListFragment: SermonListFragment
+
+    // endregion
+
     // region AppCompatActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        StandAloneContext.loadKoinModules(sermonsModule)
         setContentView(R.layout.sermons_activity)
+
+        DaggerInjector.buildSermonsComponent(this).inject(this)
 
         activityUnbinder = ButterKnife.bind(this)
         sermonsStore.subscribe(this)
@@ -70,8 +76,8 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
             replace(R.id.sermon_list_container, sermonListFragment)
         }
 
-        sermonsStore.dispatch(DataAction.SetTitleAction(this, RBase.string.navigation_sermons))
-        sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction(this))
+        sermonsStore.dispatch(DataAction.SetTitleAction(RBase.string.navigation_sermons))
+        sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction)
 
         val isTablet = resources.getBoolean(RBase.bool.is_tablet)
 
@@ -130,6 +136,6 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         }
 
         sermonsStore.dispatch(DrawerAction.SetSelectedItemAction(0))
-        sermonsStore.dispatch(ProfileAction.GetUserProfileAction(this))
+        sermonsStore.dispatch(ProfileAction.GetUserProfileAction)
     }
 }

@@ -1,5 +1,6 @@
 package com.branhamplayer.android.middleware
 
+import android.app.Activity
 import android.app.Dialog
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationException
@@ -11,38 +12,29 @@ import com.branhamplayer.android.BuildConfig
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.RoutingAction
+import com.branhamplayer.android.base.redux.TypedMiddleware
 import com.branhamplayer.android.states.StartupState
-import org.koin.core.parameter.parametersOf
-import org.koin.standalone.StandAloneContext
 import org.rekotlin.DispatchFunction
-import org.rekotlin.Middleware
+import javax.inject.Inject
 
-class AuthenticationMiddleware : Middleware<StartupState> {
+class AuthenticationMiddleware @Inject constructor(
+    private val activity: Activity,
+    private val auth0: Auth0,
+    private val customTabsOptionsBuilder: CustomTabsOptions.Builder,
+    private val webAuthProvider: WebAuthProvider.Builder
+) : TypedMiddleware<AuthenticationAction, StartupState> {
 
-    override fun invoke(
-        dispatch: DispatchFunction,
-        getState: () -> StartupState?
-    ): (DispatchFunction) -> DispatchFunction = { next ->
-        { action ->
-            when (action) {
-                is AuthenticationAction.DoLoginAction -> doLogin(action, dispatch)
-            }
-
-            next(action)
+    override fun invoke(dispatch: DispatchFunction, action: AuthenticationAction, oldState: StartupState?) {
+        when (action) {
+            is AuthenticationAction.DoLoginAction -> doLogin(dispatch)
+            is AuthenticationAction.SaveCredentialsAction -> Unit
         }
     }
 
-    private fun doLogin(action: AuthenticationAction.DoLoginAction, dispatch: DispatchFunction) {
-
-        val activity = action.activity
-        val auth0: Auth0 = StandAloneContext.getKoin().koinContext.get()
+    private fun doLogin(dispatch: DispatchFunction) {
         auth0.isOIDCConformant = true
 
-        val customTabsOptionsBuilder: CustomTabsOptions.Builder = StandAloneContext.getKoin().koinContext.get()
         val customTabsOptions = customTabsOptionsBuilder.withToolbarColor(R.color.toolbar_background).build()
-
-        val webAuthProvider: WebAuthProvider.Builder =
-            StandAloneContext.getKoin().koinContext.get { parametersOf(auth0) }
 
         webAuthProvider
             .withCustomTabsOptions(customTabsOptions)
@@ -51,8 +43,8 @@ class AuthenticationMiddleware : Middleware<StartupState> {
             .withAudience("https://${BuildConfig.AUTH0_DOMAIN}/userinfo")
             .start(activity, object : AuthCallback {
                 override fun onSuccess(credentials: Credentials) {
-                    dispatch(AuthenticationAction.SaveCredentialsAction(activity.applicationContext, credentials))
-                    dispatch(RoutingAction.NavigateToSermonsAction(activity.applicationContext))
+                    dispatch(AuthenticationAction.SaveCredentialsAction(credentials))
+                    dispatch(RoutingAction.NavigateToSermonsAction)
                 }
 
                 override fun onFailure(dialog: Dialog) =

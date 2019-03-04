@@ -45,9 +45,9 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.0.0'
     kapt 'com.jakewharton:butterknife-compiler:10.0.0'
 
-    // Koin
-    implementation 'org.koin:koin-core:1.0.2'
-    implementation 'org.koin:koin-android:1.0.2'
+    // Dagger
+    implementation 'com.google.dagger:dagger:2.21'
+    kapt 'com.google.dagger:dagger-compiler:2.21'
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"

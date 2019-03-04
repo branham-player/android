@@ -1,44 +1,32 @@
 package com.branhamplayer.android.sermons.middleware
 
-import android.widget.Toast
-import com.branhamplayer.android.sermons.R
+import androidx.appcompat.app.AppCompatActivity
+import com.branhamplayer.android.base.redux.TypedMiddleware
 import com.branhamplayer.android.sermons.actions.DataAction
 import com.branhamplayer.android.sermons.actions.PermissionAction
-import com.branhamplayer.android.sermons.shared.SermonsModuleConstants
+import com.branhamplayer.android.sermons.di.RxJavaModule
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.utils.permissions.PermissionConstants
 import com.branhamplayer.android.sermons.utils.permissions.PermissionManager
 import io.reactivex.Scheduler
-import org.koin.core.parameter.parametersOf
-import org.koin.standalone.StandAloneContext
 import org.rekotlin.DispatchFunction
-import org.rekotlin.Middleware
+import javax.inject.Inject
+import javax.inject.Named
 
-class PermissionMiddleware : Middleware<SermonsState> {
+class PermissionMiddleware @Inject constructor(
+    private val activity: AppCompatActivity,
+    @Named(RxJavaModule.BG) private val bg: Scheduler,
+    @Named(RxJavaModule.UI) private val ui: Scheduler
+) : TypedMiddleware<PermissionAction, SermonsState> {
 
-    override fun invoke(
-        dispatch: DispatchFunction,
-        getState: () -> SermonsState?
-    ): (DispatchFunction) -> DispatchFunction = { next ->
-        { action ->
-            when (action) {
-                is PermissionAction.GetFileReadPermissionAction -> getFileReadPermission(action, dispatch)
-                is PermissionAction.ShowPermissionDeniedErrorAction -> showPermissionDeniedError(action)
-            }
-
-            next(action)
+    override fun invoke(dispatch: DispatchFunction, action: PermissionAction, oldState: SermonsState?) {
+        when (action) {
+            is PermissionAction.GetFileReadPermissionAction -> getFileReadPermission(dispatch)
+            is PermissionAction.ShowPermissionDeniedErrorAction -> showPermissionDeniedError()
         }
     }
 
-    private fun getFileReadPermission(
-        action: PermissionAction.GetFileReadPermissionAction,
-        dispatcher: DispatchFunction
-    ) {
-
-        val activity = action.activity
-        val bg: Scheduler = StandAloneContext.getKoin().koinContext.get(SermonsModuleConstants.BG_THREAD)
-        val ui: Scheduler = StandAloneContext.getKoin().koinContext.get(SermonsModuleConstants.UI_THREAD)
-
+    private fun getFileReadPermission(dispatcher: DispatchFunction) {
         // TODO: Use disposable
         PermissionManager(activity)
             .getSinglePermission(PermissionConstants.fileRead)
@@ -48,18 +36,20 @@ class PermissionMiddleware : Middleware<SermonsState> {
                 if (hasPermission) {
                     dispatcher(DataAction.FetchSermonListAction)
                 } else {
-                    dispatcher(PermissionAction.ShowPermissionDeniedErrorAction(activity.applicationContext))
+                    dispatcher(PermissionAction.ShowPermissionDeniedErrorAction)
                 }
             }, {
-                dispatcher(PermissionAction.ShowPermissionDeniedErrorAction(activity.applicationContext))
+                dispatcher(PermissionAction.ShowPermissionDeniedErrorAction)
             })
     }
 
-    private fun showPermissionDeniedError(action: PermissionAction.ShowPermissionDeniedErrorAction) {
-        val toast: Toast = StandAloneContext.getKoin().koinContext.get {
-            parametersOf(action.context, R.string.permission_denied_message, Toast.LENGTH_LONG)
-        }
-
-        toast.show()
+    private fun showPermissionDeniedError() {
+        // TODO: Get rid of this whenever the design for the permission request is finished
+        // TODO: No point in trying to work with this
+//        val toast: Toast = StandAloneContext.getKoin().koinContext.get {
+//            parametersOf(context, R.string.permission_denied_message, Toast.LENGTH_LONG)
+//        }
+//
+//        toast.show()
     }
 }

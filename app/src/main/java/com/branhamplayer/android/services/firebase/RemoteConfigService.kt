@@ -6,7 +6,6 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 
 class RemoteConfigService {
-
     companion object {
 
         private val firebase: FirebaseRemoteConfig by lazy {

@@ -12,12 +12,14 @@ import com.auth0.android.authentication.storage.CredentialsManager
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.RoutingAction
+import com.branhamplayer.android.di.DaggerInjector
 import com.branhamplayer.android.store.startupStore
-import org.koin.core.parameter.parametersOf
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.get
+import javax.inject.Inject
 
-class AuthenticationFragment : Fragment(), KoinComponent {
+class AuthenticationFragment : Fragment() {
+
+    @Inject
+    lateinit var credentialsManager: CredentialsManager
 
     private var unbinder: Unbinder? = null
 
@@ -27,18 +29,16 @@ class AuthenticationFragment : Fragment(), KoinComponent {
         val view = inflater.inflate(R.layout.authentication_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
 
+        DaggerInjector.startupComponent?.inject(this)
+
         return view
     }
 
     override fun onResume() {
         super.onResume()
 
-        context?.let {
-            val userCredentials: CredentialsManager = get { parametersOf(it) }
-
-            if (userCredentials.hasValidCredentials()) {
-                startupStore.dispatch(RoutingAction.NavigateToSermonsAction(it))
-            }
+        if (credentialsManager.hasValidCredentials()) {
+            startupStore.dispatch(RoutingAction.NavigateToSermonsAction)
         }
     }
 
@@ -59,9 +59,5 @@ class AuthenticationFragment : Fragment(), KoinComponent {
 
     // endregion
 
-    private fun launchAuth0() {
-        activity?.let {
-            startupStore.dispatch(AuthenticationAction.DoLoginAction(it))
-        }
-    }
+    private fun launchAuth0() = startupStore.dispatch(AuthenticationAction.DoLoginAction)
 }
