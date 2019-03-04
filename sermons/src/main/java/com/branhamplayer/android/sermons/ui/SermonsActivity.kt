@@ -64,7 +64,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.sermons_activity)
 
-        DaggerInjector.buildSermonsComponent(this)
+        DaggerInjector.buildSermonsComponent(this).inject(this)
 
         activityUnbinder = ButterKnife.bind(this)
         sermonsStore.subscribe(this)
