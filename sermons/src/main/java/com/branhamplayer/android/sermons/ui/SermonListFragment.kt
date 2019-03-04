@@ -13,35 +13,40 @@ import butterknife.Unbinder
 import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.adapters.SermonsAdapter
-import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
-import org.koin.core.parameter.parametersOf
-import org.koin.standalone.KoinComponent
-import org.koin.standalone.get
-import org.koin.standalone.inject
 import org.rekotlin.StoreSubscriber
+import javax.inject.Inject
 
-class SermonListFragment : Fragment(), KoinComponent, StoreSubscriber<SermonsState> {
+class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
 
-    private val sermonAdapter: SermonsAdapter by inject { parametersOf(context) }
     private var unbinder: Unbinder? = null
+
+    // region Components
 
     @JvmField
     @BindView(R.id.sermon_list)
     var sermonsRecyclerView: RecyclerView? = null
 
+    // endregion
+
+    // region DI
+
+    @Inject
+    lateinit var sermonAdapter: SermonsAdapter
+
+    // endregion
+
     // region Controller
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.sermon_list_fragment, container, false)
-        val linearLayoutManager: LinearLayoutManager = get { parametersOf(context) }
 
         unbinder = ButterKnife.bind(this, view)
         sermonsStore.subscribe(this)
 
         sermonsRecyclerView?.adapter = sermonAdapter
-        sermonsRecyclerView?.layoutManager = linearLayoutManager
+        sermonsRecyclerView?.layoutManager = LinearLayoutManager(context)
 
         return view
     }

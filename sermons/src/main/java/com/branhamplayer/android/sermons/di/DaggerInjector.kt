@@ -5,8 +5,6 @@ import com.branhamplayer.android.di.AuthenticationModule
 
 object DaggerInjector {
 
-    // region Sermons Activity & Root Components
-
     var sermonsComponent: SermonsComponent? = null
         private set
 
@@ -21,6 +19,4 @@ object DaggerInjector {
         sermonsComponent = component
         return component
     }
-
-    // endregion
 }

@@ -20,16 +20,13 @@ import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.ui.DrawerHeaderViewBinder
 import com.google.android.material.navigation.NavigationView
-import org.koin.android.ext.android.inject
 import org.rekotlin.StoreSubscriber
+import javax.inject.Inject
 
 class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
-    private var drawerToggle: ActionBarDrawerToggle? = null
-    private val sermonListFragment: SermonListFragment by inject()
-
     private var activityUnbinder: Unbinder? = null
-    private val drawerHeaderBinder: DrawerHeaderViewBinder by inject()
+    private var drawerToggle: ActionBarDrawerToggle? = null
 
     // region Components
 
@@ -48,6 +45,16 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
     @JvmField
     @BindView(R.id.sermon_list_toolbar)
     var sermonsListToolbar: Toolbar? = null
+
+    // endregion
+
+    // region DI
+
+    @Inject
+    lateinit var drawerHeaderBinder: DrawerHeaderViewBinder
+
+    @Inject
+    lateinit var sermonListFragment: SermonListFragment
 
     // endregion
 

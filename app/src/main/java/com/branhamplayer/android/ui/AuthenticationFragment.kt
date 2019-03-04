@@ -29,8 +29,7 @@ class AuthenticationFragment : Fragment() {
         val view = inflater.inflate(R.layout.authentication_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
 
-        DaggerInjector.buildAuthenticationComponent().inject(this)
-        DaggerInjector.buildRoutingComponent()
+        DaggerInjector.startupComponent?.inject(this)
 
         return view
     }

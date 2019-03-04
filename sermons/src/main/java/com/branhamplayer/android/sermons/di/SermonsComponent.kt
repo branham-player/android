@@ -7,7 +7,7 @@ import com.branhamplayer.android.sermons.middleware.SermonsMiddleware
 import com.branhamplayer.android.sermons.reducers.SermonsReducer
 import dagger.Component
 
-@Component(modules = [AuthenticationModule::class, DataModule::class, DrawerModule::class, RxJavaModule::class, SermonsModule::class])
+@Component(modules = [AuthenticationModule::class, DataModule::class, DrawerModule::class, ProfileModule::class, RxJavaModule::class, SermonsModule::class])
 interface SermonsComponent {
 
     fun getActivity(): AppCompatActivity

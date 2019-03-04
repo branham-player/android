@@ -2,6 +2,8 @@ package com.branhamplayer.android.sermons.di
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
+import com.branhamplayer.android.sermons.ui.SermonListFragment
+import com.branhamplayer.android.ui.DrawerHeaderViewBinder
 import dagger.Module
 import dagger.Provides
 
@@ -13,4 +15,10 @@ class SermonsModule(private val activity: AppCompatActivity) {
 
     @Provides
     fun provideContext(): Context = activity.applicationContext
+
+    @Provides
+    fun provideDrawerHeaderViewBinder() = DrawerHeaderViewBinder()
+
+    @Provides
+    fun provideListFragment() = SermonListFragment()
 }
