@@ -7,7 +7,7 @@ import com.branhamplayer.android.R
 import com.branhamplayer.android.di.DaggerInjector
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class StartupActivity : AppCompatActivity() {
 
     @Inject
     lateinit var authenticationFragment: AuthenticationFragment

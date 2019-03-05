@@ -18,10 +18,14 @@ import javax.inject.Inject
 
 class AuthenticationFragment : Fragment() {
 
+    private var unbinder: Unbinder? = null
+
+    // region DI
+
     @Inject
     lateinit var credentialsManager: CredentialsManager
 
-    private var unbinder: Unbinder? = null
+    // endregion
 
     // region Fragment
 
