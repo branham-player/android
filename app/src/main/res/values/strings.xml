@@ -33,4 +33,11 @@
     <string name="login_screen_register">Register</string>
 
     <!-- endregion -->
+
+    <!-- region Preflight Checklist -->
+
+    <string name="preflight_checklist_platform_down">Branham Player is currently unavailable, please check back later.</string>
+    <string name="preflight_checklist_required_update">This version of Branham Player is no longer supported and requires an update. Please update this app now.</string>
+
+    <!-- endregion -->
 </resources>
