@@ -28,7 +28,6 @@
 
     <!-- region Login -->
 
-    <string name="login_screen_branham_player_logo">Branham Player Logo</string>
     <string name="login_screen_login">Login</string>
     <string name="login_screen_registration_prompt">New to Branham Player?</string>
     <string name="login_screen_register">Register</string>
