@@ -8,7 +8,6 @@ import dagger.Component
 
 @Component(modules = [AuthenticationModule::class, PreflightChecklistModule::class, RoutingModule::class, StartupModule::class])
 interface StartupComponent {
-
     fun getContext(): Context
 
     fun inject(activity: StartupActivity)

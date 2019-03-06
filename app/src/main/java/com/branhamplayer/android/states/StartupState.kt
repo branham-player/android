@@ -2,4 +2,8 @@ package com.branhamplayer.android.states
 
 import org.rekotlin.StateType
 
-class StartupState : StateType
+data class StartupState(
+    val message: String? = null,
+    val minimumVersionMet: Boolean = true,
+    val platformAvailable: Boolean = true
+) : StateType

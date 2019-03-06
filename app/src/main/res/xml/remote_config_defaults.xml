@@ -1,7 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <defaultsMap>
+
+    <!-- region Preflight Checklist -->
+
+    <entry>
+        <key>message</key>
+        <value>Howdy!</value>
+    </entry>
+
+    <entry>
+        <key>minimum_version</key>
+        <value>1.0.0</value>
+    </entry>
+
+    <entry>
+        <key>platform_available</key>
+        <value>true</value>
+    </entry>
+
+    <!-- endregion -->
+
+    <!-- region Logging -->
+
     <entry>
         <key>log_level</key>
         <value>warn</value>
     </entry>
+
+    <!-- endregion -->
 </defaultsMap>

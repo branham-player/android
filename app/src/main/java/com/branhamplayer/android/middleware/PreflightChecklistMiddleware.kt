@@ -1,8 +1,6 @@
 package com.branhamplayer.android.middleware
 
-import android.content.Context
 import com.branhamplayer.android.BuildConfig
-import com.branhamplayer.android.R
 import com.branhamplayer.android.StartupConstants
 import com.branhamplayer.android.actions.PreflightChecklistAction
 import com.branhamplayer.android.actions.RoutingAction
@@ -14,7 +12,6 @@ import org.rekotlin.DispatchFunction
 import javax.inject.Inject
 
 class PreflightChecklistMiddleware @Inject constructor(
-    private val context: Context,
     private val firebaseRemoteConfig: FirebaseRemoteConfig
 ) : TypedMiddleware<PreflightChecklistAction, StartupState> {
 
@@ -43,7 +40,7 @@ class PreflightChecklistMiddleware @Inject constructor(
         if (appVersion >= minimumVersion) {
             dispatch(RoutingAction.NavigateToAuthenticationAction)
         } else {
-            dispatch(PreflightChecklistAction.StopAppWithMinimumVersionFailureAction(context.getString(R.string.preflight_checklist_required_update)))
+            dispatch(PreflightChecklistAction.StopAppWithMinimumVersionFailureAction)
         }
     }
 
@@ -52,11 +49,6 @@ class PreflightChecklistMiddleware @Inject constructor(
             dispatch(PreflightChecklistAction.CheckMessageAction)
         } else {
             val message = firebaseRemoteConfig.getString(StartupConstants.PreflightChecklist.message)
-
-            if (message.isNullOrBlank()) {
-                dispatch(PreflightChecklistAction.StopAppWithPlatformDownAction(context.getString(R.string.preflight_checklist_platform_down)))
-            } else {
-                dispatch(PreflightChecklistAction.StopAppWithPlatformDownAction(message))
-            }
+            dispatch(PreflightChecklistAction.StopAppWithPlatformDownAction(message))
         }
 }

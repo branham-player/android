@@ -10,5 +10,5 @@ sealed class PreflightChecklistAction : Action {
     data class NotifyWithMessageAction(val message: String) : PreflightChecklistAction()
 
     data class StopAppWithPlatformDownAction(val message: String) : PreflightChecklistAction()
-    data class StopAppWithMinimumVersionFailureAction(val message: String) : PreflightChecklistAction()
+    object StopAppWithMinimumVersionFailureAction : PreflightChecklistAction()
 }

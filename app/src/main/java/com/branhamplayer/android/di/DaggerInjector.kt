@@ -1,6 +1,7 @@
 package com.branhamplayer.android.di
 
 import android.app.Activity
+import android.content.Context
 
 object DaggerInjector {
 
@@ -12,7 +13,6 @@ object DaggerInjector {
     fun buildAuthenticationComponent(): AuthenticationComponent {
         val component = authenticationComponent ?: DaggerAuthenticationComponent
             .builder()
-            .authenticationModule(AuthenticationModule())
             .startupComponent(startupComponent)
             .build()
 
@@ -24,17 +24,14 @@ object DaggerInjector {
 
     // region Preflight Checklist
 
-    var preflightChecklistComponent: PreflightChecklistComponent? = null
-        private set
-
-    fun buildPreflightChecklistComponent(): PreflightChecklistComponent {
-        val component = preflightChecklistComponent ?: DaggerPreflightChecklistComponent
-            .builder()
-            .build()
-
-        preflightChecklistComponent = component
-        return component
-    }
+    // This component needs to be rebuilt every time. Since the preflight checklist fragment
+    // is capable of shutting the app down (and thus invalidating the given context), it
+    // needs to receive a fresh context each time so that the dialog which depends on it can
+    // show a dialog with a valid context without crashing the app.
+    fun buildPreflightChecklistComponent(context: Context) = DaggerPreflightChecklistComponent
+        .builder()
+        .preflightChecklistModule(PreflightChecklistModule(context))
+        .build()
 
     // endregion
 
@@ -46,6 +43,7 @@ object DaggerInjector {
     fun buildStartupComponent(activity: Activity): StartupComponent {
         val component = startupComponent ?: DaggerStartupComponent
             .builder()
+            .preflightChecklistModule(PreflightChecklistModule(activity))
             .startupModule(StartupModule(activity))
             .build()
 
