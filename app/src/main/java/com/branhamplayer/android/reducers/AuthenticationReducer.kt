@@ -13,7 +13,6 @@ class AuthenticationReducer @Inject constructor(
 
     override fun invoke(action: AuthenticationAction, oldState: StartupState): StartupState {
         when (action) {
-            is AuthenticationAction.DoLoginAction -> Unit
             is AuthenticationAction.SaveCredentialsAction -> saveCredentials(action)
         }
 

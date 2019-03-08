@@ -1,16 +1,16 @@
 package com.branhamplayer.android.di
 
-import android.app.Activity
 import android.content.Context
+import com.branhamplayer.android.ui.StartupActivity
 import dagger.Module
 import dagger.Provides
 
 @Module
-class StartupModule(private val activity: Activity) {
+class StartupModule(private val startupActivity: StartupActivity) {
 
     @Provides
-    fun provideActivity() = activity
+    fun provideActivity() = startupActivity
 
     @Provides
-    fun provideContext(): Context = activity.applicationContext
+    fun provideContext(): Context = startupActivity.applicationContext
 }

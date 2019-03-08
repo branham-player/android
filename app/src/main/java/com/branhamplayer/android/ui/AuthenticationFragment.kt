@@ -18,18 +18,25 @@ import javax.inject.Inject
 
 class AuthenticationFragment : Fragment() {
 
+    private var unbinder: Unbinder? = null
+
+    // region DI
+
     @Inject
     lateinit var credentialsManager: CredentialsManager
 
-    private var unbinder: Unbinder? = null
+    // endregion
 
     // region Fragment
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        DaggerInjector.buildAuthenticationComponent().inject(this)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.authentication_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
-
-        DaggerInjector.startupComponent?.inject(this)
 
         return view
     }

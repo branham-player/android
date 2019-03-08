@@ -28,10 +28,22 @@
 
     <!-- region Login -->
 
-    <string name="login_screen_branham_player_logo">Branham Player Logo</string>
     <string name="login_screen_login">Login</string>
     <string name="login_screen_registration_prompt">New to Branham Player?</string>
     <string name="login_screen_register">Register</string>
+
+    <!-- endregion -->
+
+    <!-- region Preflight Checklist -->
+
+    <string name="preflight_checklist_close_app">Close App</string>
+    <string name="preflight_checklist_notice">Notice</string>
+    <string name="preflight_checklist_ok">OK</string>
+    <string name="preflight_checklist_platform_unavailable_message">Branham Player is currently unavailable, please check back later.</string>
+    <string name="preflight_checklist_platform_unavailable_title">App Unavailable</string>
+    <string name="preflight_checklist_required_update_message">This version of Branham Player is no longer supported and requires an update. Please update this app now.</string>
+    <string name="preflight_checklist_required_update_title">App Update Required</string>
+    <string name="preflight_checklist_update_app">Update App</string>
 
     <!-- endregion -->
 </resources>

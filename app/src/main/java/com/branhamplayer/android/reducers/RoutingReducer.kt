@@ -1,32 +1,57 @@
 package com.branhamplayer.android.reducers
 
-import android.content.Context
 import android.content.Intent
 import com.branhamplayer.android.actions.RoutingAction
 import com.branhamplayer.android.base.redux.TypedReducer
-import com.branhamplayer.android.di.DaggerInjector
+import com.branhamplayer.android.di.RoutingModule
 import com.branhamplayer.android.states.StartupState
+import com.branhamplayer.android.ui.AuthenticationFragment
+import com.branhamplayer.android.ui.PreflightChecklistFragment
+import com.branhamplayer.android.ui.StartupActivity
 import javax.inject.Inject
+import javax.inject.Named
 
 class RoutingReducer @Inject constructor(
-    private val context: Context,
-    private val sermonsIntent: Intent
+    private val startupActivity: StartupActivity,
+    private val authenticationFragment: AuthenticationFragment,
+    private val preflightChecklistFragment: PreflightChecklistFragment,
+    @Named(RoutingModule.GooglePlay) private val googlePlayIntent: Intent,
+    @Named(RoutingModule.Sermons) private val sermonsIntent: Intent
 ) : TypedReducer<RoutingAction, StartupState> {
 
     override fun invoke(action: RoutingAction, oldState: StartupState): StartupState {
         when (action) {
+            is RoutingAction.CloseAppAction -> closeApp()
+            is RoutingAction.NavigateToAuthenticationAction -> navigateToAuthentication()
+            is RoutingAction.NavigateToGooglePlayStoreAction -> navigateToGooglePlayStore()
+            is RoutingAction.NavigateToPreflightChecklistAction -> navigateToPreflightChecklist()
             is RoutingAction.NavigateToSermonsAction -> navigateToSermons()
-            is RoutingAction.ShowLoginErrorAction -> Unit
         }
 
         return oldState
     }
 
+    private fun navigateToGooglePlayStore() {
+        startupActivity.startActivity(googlePlayIntent)
+    }
+
+    private fun closeApp() {
+        startupActivity.finish()
+    }
+
+    private fun navigateToAuthentication() {
+        startupActivity.setFragment(authenticationFragment)
+    }
+
+    private fun navigateToPreflightChecklist() {
+        startupActivity.setFragment(preflightChecklistFragment)
+    }
+
     private fun navigateToSermons() {
         sermonsIntent.addCategory(Intent.CATEGORY_BROWSABLE)
         sermonsIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        sermonsIntent.setPackage(context.packageName)
+        sermonsIntent.setPackage(startupActivity.packageName)
 
-        context.startActivity(sermonsIntent)
+        startupActivity.startActivity(sermonsIntent)
     }
 }

@@ -1,6 +1,5 @@
 package com.branhamplayer.android.di
 
-import android.app.Activity
 import android.content.Context
 import com.auth0.android.Auth0
 import com.auth0.android.authentication.AuthenticationAPIClient
@@ -13,6 +12,7 @@ import com.branhamplayer.android.middleware.AuthenticationMiddleware
 import com.branhamplayer.android.reducers.AuthenticationReducer
 import com.branhamplayer.android.services.auth0.Auth0Service
 import com.branhamplayer.android.ui.AuthenticationFragment
+import com.branhamplayer.android.ui.StartupActivity
 import dagger.Module
 import dagger.Provides
 
@@ -34,12 +34,12 @@ class AuthenticationModule {
 
     @Provides
     fun provideAuthenticationMiddleware(
-        activity: Activity,
+        startupActivity: StartupActivity,
         auth0: Auth0,
         customTabsOptionsBuilder: CustomTabsOptions.Builder,
         webAuthProvider: WebAuthProvider.Builder
     ) = AuthenticationMiddleware(
-        activity, auth0, customTabsOptionsBuilder, webAuthProvider
+        startupActivity, auth0, customTabsOptionsBuilder, webAuthProvider
     )
 
     @Provides

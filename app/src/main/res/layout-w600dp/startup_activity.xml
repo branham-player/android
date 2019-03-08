@@ -32,7 +32,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <FrameLayout
-                android:id="@+id/start_up_container"
+                android:id="@+id/startup_container"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 tools:context=".StartupActivity"/>
