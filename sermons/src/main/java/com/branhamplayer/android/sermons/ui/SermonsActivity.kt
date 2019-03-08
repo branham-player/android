@@ -5,16 +5,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
-import com.branhamplayer.android.sermons.actions.DataAction
-import com.branhamplayer.android.sermons.actions.DrawerAction
-import com.branhamplayer.android.sermons.actions.PermissionAction
-import com.branhamplayer.android.sermons.actions.ProfileAction
+import com.branhamplayer.android.sermons.actions.*
 import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
@@ -28,26 +26,6 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
     private var activityUnbinder: Unbinder? = null
     private var drawerToggle: ActionBarDrawerToggle? = null
 
-    // region Components
-
-    @JvmField
-    @BindView(R.id.navigation_drawer)
-    var drawer: NavigationView? = null
-
-    @JvmField
-    @BindView(R.id.navigation_drawer_layout)
-    var drawerLayout: DrawerLayout? = null
-
-    @JvmField
-    @BindView(R.id.primary_toolbar)
-    var primaryToolbar: Toolbar? = null
-
-    @JvmField
-    @BindView(R.id.sermon_list_toolbar)
-    var sermonsListToolbar: Toolbar? = null
-
-    // endregion
-
     // region DI
 
     @Inject
@@ -55,6 +33,22 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
     @Inject
     lateinit var sermonListFragment: SermonListFragment
+
+    // endregion
+
+    // region UI
+
+    @BindView(R.id.navigation_drawer)
+    lateinit var drawer: NavigationView
+
+    @BindView(R.id.navigation_drawer_layout)
+    lateinit var drawerLayout: DrawerLayout
+
+    @BindView(R.id.primary_toolbar)
+    lateinit var primaryToolbar: Toolbar
+
+    @BindView(R.id.sermon_list_toolbar)
+    lateinit var sermonsListToolbar: Toolbar
 
     // endregion
 
@@ -78,6 +72,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
         sermonsStore.dispatch(DataAction.SetTitleAction(RBase.string.navigation_sermons))
         sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction)
+        sermonsStore.dispatch(RoutingAction.NavigateToNoSelectionAction)
 
         val isTablet = resources.getBoolean(RBase.bool.is_tablet)
 
@@ -99,7 +94,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
     override fun newState(state: SermonsState) {
 
-        drawer?.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
+        drawer.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
 
         state.profile?.let {
             drawerHeaderBinder.email?.text = it.email
@@ -107,11 +102,27 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         }
 
         state.title?.let {
-            sermonsListToolbar?.title = it
+            sermonsListToolbar.title = it
         }
     }
 
     // endregion
+
+    fun setDetailFragment(fragment: Fragment) {
+
+        val isTablet = resources.getBoolean(RBase.bool.is_tablet)
+        if (!isTablet) return
+
+        supportFragmentManager.commit(allowStateLoss = true) {
+            replace(R.id.sermons_details_container, fragment)
+        }
+    }
+
+    fun setMasterFragment(fragment: Fragment) {
+        supportFragmentManager.commit(allowStateLoss = true) {
+            replace(R.id.sermon_list_container, fragment)
+        }
+    }
 
     private fun setUpDrawer() {
 
@@ -124,13 +135,13 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         )
 
         drawerToggle?.let {
-            drawerLayout?.addDrawerListener(it)
+            drawerLayout.addDrawerListener(it)
         }
 
         drawerToggle?.syncState()
 
-        if (drawer?.headerCount == 1) {
-            drawer?.getHeaderView(0)?.let {
+        if (drawer.headerCount == 1) {
+            drawer.getHeaderView(0)?.let {
                 drawerHeaderBinder.bind(it)
             }
         }

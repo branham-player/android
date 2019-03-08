@@ -28,4 +28,10 @@
     <string name="permission_denied_message">This permission is necessary for the Branham Player to work properly</string>
 
     <!-- endregion -->
+
+    <!-- region In-App Media Player -->
+
+    <string name="no_selection_description">Select a sermon from the list</string>
+
+    <!-- endregion -->
 </resources>

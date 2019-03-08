@@ -16,6 +16,8 @@ android {
 
         minSdkVersion min_sdk_version
         targetSdkVersion target_sdk_version
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {

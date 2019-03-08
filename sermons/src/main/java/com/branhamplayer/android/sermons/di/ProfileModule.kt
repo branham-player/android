@@ -13,7 +13,9 @@ class ProfileModule {
 
     @Provides
     fun provideProfileMiddleware(
-        auth0Service: Auth0Service, @Named(RxJavaModule.BG) bg: Scheduler, @Named(RxJavaModule.UI) ui: Scheduler
+        auth0Service: Auth0Service,
+        @Named(RxJavaModule.BG) bg: Scheduler,
+        @Named(RxJavaModule.UI) ui: Scheduler
     ) = ProfileMiddleware(auth0Service, bg, ui)
 
     @Provides

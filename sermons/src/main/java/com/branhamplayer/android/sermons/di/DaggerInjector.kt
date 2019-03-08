@@ -1,18 +1,15 @@
 package com.branhamplayer.android.sermons.di
 
-import androidx.appcompat.app.AppCompatActivity
-import com.branhamplayer.android.di.AuthenticationModule
+import com.branhamplayer.android.sermons.ui.SermonsActivity
 
 object DaggerInjector {
 
     var sermonsComponent: SermonsComponent? = null
         private set
 
-    fun buildSermonsComponent(activity: AppCompatActivity): SermonsComponent {
+    fun buildSermonsComponent(activity: SermonsActivity): SermonsComponent {
         val component = sermonsComponent ?: DaggerSermonsComponent
             .builder()
-            .authenticationModule(AuthenticationModule())
-            .rxJavaModule(RxJavaModule())
             .sermonsModule(SermonsModule(activity))
             .build()
 

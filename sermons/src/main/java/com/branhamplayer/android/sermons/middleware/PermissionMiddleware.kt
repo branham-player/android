@@ -1,11 +1,11 @@
 package com.branhamplayer.android.sermons.middleware
 
-import androidx.appcompat.app.AppCompatActivity
 import com.branhamplayer.android.base.redux.TypedMiddleware
 import com.branhamplayer.android.sermons.actions.DataAction
 import com.branhamplayer.android.sermons.actions.PermissionAction
 import com.branhamplayer.android.sermons.di.RxJavaModule
 import com.branhamplayer.android.sermons.states.SermonsState
+import com.branhamplayer.android.sermons.ui.SermonsActivity
 import com.branhamplayer.android.sermons.utils.permissions.PermissionConstants
 import com.branhamplayer.android.sermons.utils.permissions.PermissionManager
 import io.reactivex.Scheduler
@@ -14,7 +14,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class PermissionMiddleware @Inject constructor(
-    private val activity: AppCompatActivity,
+    private val activity: SermonsActivity,
     @Named(RxJavaModule.BG) private val bg: Scheduler,
     @Named(RxJavaModule.UI) private val ui: Scheduler
 ) : TypedMiddleware<PermissionAction, SermonsState> {
