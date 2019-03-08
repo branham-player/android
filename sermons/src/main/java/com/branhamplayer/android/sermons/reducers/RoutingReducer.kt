@@ -2,6 +2,7 @@ package com.branhamplayer.android.sermons.reducers
 
 import com.branhamplayer.android.base.redux.TypedReducer
 import com.branhamplayer.android.sermons.actions.RoutingAction
+import com.branhamplayer.android.sermons.models.PlayerUpdateModel
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.ui.NoSelectionFragment
 import com.branhamplayer.android.sermons.ui.PlayerFragment
@@ -16,22 +17,26 @@ class RoutingReducer @Inject constructor(
 
     // region TypedReducer
 
-    override fun invoke(action: RoutingAction, oldState: SermonsState): SermonsState {
-        when (action) {
-            is RoutingAction.NavigateToNoSelectionAction -> navigateToNoSelection()
-            is RoutingAction.NavigateToPlayerAction -> navigateToPlayer()
-        }
-
-        return oldState
+    override fun invoke(action: RoutingAction, oldState: SermonsState) = when (action) {
+        is RoutingAction.NavigateToNoSelectionAction -> navigateToNoSelection(oldState)
+        is RoutingAction.NavigateToPlayerAction -> navigateToPlayer(action, oldState)
     }
 
     // endregion
 
-    private fun navigateToNoSelection() {
+    private fun navigateToNoSelection(oldState: SermonsState): SermonsState {
         sermonsActivity.setDetailFragment(noSelectionFragment)
+        return oldState
     }
 
-    private fun navigateToPlayer() {
+    private fun navigateToPlayer(
+        action: RoutingAction.NavigateToPlayerAction,
+        oldState: SermonsState
+    ): SermonsState {
         sermonsActivity.setDetailFragment(playerFragment)
+
+        return oldState.copy(
+            selectedSermon = action.sermon
+        )
     }
 }

@@ -105,7 +105,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
             drawerHeaderBinder.name?.text = it.name
         }
 
-        if (!state.sermonList.isNullOrEmpty()) {
+        if (!state.sermonList.isNullOrEmpty() && state.selectedSermon == null) {
             sermonsStore.dispatch(RoutingAction.NavigateToNoSelectionAction)
         }
 
