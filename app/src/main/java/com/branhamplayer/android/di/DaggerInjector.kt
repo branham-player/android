@@ -2,6 +2,7 @@ package com.branhamplayer.android.di
 
 import android.app.Activity
 import android.content.Context
+import com.branhamplayer.android.ui.StartupActivity
 
 object DaggerInjector {
 
@@ -40,7 +41,7 @@ object DaggerInjector {
     var startupComponent: StartupComponent? = null
         private set
 
-    fun buildStartupComponent(activity: Activity): StartupComponent {
+    fun buildStartupComponent(activity: StartupActivity): StartupComponent {
         val component = startupComponent ?: DaggerStartupComponent
             .builder()
             .preflightChecklistModule(PreflightChecklistModule(activity))

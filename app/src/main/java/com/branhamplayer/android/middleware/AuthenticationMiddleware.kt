@@ -27,7 +27,6 @@ class AuthenticationMiddleware @Inject constructor(
     override fun invoke(dispatch: DispatchFunction, action: AuthenticationAction, oldState: StartupState?) {
         when (action) {
             is AuthenticationAction.DoLoginAction -> doLogin(dispatch)
-            is AuthenticationAction.SaveCredentialsAction -> Unit
         }
     }
 

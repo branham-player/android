@@ -2,7 +2,7 @@ package com.branhamplayer.android.services.logging
 
 import com.orhanobut.logger.Logger
 import com.branhamplayer.android.services.firebase.RemoteConfigConstants
-import com.branhamplayer.android.services.firebase.RemoteConfigService
+import com.branhamplayer.android.services.RemoteConfigService
 import timber.log.Timber
 
 class Loggly {

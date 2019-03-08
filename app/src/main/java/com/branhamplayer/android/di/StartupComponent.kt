@@ -10,7 +10,6 @@ import dagger.Component
 interface StartupComponent {
     fun getContext(): Context
 
-    fun inject(activity: StartupActivity)
     fun inject(rootMiddleware: StartupMiddleware)
     fun inject(rootReducer: StartupReducer)
 }

@@ -18,9 +18,18 @@ class Semver(version: String) {
         patch = parts[2].toInt()
     }
 
-    operator fun compareTo(semver: Semver) = when {
-        major > semver.major && minor > semver.minor && patch > semver.patch -> 1
-        major < semver.major && minor < semver.minor && patch < semver.patch -> -1
-        else -> 0
+    operator fun compareTo(semver: Semver): Int {
+        val theseParts = arrayOf(major, minor, patch)
+        val thoseParts = arrayOf(semver.major, semver.minor, semver.patch)
+
+        for (i in 0..2) {
+            if (theseParts[i] > thoseParts[i]) {
+                return 1
+            } else if (theseParts[i] < thoseParts[i]) {
+                return -1
+            }
+        }
+
+        return 0
     }
 }

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.PreflightChecklistAction
+import com.branhamplayer.android.actions.RoutingAction
 import com.branhamplayer.android.di.DaggerInjector
 import com.branhamplayer.android.states.StartupState
 import com.branhamplayer.android.store.startupStore
@@ -81,7 +82,7 @@ class PreflightChecklistFragment : Fragment(), StoreSubscriber<StartupState> {
             }
             .setNegativeButton(R.string.preflight_checklist_close_app) { dialog, _ ->
                 dialog.dismiss()
-                activity?.finish()
+                startupStore.dispatch(RoutingAction.CloseAppAction)
             }
 
         builder.create().show()
@@ -94,6 +95,7 @@ class PreflightChecklistFragment : Fragment(), StoreSubscriber<StartupState> {
             .setTitle(R.string.preflight_checklist_notice)
             .setPositiveButton(R.string.preflight_checklist_ok) { dialog, _ ->
                 dialog.dismiss()
+                startupStore.dispatch(RoutingAction.NavigateToAuthenticationAction)
             }
 
         builder.create().show()
@@ -105,7 +107,7 @@ class PreflightChecklistFragment : Fragment(), StoreSubscriber<StartupState> {
             .setTitle(R.string.preflight_checklist_platform_unavailable_title)
             .setPositiveButton(R.string.preflight_checklist_close_app) { dialog, _ ->
                 dialog.dismiss()
-                activity?.finish()
+                startupStore.dispatch(RoutingAction.CloseAppAction)
             }
 
         if (message.isNullOrBlank()) {

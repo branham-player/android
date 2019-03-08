@@ -1,7 +1,7 @@
 package com.branhamplayer.android
 
 import android.app.Application
-import com.branhamplayer.android.services.firebase.RemoteConfigService
+import com.branhamplayer.android.services.RemoteConfigService
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 

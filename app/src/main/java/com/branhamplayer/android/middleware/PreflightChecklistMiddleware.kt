@@ -27,7 +27,7 @@ class PreflightChecklistMiddleware @Inject constructor(
         val message = firebaseRemoteConfig.getString(StartupConstants.PreflightChecklist.message)
 
         if (message.isNullOrBlank()) {
-            dispatch(PreflightChecklistAction.CheckMinimumVersionAction)
+            dispatch(RoutingAction.NavigateToAuthenticationAction)
         } else {
             dispatch(PreflightChecklistAction.NotifyWithMessageAction(message))
         }
@@ -38,7 +38,7 @@ class PreflightChecklistMiddleware @Inject constructor(
         val minimumVersion = Semver(firebaseRemoteConfig.getString(StartupConstants.PreflightChecklist.minimumVersion))
 
         if (appVersion >= minimumVersion) {
-            dispatch(RoutingAction.NavigateToAuthenticationAction)
+            dispatch(PreflightChecklistAction.CheckMessageAction)
         } else {
             dispatch(PreflightChecklistAction.StopAppWithMinimumVersionFailureAction)
         }
@@ -46,7 +46,7 @@ class PreflightChecklistMiddleware @Inject constructor(
 
     private fun checkPlatformStatus(dispatch: DispatchFunction) =
         if (firebaseRemoteConfig.getBoolean(StartupConstants.PreflightChecklist.platformStatus)) {
-            dispatch(PreflightChecklistAction.CheckMessageAction)
+            dispatch(PreflightChecklistAction.CheckMinimumVersionAction)
         } else {
             val message = firebaseRemoteConfig.getString(StartupConstants.PreflightChecklist.message)
             dispatch(PreflightChecklistAction.StopAppWithPlatformDownAction(message))
