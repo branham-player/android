@@ -1,8 +1,8 @@
 package com.branhamplayer.android.services.logging
 
+import com.branhamplayer.android.StartupConstants
 import com.orhanobut.logger.Logger
-import com.branhamplayer.android.services.firebase.RemoteConfigConstants
-import com.branhamplayer.android.services.RemoteConfigService
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import timber.log.Timber
 
 class Loggly {
@@ -58,8 +58,9 @@ class Loggly {
 
         private fun allowedToLog(currentLogType: String): Boolean {
             val currentLevel = currentLogType.toLogLevel()
-            val minLevel = RemoteConfigService.instance.getString(RemoteConfigConstants.Keys.logLevel).toLogLevel()
-            
+            val minLevel = FirebaseRemoteConfig.getInstance().getString(StartupConstants.FirebaseRemoteConfig.logLevel)
+                .toLogLevel()
+
             return currentLevel >= minLevel
         }
 

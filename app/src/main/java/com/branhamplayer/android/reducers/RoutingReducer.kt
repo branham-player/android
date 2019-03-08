@@ -3,28 +3,36 @@ package com.branhamplayer.android.reducers
 import android.content.Intent
 import com.branhamplayer.android.actions.RoutingAction
 import com.branhamplayer.android.base.redux.TypedReducer
+import com.branhamplayer.android.di.RoutingModule
 import com.branhamplayer.android.states.StartupState
 import com.branhamplayer.android.ui.AuthenticationFragment
 import com.branhamplayer.android.ui.PreflightChecklistFragment
 import com.branhamplayer.android.ui.StartupActivity
 import javax.inject.Inject
+import javax.inject.Named
 
 class RoutingReducer @Inject constructor(
     private val startupActivity: StartupActivity,
     private val authenticationFragment: AuthenticationFragment,
     private val preflightChecklistFragment: PreflightChecklistFragment,
-    private val sermonsIntent: Intent
+    @Named(RoutingModule.GooglePlay) private val googlePlayIntent: Intent,
+    @Named(RoutingModule.Sermons) private val sermonsIntent: Intent
 ) : TypedReducer<RoutingAction, StartupState> {
 
     override fun invoke(action: RoutingAction, oldState: StartupState): StartupState {
         when (action) {
             is RoutingAction.CloseAppAction -> closeApp()
             is RoutingAction.NavigateToAuthenticationAction -> navigateToAuthentication()
+            is RoutingAction.NavigateToGooglePlayStoreAction -> navigateToGooglePlayStore()
             is RoutingAction.NavigateToPreflightChecklistAction -> navigateToPreflightChecklist()
             is RoutingAction.NavigateToSermonsAction -> navigateToSermons()
         }
 
         return oldState
+    }
+
+    private fun navigateToGooglePlayStore() {
+        startupActivity.startActivity(googlePlayIntent)
     }
 
     private fun closeApp() {

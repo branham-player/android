@@ -14,7 +14,6 @@ object RemoteConfigService {
             .build()
 
         val firebase = FirebaseRemoteConfig.getInstance()
-
         firebase.setConfigSettings(settings)
         firebase.setDefaults(R.xml.remote_config_defaults)
 

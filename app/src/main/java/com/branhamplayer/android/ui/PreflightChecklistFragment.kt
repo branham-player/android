@@ -78,7 +78,7 @@ class PreflightChecklistFragment : Fragment(), StoreSubscriber<StartupState> {
             .setTitle(R.string.preflight_checklist_required_update_title)
             .setPositiveButton(R.string.preflight_checklist_update_app) { dialog, _ ->
                 dialog.dismiss()
-
+                startupStore.dispatch(RoutingAction.NavigateToGooglePlayStoreAction)
             }
             .setNegativeButton(R.string.preflight_checklist_close_app) { dialog, _ ->
                 dialog.dismiss()
