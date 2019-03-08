@@ -89,6 +89,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
         drawerHeaderBinder.unbind()
         activityUnbinder?.unbind()
+        sermonsStore.unsubscribe(this)
     }
 
     // endregion
