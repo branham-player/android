@@ -28,10 +28,11 @@ object DaggerInjector {
     // is capable of shutting the app down (and thus invalidating the given context), it
     // needs to receive a fresh context each time so that the dialog which depends on it can
     // show a dialog with a valid context without crashing the app.
-    fun buildPreflightChecklistComponent(context: Context) = DaggerPreflightChecklistComponent
-        .builder()
-        .preflightChecklistModule(PreflightChecklistModule(context))
-        .build()
+    fun buildPreflightChecklistComponent(context: Context): PreflightChecklistComponent =
+        DaggerPreflightChecklistComponent
+            .builder()
+            .preflightChecklistModule(PreflightChecklistModule(context))
+            .build()
 
     // endregion
 
