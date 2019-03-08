@@ -12,7 +12,11 @@ import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
-import com.branhamplayer.android.sermons.actions.*
+import com.branhamplayer.android.sermons.actions.DataAction
+import com.branhamplayer.android.sermons.actions.DrawerAction
+import com.branhamplayer.android.sermons.actions.PermissionAction
+import com.branhamplayer.android.sermons.actions.ProfileAction
+import com.branhamplayer.android.sermons.actions.RoutingAction
 import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
@@ -72,7 +76,6 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
         sermonsStore.dispatch(DataAction.SetTitleAction(RBase.string.navigation_sermons))
         sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction)
-        sermonsStore.dispatch(RoutingAction.NavigateToNoSelectionAction)
 
         val isTablet = resources.getBoolean(RBase.bool.is_tablet)
 
@@ -101,6 +104,10 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
             drawerHeaderBinder.name?.text = it.name
         }
 
+        if (!state.sermonList.isNullOrEmpty()) {
+            sermonsStore.dispatch(RoutingAction.NavigateToNoSelectionAction)
+        }
+
         state.title?.let {
             sermonsListToolbar.title = it
         }
@@ -109,7 +116,6 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
     // endregion
 
     fun setDetailFragment(fragment: Fragment) {
-
         val isTablet = resources.getBoolean(RBase.bool.is_tablet)
         if (!isTablet) return
 
