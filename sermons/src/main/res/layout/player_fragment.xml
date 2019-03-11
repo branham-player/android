@@ -1,13 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/player_button"
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/player_artwork"
+        android:layout_height="240dp"
+        android:layout_marginTop="80dp"
+        android:layout_width="240dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/player_title"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:layout_width="match_parent"
-        android:text="Button"/>
-</LinearLayout>
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_artwork"
+        tools:text="Earnestly Contending for the Faith that was Once Delivered unto the Saints"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/player_date"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_title"
+        tools:text="August 15th, 1955"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/player_location"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/player_date"
+        tools:text="Karlsruhe, Germany"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
