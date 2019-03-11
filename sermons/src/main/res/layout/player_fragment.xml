@@ -3,19 +3,30 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/colorPrimaryDark"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/player_background"
+        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/player_artwork"
-        android:layout_height="240dp"
-        android:layout_marginTop="80dp"
-        android:layout_width="240dp"
+        android:layout_height="320dp"
+        android:layout_marginTop="40dp"
+        android:layout_width="320dp"
+        android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars"/>
+        tools:src="@tools:sample/backgrounds/scenic"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/player_title"
@@ -25,7 +36,9 @@
         android:layout_marginTop="24dp"
         android:layout_width="match_parent"
         android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/player_artwork"
@@ -33,12 +46,15 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/player_date"
+        android:ellipsize="end"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
+        android:lines="1"
         android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,15 +63,117 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/player_location"
+        android:ellipsize="end"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
+        android:lines="1"
         android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/player_date"
         tools:text="Karlsruhe, Germany"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/player_backward_30"
+        android:background="?android:selectableItemBackground"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_width="48dp"
+        android:src="@drawable/ic_backward_30"
+        app:layout_constraintBottom_toBottomOf="@+id/player_play_pause"
+        app:layout_constraintEnd_toStartOf="@+id/player_previous"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/player_play_pause"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/player_previous"
+        android:background="?android:selectableItemBackground"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_width="48dp"
+        android:src="@drawable/ic_previous"
+        app:layout_constraintBottom_toBottomOf="@+id/player_play_pause"
+        app:layout_constraintEnd_toStartOf="@+id/player_play_pause"
+        app:layout_constraintStart_toEndOf="@+id/player_backward_30"
+        app:layout_constraintTop_toTopOf="@+id/player_play_pause"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/player_play_pause"
+        android:background="?android:selectableItemBackground"
+        android:layout_height="64dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_width="64dp"
+        android:src="@drawable/ic_play"
+        app:layout_constraintBottom_toTopOf="@+id/player_progress"
+        app:layout_constraintEnd_toStartOf="@+id/player_next"
+        app:layout_constraintStart_toEndOf="@+id/player_previous"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/player_next"
+        android:background="?android:selectableItemBackground"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_width="48dp"
+        android:src="@drawable/ic_next"
+        app:layout_constraintBottom_toBottomOf="@+id/player_play_pause"
+        app:layout_constraintEnd_toStartOf="@+id/player_forward_30"
+        app:layout_constraintStart_toEndOf="@+id/player_play_pause"
+        app:layout_constraintTop_toTopOf="@+id/player_play_pause"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/player_forward_30"
+        android:background="?android:selectableItemBackground"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_width="48dp"
+        android:src="@drawable/ic_forward_30"
+        app:layout_constraintBottom_toBottomOf="@+id/player_play_pause"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/player_next"
+        app:layout_constraintTop_toTopOf="@+id/player_play_pause"/>
+
+    <androidx.appcompat.widget.AppCompatSeekBar
+        android:id="@+id/player_progress"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="80dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/player_played_time"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/player_progress"
+        app:layout_constraintTop_toBottomOf="@+id/player_progress"
+        tools:text="0:00"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/player_sermon_duration"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_width="wrap_content"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/player_progress"
+        app:layout_constraintTop_toBottomOf="@+id/player_progress"
+        tools:text="1:00:00"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

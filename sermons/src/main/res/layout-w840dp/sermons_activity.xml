@@ -83,23 +83,10 @@
             app:layout_constraintStart_toEndOf="@+id/sermon_list_card"
             app:layout_constraintTop_toTopOf="@+id/primary_toolbar_spacer">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <FrameLayout
+                android:id="@+id/sermons_details_container"
                 android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:orientation="vertical">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/sermons_details_toolbar"
-                    android:layout_height="?attr/actionBarSize"
-                    android:layout_width="match_parent"
-                    android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
-                    app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"/>
-
-                <FrameLayout
-                    android:id="@+id/sermons_details_container"
-                    android:layout_height="match_parent"
-                    android:layout_width="match_parent"/>
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                android:layout_width="match_parent"/>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
