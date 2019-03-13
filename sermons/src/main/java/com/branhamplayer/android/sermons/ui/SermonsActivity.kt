@@ -42,14 +42,17 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
     // region UI
 
+    @JvmField
     @BindView(R.id.navigation_drawer)
-    lateinit var drawer: NavigationView
+    var drawer: NavigationView? = null
 
+    @JvmField
     @BindView(R.id.navigation_drawer_layout)
-    lateinit var drawerLayout: DrawerLayout
+    var drawerLayout: DrawerLayout? = null
 
+    @JvmField
     @BindView(R.id.primary_toolbar)
-    lateinit var primaryToolbar: Toolbar
+    var primaryToolbar: Toolbar? = null
 
     @BindView(R.id.sermon_list_toolbar)
     lateinit var sermonsListToolbar: Toolbar
@@ -98,7 +101,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
     override fun newState(state: SermonsState) {
 
-        drawer.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
+        drawer?.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
 
         state.profile?.let {
             drawerHeaderBinder.email?.text = it.email
@@ -125,9 +128,13 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         }
     }
 
-    fun setMasterFragment(fragment: Fragment) {
+    fun setMasterFragment(fragment: Fragment, addToBackStack: Boolean = true) {
         supportFragmentManager.commit(allowStateLoss = true) {
             replace(R.id.sermon_list_container, fragment)
+
+            if (addToBackStack) {
+                addToBackStack(fragment::class.java.simpleName)
+            }
         }
     }
 
@@ -142,13 +149,13 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         )
 
         drawerToggle?.let {
-            drawerLayout.addDrawerListener(it)
+            drawerLayout?.addDrawerListener(it)
         }
 
         drawerToggle?.syncState()
 
-        if (drawer.headerCount == 1) {
-            drawer.getHeaderView(0)?.let {
+        if (drawer?.headerCount == 1) {
+            drawer?.getHeaderView(0)?.let {
                 drawerHeaderBinder.bind(it)
             }
         }

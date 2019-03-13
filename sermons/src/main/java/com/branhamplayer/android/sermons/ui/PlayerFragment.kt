@@ -1,6 +1,5 @@
 package com.branhamplayer.android.sermons.ui
 
-import android.graphics.drawable.TransitionDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,15 +12,30 @@ import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
+import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.models.SermonModel
 import com.branhamplayer.android.sermons.store.sermonsStore
-import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import org.rekotlin.StoreSubscriber
+import javax.inject.Inject
 
 class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
 
     private var unbinder: Unbinder? = null
+
+    // region DI
+
+    @Inject
+    lateinit var artworkLoader: RequestManager
+
+    @Inject
+    lateinit var backgroundArtworkLoader: RequestManager
+
+    @Inject
+    lateinit var crossFade: DrawableTransitionOptions
+
+    // endregion
 
     // region UI
 
@@ -44,6 +58,10 @@ class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val view = inflater.inflate(R.layout.player_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
+
+        context?.let {
+            DaggerInjector.buildPlayerComponent(it).inject(this)
+        }
 
         sermonsStore.subscribe(this) {
             it.select { state ->
@@ -71,19 +89,19 @@ class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
             title.text = it.name
 
             // TODO, replace with real album artwork
-            Glide.with(this)
+            artworkLoader
                 .load("https://cloudinary-a.akamaihd.net/branham-player/image/upload/c_scale,w_421/samples/landscapes/beach-boat.jpg")
                 .timeout(5000)
-                .transition(DrawableTransitionOptions().crossFade())
+                .transition(crossFade)
                 .error(RBase.drawable.ic_account)
                 .placeholder(RBase.drawable.ic_sermons)
                 .centerCrop()
                 .into(artwork)
 
-            Glide.with(this)
+            backgroundArtworkLoader
                 .load("https://cloudinary-a.akamaihd.net/branham-player/image/upload/co_rgb:3086D4,e_colorize:80/e_blur:1600/samples/landscapes/beach-boat.jpg")
                 .timeout(5000)
-                .transition(DrawableTransitionOptions().crossFade())
+                .transition(crossFade)
                 .centerCrop()
                 .into(background)
         }

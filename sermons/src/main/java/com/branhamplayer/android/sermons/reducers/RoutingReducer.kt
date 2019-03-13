@@ -1,8 +1,8 @@
 package com.branhamplayer.android.sermons.reducers
 
 import com.branhamplayer.android.base.redux.TypedReducer
+import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.actions.RoutingAction
-import com.branhamplayer.android.sermons.models.PlayerUpdateModel
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.ui.NoSelectionFragment
 import com.branhamplayer.android.sermons.ui.PlayerFragment
@@ -33,7 +33,13 @@ class RoutingReducer @Inject constructor(
         action: RoutingAction.NavigateToPlayerAction,
         oldState: SermonsState
     ): SermonsState {
-        sermonsActivity.setDetailFragment(playerFragment)
+        val isTablet = sermonsActivity.resources.getBoolean(RBase.bool.is_tablet)
+
+        if (isTablet) {
+            sermonsActivity.setDetailFragment(playerFragment)
+        } else {
+            sermonsActivity.setMasterFragment(playerFragment)
+        }
 
         return oldState.copy(
             selectedSermon = action.sermon
