@@ -18,7 +18,7 @@ import com.branhamplayer.android.sermons.models.SermonModel
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.google.android.material.appbar.AppBarLayout
+import de.hdodenhof.circleimageview.CircleImageView
 import org.rekotlin.StoreSubscriber
 import javax.inject.Inject
 
@@ -32,7 +32,7 @@ class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
     lateinit var artworkLoader: RequestManager
 
     @Inject
-    lateinit var backgroundArtworkLoader: RequestManager
+    lateinit var backgroundLoader: RequestManager
 
     @Inject
     lateinit var crossFade: DrawableTransitionOptions
@@ -42,7 +42,10 @@ class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
     // region UI
 
     @BindView(R.id.player_artwork)
-    lateinit var artwork: AppCompatImageView
+    lateinit var artwork: CircleImageView
+
+    @BindView(R.id.player_background)
+    lateinit var background: AppCompatImageView
 
     @BindView(R.id.player_date)
     lateinit var date: AppCompatTextView
@@ -69,6 +72,8 @@ class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
         sermonsActivity?.setSupportActionBar(toolbar)
         sermonsActivity?.supportActionBar?.setHomeButtonEnabled(true)
         sermonsActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        toolbar.setNavigationOnClickListener { sermonsActivity?.onBackPressed() }
 
         sermonsStore.subscribe(this) {
             it.select { state ->
@@ -100,18 +105,18 @@ class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
             artworkLoader
                 .load("https://cloudinary-a.akamaihd.net/branham-player/image/upload/c_scale,w_421/samples/landscapes/beach-boat.jpg")
                 .timeout(5000)
-                .transition(crossFade)
-                .error(RBase.drawable.ic_account)
+                .dontAnimate()
+                .error(RBase.drawable.ic_sermons)
                 .placeholder(RBase.drawable.ic_sermons)
-                .centerCrop()
                 .into(artwork)
 
-//            backgroundArtworkLoader
-//                .load("https://cloudinary-a.akamaihd.net/branham-player/image/upload/co_rgb:3086D4,e_colorize:80/e_blur:1600/samples/landscapes/beach-boat.jpg")
-//                .timeout(5000)
-//                .transition(crossFade)
-//                .centerCrop()
-//                .into(background)
+            backgroundLoader
+                .load("https://cloudinary-a.akamaihd.net/branham-player/image/upload/c_scale,w_421/samples/landscapes/beach-boat.jpg")
+                .timeout(5000)
+                .transition(crossFade)
+                .error(RBase.drawable.ic_sermons)
+                .placeholder(RBase.drawable.ic_sermons)
+                .into(background)
         }
     }
 
