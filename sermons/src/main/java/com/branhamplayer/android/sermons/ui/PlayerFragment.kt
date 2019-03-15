@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -17,6 +18,7 @@ import com.branhamplayer.android.sermons.models.SermonModel
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.appbar.AppBarLayout
 import org.rekotlin.StoreSubscriber
 import javax.inject.Inject
 
@@ -42,14 +44,14 @@ class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
     @BindView(R.id.player_artwork)
     lateinit var artwork: AppCompatImageView
 
-    @BindView(R.id.player_background)
-    lateinit var background: AppCompatImageView
-
     @BindView(R.id.player_date)
     lateinit var date: AppCompatTextView
 
     @BindView(R.id.player_title)
     lateinit var title: AppCompatTextView
+
+    @BindView(R.id.player_toolbar)
+    lateinit var toolbar: Toolbar
 
     // endregion
 
@@ -62,6 +64,11 @@ class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
         context?.let {
             DaggerInjector.buildPlayerComponent(it).inject(this)
         }
+
+        val sermonsActivity = activity as? SermonsActivity?
+        sermonsActivity?.setSupportActionBar(toolbar)
+        sermonsActivity?.supportActionBar?.setHomeButtonEnabled(true)
+        sermonsActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         sermonsStore.subscribe(this) {
             it.select { state ->
@@ -87,6 +94,7 @@ class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
         state?.let {
             date.text = it.formattedDate
             title.text = it.name
+            toolbar.title = "" // Don't use the default toolbar, since we extend it with a collapsing toolbar
 
             // TODO, replace with real album artwork
             artworkLoader
@@ -98,12 +106,12 @@ class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
                 .centerCrop()
                 .into(artwork)
 
-            backgroundArtworkLoader
-                .load("https://cloudinary-a.akamaihd.net/branham-player/image/upload/co_rgb:3086D4,e_colorize:80/e_blur:1600/samples/landscapes/beach-boat.jpg")
-                .timeout(5000)
-                .transition(crossFade)
-                .centerCrop()
-                .into(background)
+//            backgroundArtworkLoader
+//                .load("https://cloudinary-a.akamaihd.net/branham-player/image/upload/co_rgb:3086D4,e_colorize:80/e_blur:1600/samples/landscapes/beach-boat.jpg")
+//                .timeout(5000)
+//                .transition(crossFade)
+//                .centerCrop()
+//                .into(background)
         }
     }
 

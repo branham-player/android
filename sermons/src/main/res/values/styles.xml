@@ -2,9 +2,9 @@
 <resources>
     <!-- region SermonList -->
 
-    <style name="SermonList" />
+    <style name="SermonList"/>
 
-    <style name="SermonList.Row" />
+    <style name="SermonList.Row"/>
 
     <style name="SermonList.Row.Date">
         <item name="android:textSize">12sp</item>
