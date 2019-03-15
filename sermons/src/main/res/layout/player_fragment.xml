@@ -7,6 +7,7 @@
     android:layout_width="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/player_app_bar"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
@@ -79,8 +80,8 @@
         android:layout_height="96dp"
         android:layout_width="96dp"
         app:layout_anchor="@+id/player_title_layout"
-        app:layout_anchorGravity="top|center_horizontal"
-        app:layout_scrollFlags="scroll"/>
+        app:layout_anchorGravity="center_horizontal|top"
+        app:layout_scrollFlags="noScroll"/>
 
     <androidx.core.widget.NestedScrollView
         android:layout_height="match_parent"

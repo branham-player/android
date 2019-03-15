@@ -16,14 +16,17 @@ import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.models.SermonModel
 import com.branhamplayer.android.sermons.store.sermonsStore
+import com.branhamplayer.android.sermons.utils.DisplayUtility
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.android.material.appbar.AppBarLayout
 import de.hdodenhof.circleimageview.CircleImageView
 import org.rekotlin.StoreSubscriber
 import javax.inject.Inject
 
-class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
+class PlayerFragment : Fragment(), AppBarLayout.OnOffsetChangedListener, StoreSubscriber<SermonModel?> {
 
+    private var showingArtwork = true
     private var unbinder: Unbinder? = null
 
     // region DI
@@ -40,6 +43,9 @@ class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
     // endregion
 
     // region UI
+
+    @BindView(R.id.player_app_bar)
+    lateinit var appBar: AppBarLayout
 
     @BindView(R.id.player_artwork)
     lateinit var artwork: CircleImageView
@@ -73,6 +79,7 @@ class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
         sermonsActivity?.supportActionBar?.setHomeButtonEnabled(true)
         sermonsActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        appBar.addOnOffsetChangedListener(this)
         toolbar.setNavigationOnClickListener { sermonsActivity?.onBackPressed() }
 
         sermonsStore.subscribe(this) {
@@ -87,8 +94,37 @@ class PlayerFragment : Fragment(), StoreSubscriber<SermonModel?> {
     override fun onDestroyView() {
         super.onDestroyView()
 
+        appBar.removeOnOffsetChangedListener(this)
         sermonsStore.unsubscribe(this)
         unbinder?.unbind()
+    }
+
+    // endregion
+
+    // region AppBarLayout.OnOffsetChangedListener
+
+    override fun onOffsetChanged(appBarLayout: AppBarLayout?, verticalOffset: Int) {
+        context?.let {
+            val verticalOffsetInDp = DisplayUtility.convertPxToDp(Math.abs(verticalOffset), it)
+
+            if (verticalOffsetInDp >= 125 && showingArtwork) {
+                showingArtwork = false
+
+                artwork.animate()
+                    .scaleX(0F)
+                    .scaleY(0F)
+                    .setDuration(200L)
+                    .start()
+            } else if (verticalOffsetInDp < 125 && !showingArtwork) {
+                showingArtwork = true
+
+                artwork.animate()
+                    .scaleX(1F)
+                    .scaleY(1F)
+                    .setDuration(200L)
+                    .start()
+            }
+        }
     }
 
     // endregion
