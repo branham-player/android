@@ -1,6 +1,5 @@
 package com.branhamplayer.android.sermons.di
 
-import android.content.Context
 import com.branhamplayer.android.sermons.ui.SermonsActivity
 
 object DaggerInjector {
@@ -10,10 +9,10 @@ object DaggerInjector {
     var playerComponent: PlayerComponent? = null
         private set
 
-    fun buildPlayerComponent(context: Context): PlayerComponent {
+    fun buildPlayerComponent(activity: SermonsActivity): PlayerComponent {
         val component = playerComponent ?: DaggerPlayerComponent
             .builder()
-            .playerModule(PlayerModule(context))
+            .playerModule(PlayerModule(activity))
             .build()
 
         playerComponent = component

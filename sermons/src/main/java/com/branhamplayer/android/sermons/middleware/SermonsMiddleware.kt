@@ -1,7 +1,7 @@
 package com.branhamplayer.android.sermons.middleware
 
-import com.branhamplayer.android.sermons.actions.PermissionAction
-import com.branhamplayer.android.sermons.actions.ProfileAction
+import com.branhamplayer.android.sermons.actions.AuthAction
+import com.branhamplayer.android.sermons.actions.SermonListAction
 import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.states.SermonsState
 import org.rekotlin.DispatchFunction
@@ -10,11 +10,17 @@ import javax.inject.Inject
 
 class SermonsMiddleware : Middleware<SermonsState> {
 
-    @Inject
-    lateinit var permissionMiddleware: PermissionMiddleware
+    // region DI
 
     @Inject
-    lateinit var profileMiddleware: ProfileMiddleware
+    lateinit var authMiddleware: AuthMiddleware
+
+    @Inject
+    lateinit var sermonsListMiddleware: SermonsListMiddleware
+
+    // endregion
+
+    // region Middleware
 
     override fun invoke(
         dispatch: DispatchFunction,
@@ -22,20 +28,22 @@ class SermonsMiddleware : Middleware<SermonsState> {
     ): (DispatchFunction) -> DispatchFunction = { next ->
         { action ->
             when (action) {
-                is PermissionAction -> {
+                is AuthAction -> {
                     inject()
-                    permissionMiddleware.invoke(dispatch, action, getState())
+                    authMiddleware.invoke(dispatch, action, getState())
                 }
 
-                is ProfileAction -> {
+                is SermonListAction -> {
                     inject()
-                    profileMiddleware.invoke(dispatch, action, getState())
+                    sermonsListMiddleware.invoke(dispatch, action, getState())
                 }
             }
 
             next(action)
         }
     }
+
+    // endregion
 
     private fun inject() {
         DaggerInjector.sermonsComponent?.inject(this)

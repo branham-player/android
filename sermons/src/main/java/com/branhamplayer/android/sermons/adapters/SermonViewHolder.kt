@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.TextView
 import com.branhamplayer.android.base.ui.BindableViewHolder
 import com.branhamplayer.android.sermons.R
-import com.branhamplayer.android.sermons.actions.RoutingAction
+import com.branhamplayer.android.sermons.actions.PlayerAction
 import com.branhamplayer.android.sermons.models.SermonModel
 import com.branhamplayer.android.sermons.store.sermonsStore
 
@@ -34,7 +34,7 @@ class SermonViewHolder(itemView: View) : BindableViewHolder<SermonModel>(itemVie
 
     override fun onClick(view: View?) {
         sermonModel?.let {
-            sermonsStore.dispatch(RoutingAction.NavigateToPlayerAction(it))
+            sermonsStore.dispatch(PlayerAction.NavigateToPlayerAction(it))
         }
     }
 

@@ -1,25 +1,25 @@
 package com.branhamplayer.android.sermons.reducers
 
 import com.branhamplayer.android.base.redux.TypedReducer
+import com.branhamplayer.android.sermons.actions.PlayerAction
 import com.branhamplayer.android.R as RBase
-import com.branhamplayer.android.sermons.actions.RoutingAction
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.ui.NoSelectionFragment
 import com.branhamplayer.android.sermons.ui.PlayerFragment
 import com.branhamplayer.android.sermons.ui.SermonsActivity
 import javax.inject.Inject
 
-class RoutingReducer @Inject constructor(
+class PlayerReducer @Inject constructor(
     private val sermonsActivity: SermonsActivity,
     private val noSelectionFragment: NoSelectionFragment,
     private val playerFragment: PlayerFragment
-) : TypedReducer<RoutingAction, SermonsState> {
+) : TypedReducer<PlayerAction, SermonsState> {
 
     // region TypedReducer
 
-    override fun invoke(action: RoutingAction, oldState: SermonsState) = when (action) {
-        is RoutingAction.NavigateToNoSelectionAction -> navigateToNoSelection(oldState)
-        is RoutingAction.NavigateToPlayerAction -> navigateToPlayer(action, oldState)
+    override fun invoke(action: PlayerAction, oldState: SermonsState) = when (action) {
+        is PlayerAction.NavigateToNoSelectionAction -> navigateToNoSelection(oldState)
+        is PlayerAction.NavigateToPlayerAction -> navigateToPlayer(oldState, action)
     }
 
     // endregion
@@ -29,10 +29,7 @@ class RoutingReducer @Inject constructor(
         return oldState
     }
 
-    private fun navigateToPlayer(
-        action: RoutingAction.NavigateToPlayerAction,
-        oldState: SermonsState
-    ): SermonsState {
+    private fun navigateToPlayer(oldState: SermonsState, action: PlayerAction.NavigateToPlayerAction): SermonsState {
         val isTablet = sermonsActivity.resources.getBoolean(RBase.bool.is_tablet)
 
         if (isTablet) {
@@ -42,7 +39,7 @@ class RoutingReducer @Inject constructor(
         }
 
         return oldState.copy(
-            selectedSermon = action.sermon
+            selectedSermon = action.selectedSermon
         )
     }
 }

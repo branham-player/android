@@ -1,9 +1,9 @@
 package com.branhamplayer.android.sermons.reducers
 
-import com.branhamplayer.android.sermons.actions.DataAction
+import com.branhamplayer.android.sermons.actions.AuthAction
+import com.branhamplayer.android.sermons.actions.SermonListAction
 import com.branhamplayer.android.sermons.actions.DrawerAction
-import com.branhamplayer.android.sermons.actions.ProfileAction
-import com.branhamplayer.android.sermons.actions.RoutingAction
+import com.branhamplayer.android.sermons.actions.PlayerAction
 import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.states.SermonsState
 import org.rekotlin.Action
@@ -15,16 +15,16 @@ class SermonsReducer : Reducer<SermonsState> {
     // region DI
 
     @Inject
-    lateinit var dataReducer: DataReducer
+    lateinit var authReducer: AuthReducer
 
     @Inject
     lateinit var drawerReducer: DrawerReducer
 
     @Inject
-    lateinit var profileReducer: ProfileReducer
+    lateinit var playerReducer: PlayerReducer
 
     @Inject
-    lateinit var routingReducer: RoutingReducer
+    lateinit var sermonListReducer: SermonListReducer
 
     // endregion
 
@@ -34,9 +34,9 @@ class SermonsReducer : Reducer<SermonsState> {
         val oldState = sermonsState ?: SermonsState()
 
         return when (action) {
-            is DataAction -> {
+            is AuthAction -> {
                 inject()
-                dataReducer.invoke(action, oldState)
+                authReducer.invoke(action, oldState)
             }
 
             is DrawerAction -> {
@@ -44,14 +44,14 @@ class SermonsReducer : Reducer<SermonsState> {
                 drawerReducer.invoke(action, oldState)
             }
 
-            is ProfileAction -> {
+            is PlayerAction -> {
                 inject()
-                profileReducer.invoke(action, oldState)
+                playerReducer.invoke(action, oldState)
             }
 
-            is RoutingAction -> {
+            is SermonListAction -> {
                 inject()
-                routingReducer.invoke(action, oldState)
+                sermonListReducer.invoke(action, oldState)
             }
 
             else -> oldState

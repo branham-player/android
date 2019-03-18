@@ -70,23 +70,20 @@ class PlayerFragment : Fragment(), AppBarLayout.OnOffsetChangedListener, StoreSu
         val view = inflater.inflate(R.layout.player_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
 
-        context?.let {
+        val sermonsActivity = activity as? SermonsActivity
+
+        sermonsActivity?.let {
             DaggerInjector.buildPlayerComponent(it).inject(this)
         }
-
-        val sermonsActivity = activity as? SermonsActivity?
-        sermonsActivity?.setSupportActionBar(toolbar)
-        sermonsActivity?.supportActionBar?.setHomeButtonEnabled(true)
-        sermonsActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        appBar.addOnOffsetChangedListener(this)
-        toolbar.setNavigationOnClickListener { sermonsActivity?.onBackPressed() }
 
         sermonsStore.subscribe(this) {
             it.select { state ->
                 state.selectedSermon
             }.skipRepeats()
         }
+
+        appBar.addOnOffsetChangedListener(this)
+        setUpToolbar()
 
         return view
     }
@@ -157,4 +154,15 @@ class PlayerFragment : Fragment(), AppBarLayout.OnOffsetChangedListener, StoreSu
     }
 
     // endregion
+
+    private fun setUpToolbar() {
+        val sermonsActivity = activity as? SermonsActivity?
+        sermonsActivity?.setSupportActionBar(toolbar)
+        sermonsActivity?.supportActionBar?.setHomeButtonEnabled(true)
+        sermonsActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        toolbar.setNavigationOnClickListener {
+            sermonsActivity?.onBackPressed()
+        }
+    }
 }

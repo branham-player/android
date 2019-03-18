@@ -48,7 +48,7 @@ class SermonListFragment : Fragment(), StoreSubscriber<List<SermonModel>?> {
 
         sermonsStore.subscribe(this) {
             it.select { state ->
-                state.sermonList
+                state.sermons
             }.skipRepeats()
         }
 

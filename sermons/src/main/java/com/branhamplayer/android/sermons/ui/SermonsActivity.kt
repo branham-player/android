@@ -12,11 +12,10 @@ import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
-import com.branhamplayer.android.sermons.actions.DataAction
+import com.branhamplayer.android.sermons.actions.AuthAction
+import com.branhamplayer.android.sermons.actions.SermonListAction
 import com.branhamplayer.android.sermons.actions.DrawerAction
-import com.branhamplayer.android.sermons.actions.PermissionAction
-import com.branhamplayer.android.sermons.actions.ProfileAction
-import com.branhamplayer.android.sermons.actions.RoutingAction
+import com.branhamplayer.android.sermons.actions.PlayerAction
 import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
@@ -77,8 +76,8 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
             replace(R.id.sermon_list_container, sermonListFragment)
         }
 
-        sermonsStore.dispatch(DataAction.SetTitleAction(RBase.string.navigation_sermons))
-        sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction)
+        sermonsStore.dispatch(SermonListAction.GetFileReadPermissionAction)
+        sermonsStore.dispatch(SermonListAction.SetTitleAction(getString(RBase.string.navigation_sermons)))
 
         val isTablet = resources.getBoolean(RBase.bool.is_tablet)
 
@@ -108,8 +107,8 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
             drawerHeaderBinder.name?.text = it.name
         }
 
-        if (!state.sermonList.isNullOrEmpty() && state.selectedSermon == null) {
-            sermonsStore.dispatch(RoutingAction.NavigateToNoSelectionAction)
+        if (!state.sermons.isNullOrEmpty() && state.selectedSermon == null) {
+            sermonsStore.dispatch(PlayerAction.NavigateToNoSelectionAction)
         }
 
         state.title?.let {
@@ -160,7 +159,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
             }
         }
 
+        sermonsStore.dispatch(AuthAction.GetUserProfileAction)
         sermonsStore.dispatch(DrawerAction.SetSelectedItemAction(0))
-        sermonsStore.dispatch(ProfileAction.GetUserProfileAction)
     }
 }
