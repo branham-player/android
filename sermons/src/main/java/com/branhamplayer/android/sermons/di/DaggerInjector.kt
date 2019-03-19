@@ -6,18 +6,12 @@ object DaggerInjector {
 
     // region Player
 
-    var playerComponent: PlayerComponent? = null
-        private set
-
-    fun buildPlayerComponent(activity: SermonsActivity): PlayerComponent {
-        val component = playerComponent ?: DaggerPlayerComponent
-            .builder()
-            .playerModule(PlayerModule(activity))
-            .build()
-
-        playerComponent = component
-        return component
-    }
+    // This component needs to be rebuilt every time. Since rotating the device
+    // destroys the given activity, a new one must be available on each rotate
+    fun buildPlayerComponent(activity: SermonsActivity): PlayerComponent = DaggerPlayerComponent
+        .builder()
+        .playerModule(PlayerModule(activity))
+        .build()
 
     // endregion
 
