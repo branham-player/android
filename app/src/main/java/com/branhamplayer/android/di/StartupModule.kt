@@ -2,6 +2,7 @@ package com.branhamplayer.android.di
 
 import android.content.Context
 import com.branhamplayer.android.ui.StartupActivity
+import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.Module
 import dagger.Provides
 
@@ -12,5 +13,8 @@ class StartupModule(private val startupActivity: StartupActivity) {
     fun provideActivity() = startupActivity
 
     @Provides
-    fun provideContext(): Context = startupActivity.applicationContext
+    fun provideContext(): Context = startupActivity
+
+    @Provides
+    fun provideFirebaseAnalytics(context: Context) = FirebaseAnalytics.getInstance(context)
 }
