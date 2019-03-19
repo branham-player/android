@@ -12,14 +12,15 @@ import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
+import com.branhamplayer.android.sermons.actions.SermonListAction
 import com.branhamplayer.android.sermons.adapters.SermonsAdapter
 import com.branhamplayer.android.sermons.di.DaggerInjector
+import com.branhamplayer.android.sermons.models.SermonModel
 import com.branhamplayer.android.sermons.store.sermonsStore
-import com.branhamplayer.android.sermons.states.SermonsState
 import org.rekotlin.StoreSubscriber
 import javax.inject.Inject
 
-class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
+class SermonListFragment : Fragment(), StoreSubscriber<List<SermonModel>?> {
 
     private var unbinder: Unbinder? = null
 
@@ -44,9 +45,15 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
         val view = inflater.inflate(R.layout.sermon_list_fragment, container, false)
 
         DaggerInjector.sermonsComponent?.inject(this)
-
         unbinder = ButterKnife.bind(this, view)
-        sermonsStore.subscribe(this)
+
+        sermonsStore.subscribe(this) {
+            it.select { state ->
+                state.sermons
+            }.skipRepeats()
+        }
+
+        sermonsStore.dispatch(SermonListAction.ShowPhoneActionBarAction)
 
         sermonsRecyclerView?.adapter = sermonAdapter
         sermonsRecyclerView?.layoutManager = LinearLayoutManager(context)
@@ -63,8 +70,8 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
 
     // region StoreSubscriber
 
-    override fun newState(state: SermonsState) {
-        state.sermonList?.let {
+    override fun newState(state: List<SermonModel>?) {
+        state?.let {
             sermonAdapter.setSermons(it)
             sermonsRecyclerView?.adapter?.notifyDataSetChanged()
         }

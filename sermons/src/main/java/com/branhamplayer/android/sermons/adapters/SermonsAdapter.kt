@@ -8,8 +8,8 @@ import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.models.SermonModel
 
 class SermonsAdapter(
-        context: Context?,
-        private val inflater: LayoutInflater = LayoutInflater.from(context)
+    context: Context?,
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
 ) : RecyclerView.Adapter<SermonViewHolder>() {
 
     private var sermons: List<SermonModel> = emptyList()
@@ -25,10 +25,8 @@ class SermonsAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SermonViewHolder {
-        val view = inflater.inflate(R.layout.sermon_list_item_fragment, parent, false)
-        return SermonViewHolder(view)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        SermonViewHolder(inflater.inflate(R.layout.sermon_list_item_fragment, parent, false))
 
     override fun getItemCount() = sermons.size
 

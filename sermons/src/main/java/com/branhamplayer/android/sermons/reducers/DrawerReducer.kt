@@ -11,7 +11,6 @@ class DrawerReducer @Inject constructor() : TypedReducer<DrawerAction, SermonsSt
         is DrawerAction.SetSelectedItemAction -> setSelectedItem(oldState, action)
     }
 
-    private fun setSelectedItem(oldState: SermonsState, action: DrawerAction.SetSelectedItemAction) = oldState.copy(
-        drawerItemSelectedIndex = action.index
-    )
+    private fun setSelectedItem(oldState: SermonsState, action: DrawerAction.SetSelectedItemAction) =
+        oldState.copy(drawerItemSelectedIndex = action.index)
 }

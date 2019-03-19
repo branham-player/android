@@ -1,20 +1,22 @@
 package com.branhamplayer.android.sermons.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
-import com.branhamplayer.android.sermons.actions.DataAction
+import com.branhamplayer.android.sermons.actions.AuthAction
+import com.branhamplayer.android.sermons.actions.SermonListAction
 import com.branhamplayer.android.sermons.actions.DrawerAction
-import com.branhamplayer.android.sermons.actions.PermissionAction
-import com.branhamplayer.android.sermons.actions.ProfileAction
+import com.branhamplayer.android.sermons.actions.PlayerAction
 import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
@@ -28,7 +30,17 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
     private var activityUnbinder: Unbinder? = null
     private var drawerToggle: ActionBarDrawerToggle? = null
 
-    // region Components
+    // region DI
+
+    @Inject
+    lateinit var drawerHeaderBinder: DrawerHeaderViewBinder
+
+    @Inject
+    lateinit var sermonListFragment: SermonListFragment
+
+    // endregion
+
+    // region UI
 
     @JvmField
     @BindView(R.id.navigation_drawer)
@@ -42,19 +54,8 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
     @BindView(R.id.primary_toolbar)
     var primaryToolbar: Toolbar? = null
 
-    @JvmField
     @BindView(R.id.sermon_list_toolbar)
-    var sermonsListToolbar: Toolbar? = null
-
-    // endregion
-
-    // region DI
-
-    @Inject
-    lateinit var drawerHeaderBinder: DrawerHeaderViewBinder
-
-    @Inject
-    lateinit var sermonListFragment: SermonListFragment
+    lateinit var sermonsListToolbar: Toolbar
 
     // endregion
 
@@ -76,8 +77,8 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
             replace(R.id.sermon_list_container, sermonListFragment)
         }
 
-        sermonsStore.dispatch(DataAction.SetTitleAction(RBase.string.navigation_sermons))
-        sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction)
+        sermonsStore.dispatch(SermonListAction.GetFileReadPermissionAction)
+        sermonsStore.dispatch(SermonListAction.SetTitleAction(getString(RBase.string.navigation_sermons)))
 
         val isTablet = resources.getBoolean(RBase.bool.is_tablet)
 
@@ -91,6 +92,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
         drawerHeaderBinder.unbind()
         activityUnbinder?.unbind()
+        sermonsStore.unsubscribe(this)
     }
 
     // endregion
@@ -100,18 +102,42 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
     override fun newState(state: SermonsState) {
 
         drawer?.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
+        sermonsListToolbar.visibility = if (state.phoneActionBarVisible) View.VISIBLE else View.GONE
 
         state.profile?.let {
             drawerHeaderBinder.email?.text = it.email
             drawerHeaderBinder.name?.text = it.name
         }
 
+        if (!state.sermons.isNullOrEmpty() && state.selectedSermon == null) {
+            sermonsStore.dispatch(PlayerAction.NavigateToNoSelectionAction)
+        }
+
         state.title?.let {
-            sermonsListToolbar?.title = it
+            sermonsListToolbar.title = it
         }
     }
 
     // endregion
+
+    fun setDetailFragment(fragment: Fragment) {
+        val isLargeTablet = resources.getBoolean(RBase.bool.is_large_tablet)
+        if (!isLargeTablet) return
+
+        supportFragmentManager.commit(allowStateLoss = true) {
+            replace(R.id.sermons_details_container, fragment)
+        }
+    }
+
+    fun setMasterFragment(fragment: Fragment, addToBackStack: Boolean = true) {
+        supportFragmentManager.commit(allowStateLoss = true) {
+            replace(R.id.sermon_list_container, fragment)
+
+            if (addToBackStack) {
+                addToBackStack(fragment::class.java.simpleName)
+            }
+        }
+    }
 
     private fun setUpDrawer() {
 
@@ -135,7 +161,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
             }
         }
 
+        sermonsStore.dispatch(AuthAction.GetUserProfileAction)
         sermonsStore.dispatch(DrawerAction.SetSelectedItemAction(0))
-        sermonsStore.dispatch(ProfileAction.GetUserProfileAction)
     }
 }

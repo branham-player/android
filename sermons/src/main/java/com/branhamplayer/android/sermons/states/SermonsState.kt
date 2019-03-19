@@ -5,8 +5,23 @@ import com.branhamplayer.android.sermons.models.SermonModel
 import org.rekotlin.StateType
 
 data class SermonsState(
-    val drawerItemSelectedIndex: Int = 0,
+    val phoneActionBarVisible: Boolean = true,
+
+    // region Auth
     val profile: UserProfile? = null,
-    val sermonList: List<SermonModel>? = null,
+    // endregion
+
+    // region Drawer
+    val drawerItemSelectedIndex: Int = 0,
+    // endregion
+
+    // region Player
+    val selectedSermon: SermonModel? = null,
+    val showPlayerBackButton: Boolean = true,
+    // endregion
+
+    // region SermonList
+    val sermons: List<SermonModel>? = null,
     val title: String? = null
+    // endregion
 ) : StateType
