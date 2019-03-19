@@ -12,6 +12,7 @@ import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
+import com.branhamplayer.android.sermons.actions.SermonListAction
 import com.branhamplayer.android.sermons.adapters.SermonsAdapter
 import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.models.SermonModel
@@ -51,6 +52,8 @@ class SermonListFragment : Fragment(), StoreSubscriber<List<SermonModel>?> {
                 state.sermons
             }.skipRepeats()
         }
+
+        sermonsStore.dispatch(SermonListAction.ShowPhoneActionBarAction)
 
         sermonsRecyclerView?.adapter = sermonAdapter
         sermonsRecyclerView?.layoutManager = LinearLayoutManager(context)

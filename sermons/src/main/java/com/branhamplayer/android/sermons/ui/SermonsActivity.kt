@@ -1,6 +1,7 @@
 package com.branhamplayer.android.sermons.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -101,6 +102,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
     override fun newState(state: SermonsState) {
 
         drawer?.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
+        sermonsListToolbar.visibility = if (state.phoneActionBarVisible) View.VISIBLE else View.GONE
 
         state.profile?.let {
             drawerHeaderBinder.email?.text = it.email
@@ -127,12 +129,18 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         }
     }
 
-    fun setMasterFragment(fragment: Fragment, addToBackStack: Boolean = true) {
+    fun setMasterFragment(fragment: Fragment, addToBackStack: Boolean = true, showToolbar: Boolean = true) {
         supportFragmentManager.commit(allowStateLoss = true) {
             replace(R.id.sermon_list_container, fragment)
 
             if (addToBackStack) {
                 addToBackStack(fragment::class.java.simpleName)
+            }
+
+            if (showToolbar) {
+                sermonsListToolbar.visibility = View.VISIBLE
+            } else {
+                sermonsListToolbar.visibility = View.GONE
             }
         }
     }

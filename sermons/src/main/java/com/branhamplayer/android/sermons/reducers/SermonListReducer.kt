@@ -12,11 +12,16 @@ class SermonListReducer @Inject constructor(
     private val repository: SermonsRepository
 ) : TypedReducer<SermonListAction, SermonsState> {
 
+    // region TypedReducer
+
     override fun invoke(action: SermonListAction, oldState: SermonsState) = when (action) {
         is SermonListAction.FetchSermonListAction -> fetchSermonList(oldState)
         is SermonListAction.SetTitleAction -> setTitle(oldState, action)
+        is SermonListAction.ShowPhoneActionBarAction -> showPhoneActionBar(oldState)
         else -> oldState
     }
+
+    // endregion
 
     private fun fetchSermonList(state: SermonsState): SermonsState {
         val filesOnDisk = repository.getSermons().value
@@ -29,5 +34,9 @@ class SermonListReducer @Inject constructor(
 
     private fun setTitle(state: SermonsState, action: SermonListAction.SetTitleAction) = state.copy(
         title = action.title
+    )
+
+    private fun showPhoneActionBar(oldState: SermonsState) = oldState.copy(
+        phoneActionBarVisible = true
     )
 }

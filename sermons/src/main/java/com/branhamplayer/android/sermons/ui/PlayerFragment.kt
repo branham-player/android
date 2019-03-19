@@ -13,8 +13,9 @@ import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
+import com.branhamplayer.android.sermons.actions.PlayerAction
 import com.branhamplayer.android.sermons.di.DaggerInjector
-import com.branhamplayer.android.sermons.models.SermonModel
+import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.utils.DisplayUtility
 import com.bumptech.glide.RequestManager
@@ -24,7 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import org.rekotlin.StoreSubscriber
 import javax.inject.Inject
 
-class PlayerFragment : Fragment(), AppBarLayout.OnOffsetChangedListener, StoreSubscriber<SermonModel?> {
+class PlayerFragment : Fragment(), AppBarLayout.OnOffsetChangedListener, StoreSubscriber<SermonsState> {
 
     private var showingArtwork = true
     private var unbinder: Unbinder? = null
@@ -70,20 +71,23 @@ class PlayerFragment : Fragment(), AppBarLayout.OnOffsetChangedListener, StoreSu
         val view = inflater.inflate(R.layout.player_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
 
+        val isTablet = resources.getBoolean(RBase.bool.is_tablet)
         val sermonsActivity = activity as? SermonsActivity
 
         sermonsActivity?.let {
             DaggerInjector.buildPlayerComponent(it).inject(this)
         }
 
-        sermonsStore.subscribe(this) {
-            it.select { state ->
-                state.selectedSermon
-            }.skipRepeats()
+        sermonsStore.subscribe(this)
+
+        if (isTablet) {
+            sermonsStore.dispatch(PlayerAction.ShowBackButtonAction(false))
+        } else {
+            sermonsStore.dispatch(PlayerAction.HidePhoneActionBarAction)
+            sermonsStore.dispatch(PlayerAction.ShowBackButtonAction(true))
         }
 
         appBar.addOnOffsetChangedListener(this)
-        setUpToolbar()
 
         return view
     }
@@ -128,38 +132,40 @@ class PlayerFragment : Fragment(), AppBarLayout.OnOffsetChangedListener, StoreSu
 
     // region StoreSubscriber
 
-    override fun newState(state: SermonModel?) {
-        state?.let {
+    override fun newState(state: SermonsState) {
+        state.selectedSermon?.let {
             date.text = it.formattedDate
             title.text = it.name
             toolbar.title = "" // Don't use the default toolbar, since we extend it with a collapsing toolbar
-
-            // TODO, replace with real album artwork
-            artworkLoader
-                .load("https://cloudinary-a.akamaihd.net/branham-player/image/upload/c_scale,w_421/samples/landscapes/beach-boat.jpg")
-                .timeout(5000)
-                .dontAnimate()
-                .error(RBase.drawable.ic_sermons)
-                .placeholder(RBase.drawable.ic_sermons)
-                .into(artwork)
-
-            backgroundLoader
-                .load("https://cloudinary-a.akamaihd.net/branham-player/image/upload/c_scale,w_421/samples/landscapes/beach-boat.jpg")
-                .timeout(5000)
-                .transition(crossFade)
-                .error(RBase.drawable.ic_sermons)
-                .placeholder(RBase.drawable.ic_sermons)
-                .into(background)
         }
+
+        setUpToolbar(state.showPlayerBackButton)
+
+        // TODO, replace with real album artwork
+        artworkLoader
+            .load("https://cloudinary-a.akamaihd.net/branham-player/image/upload/c_scale,w_421/samples/landscapes/beach-boat.jpg")
+            .timeout(5000)
+            .dontAnimate()
+            .error(RBase.drawable.ic_sermons)
+            .placeholder(RBase.drawable.ic_sermons)
+            .into(artwork)
+
+        backgroundLoader
+            .load("https://cloudinary-a.akamaihd.net/branham-player/image/upload/c_scale,w_421/samples/landscapes/beach-boat.jpg")
+            .timeout(5000)
+            .transition(crossFade)
+            .error(RBase.drawable.ic_sermons)
+            .placeholder(RBase.drawable.ic_sermons)
+            .into(background)
     }
 
     // endregion
 
-    private fun setUpToolbar() {
+    private fun setUpToolbar(showBackButton: Boolean) {
         val sermonsActivity = activity as? SermonsActivity?
         sermonsActivity?.setSupportActionBar(toolbar)
-        sermonsActivity?.supportActionBar?.setHomeButtonEnabled(true)
-        sermonsActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        sermonsActivity?.supportActionBar?.setHomeButtonEnabled(showBackButton)
+        sermonsActivity?.supportActionBar?.setDisplayHomeAsUpEnabled(showBackButton)
 
         toolbar.setNavigationOnClickListener {
             sermonsActivity?.onBackPressed()

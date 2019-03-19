@@ -18,11 +18,17 @@ class PlayerReducer @Inject constructor(
     // region TypedReducer
 
     override fun invoke(action: PlayerAction, oldState: SermonsState) = when (action) {
+        is PlayerAction.HidePhoneActionBarAction -> hidePhoneActionBar(oldState)
         is PlayerAction.NavigateToNoSelectionAction -> navigateToNoSelection(oldState)
         is PlayerAction.NavigateToPlayerAction -> navigateToPlayer(oldState, action)
+        is PlayerAction.ShowBackButtonAction -> showBackButton(oldState, action)
     }
 
     // endregion
+
+    private fun hidePhoneActionBar(oldState: SermonsState) = oldState.copy(
+        phoneActionBarVisible = false
+    )
 
     private fun navigateToNoSelection(oldState: SermonsState): SermonsState {
         sermonsActivity.setDetailFragment(noSelectionFragment)
@@ -42,4 +48,8 @@ class PlayerReducer @Inject constructor(
             selectedSermon = action.selectedSermon
         )
     }
+
+    private fun showBackButton(oldState: SermonsState, action: PlayerAction.ShowBackButtonAction) = oldState.copy(
+        showPlayerBackButton = action.showButton
+    )
 }
