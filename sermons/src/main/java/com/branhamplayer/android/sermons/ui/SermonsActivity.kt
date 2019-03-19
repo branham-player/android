@@ -121,26 +121,20 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
     // endregion
 
     fun setDetailFragment(fragment: Fragment) {
-        val isTablet = resources.getBoolean(RBase.bool.is_tablet)
-        if (!isTablet) return
+        val isLargeTablet = resources.getBoolean(RBase.bool.is_large_tablet)
+        if (!isLargeTablet) return
 
         supportFragmentManager.commit(allowStateLoss = true) {
             replace(R.id.sermons_details_container, fragment)
         }
     }
 
-    fun setMasterFragment(fragment: Fragment, addToBackStack: Boolean = true, showToolbar: Boolean = true) {
+    fun setMasterFragment(fragment: Fragment, addToBackStack: Boolean = true) {
         supportFragmentManager.commit(allowStateLoss = true) {
             replace(R.id.sermon_list_container, fragment)
 
             if (addToBackStack) {
                 addToBackStack(fragment::class.java.simpleName)
-            }
-
-            if (showToolbar) {
-                sermonsListToolbar.visibility = View.VISIBLE
-            } else {
-                sermonsListToolbar.visibility = View.GONE
             }
         }
     }

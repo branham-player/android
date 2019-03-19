@@ -36,9 +36,9 @@ class PlayerReducer @Inject constructor(
     }
 
     private fun navigateToPlayer(oldState: SermonsState, action: PlayerAction.NavigateToPlayerAction): SermonsState {
-        val isTablet = sermonsActivity.resources.getBoolean(RBase.bool.is_tablet)
+        val isLargeTablet = sermonsActivity.resources.getBoolean(RBase.bool.is_large_tablet)
 
-        if (isTablet) {
+        if (isLargeTablet) {
             sermonsActivity.setDetailFragment(playerFragment)
         } else {
             sermonsActivity.setMasterFragment(playerFragment)

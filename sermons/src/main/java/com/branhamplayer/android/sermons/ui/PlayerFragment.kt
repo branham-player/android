@@ -71,7 +71,7 @@ class PlayerFragment : Fragment(), AppBarLayout.OnOffsetChangedListener, StoreSu
         val view = inflater.inflate(R.layout.player_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
 
-        val isTablet = resources.getBoolean(RBase.bool.is_tablet)
+        val isLargeTablet = resources.getBoolean(RBase.bool.is_tablet)
         val sermonsActivity = activity as? SermonsActivity
 
         sermonsActivity?.let {
@@ -80,7 +80,7 @@ class PlayerFragment : Fragment(), AppBarLayout.OnOffsetChangedListener, StoreSu
 
         sermonsStore.subscribe(this)
 
-        if (isTablet) {
+        if (isLargeTablet) {
             sermonsStore.dispatch(PlayerAction.ShowBackButtonAction(false))
         } else {
             sermonsStore.dispatch(PlayerAction.HidePhoneActionBarAction)
