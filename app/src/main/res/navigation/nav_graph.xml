@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/preflight_checklist_fragment">
+
+    <fragment
+        android:id="@+id/preflight_checklist_fragment"
+        android:name="com.branhamplayer.android.ui.PreflightChecklistFragment"
+        android:label="PreflightChecklistFragment">
+
+        <action
+            android:id="@+id/action_preflight_checklist_fragment_to_authentication_fragment"
+            app:destination="@id/authentication_fragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/authentication_fragment"
+        android:name="com.branhamplayer.android.ui.AuthenticationFragment"
+        android:label="AuthenticationFragment"/>
+</navigation>

@@ -39,14 +39,14 @@ class PreflightChecklistFragment : Fragment(), StoreSubscriber<StartupState> {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         inflater.inflate(R.layout.preflight_checklist_fragment, container, false)
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        startupStore.dispatch(PreflightChecklistAction.CheckPlatformStatusAction)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         startupStore.unsubscribe(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        startupStore.dispatch(PreflightChecklistAction.CheckPlatformStatusAction)
     }
 
     // endregion

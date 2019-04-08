@@ -11,17 +11,13 @@ object RemoteConfigService {
     fun initializeInstance() {
         val settings = FirebaseRemoteConfigSettings.Builder()
             .setDeveloperModeEnabled(BuildConfig.DEBUG)
+            .setMinimumFetchIntervalInSeconds(StartupConstants.FirebaseRemoteConfig.cacheExipration)
             .build()
 
         val firebase = FirebaseRemoteConfig.getInstance()
         firebase.setConfigSettings(settings)
         firebase.setDefaults(R.xml.remote_config_defaults)
 
-        firebase.fetch(StartupConstants.FirebaseRemoteConfig.cacheExipration)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    firebase.activateFetched()
-                }
-            }
+        firebase.fetchAndActivate()
     }
 }

@@ -4,8 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import com.branhamplayer.android.StartupConstants
 import com.branhamplayer.android.reducers.RoutingReducer
-import com.branhamplayer.android.ui.AuthenticationFragment
-import com.branhamplayer.android.ui.PreflightChecklistFragment
 import com.branhamplayer.android.ui.StartupActivity
 import dagger.Module
 import dagger.Provides
@@ -26,14 +24,10 @@ class RoutingModule {
     @Provides
     fun provideRoutingReducer(
         startupActivity: StartupActivity,
-        authenticationFragment: AuthenticationFragment,
-        preflightChecklistFragment: PreflightChecklistFragment,
         @Named(GooglePlay) googlePlayIntent: Intent,
         @Named(Sermons) sermonsIntent: Intent
     ) = RoutingReducer(
         startupActivity,
-        authenticationFragment,
-        preflightChecklistFragment,
         googlePlayIntent,
         sermonsIntent
     )
