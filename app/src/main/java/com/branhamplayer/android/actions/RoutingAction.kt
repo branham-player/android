@@ -7,7 +7,6 @@ sealed class RoutingAction : Action {
 
     object NavigateToAuthenticationAction : RoutingAction()
     object NavigateToGooglePlayStoreAction : RoutingAction()
-    object NavigateToPreflightChecklistAction : RoutingAction()
     object NavigateToSermonsAction : RoutingAction()
 
     object ShowLoginErrorAction : RoutingAction()

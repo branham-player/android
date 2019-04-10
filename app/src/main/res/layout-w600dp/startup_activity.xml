@@ -32,13 +32,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <fragment
+            <FrameLayout
                 android:id="@+id/startup_navigation_host"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                app:defaultNavHost="true"
-                app:navGraph="@navigation/nav_graph"/>
+                android:layout_width="match_parent"/>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

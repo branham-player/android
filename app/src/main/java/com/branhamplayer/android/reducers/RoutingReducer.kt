@@ -1,6 +1,7 @@
 package com.branhamplayer.android.reducers
 
 import android.content.Intent
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.RoutingAction
@@ -20,7 +21,7 @@ class RoutingReducer @Inject constructor(
     override fun invoke(action: RoutingAction, oldState: StartupState): StartupState {
         when (action) {
             is RoutingAction.CloseAppAction -> closeApp()
-            is RoutingAction.NavigateToAuthenticationAction -> navigateToAuthentication()
+            is RoutingAction.NavigateToAuthenticationAction -> return navigateToAuthentication(oldState)
             is RoutingAction.NavigateToGooglePlayStoreAction -> navigateToGooglePlayStore()
             is RoutingAction.NavigateToSermonsAction -> navigateToSermons()
         }
@@ -28,20 +29,19 @@ class RoutingReducer @Inject constructor(
         return oldState
     }
 
-    private fun closeApp() {
-        startupActivity.finish()
+    private fun closeApp() = startupActivity.finish()
+
+    private fun navigateToAuthentication(oldState: StartupState): StartupState {
+        startupActivity
+            .findNavController(R.id.startup_navigation_host)
+            .navigate(R.id.action_before_to_after_preflight_checklist_navigation_graph)
+
+        return oldState.copy(
+            ranPreflightChecklistSuccessfully = true
+        )
     }
 
-    private fun navigateToAuthentication() {
-        startupActivity.findNavController(R.id.startup_navigation_host)
-            .popBackStack(R.id.preflight_checklist_fragment, true)
-
-        startupActivity.findNavController(R.id.startup_navigation_host).navigate(R.id.authentication_fragment)
-    }
-
-    private fun navigateToGooglePlayStore() {
-        startupActivity.startActivity(googlePlayIntent)
-    }
+    private fun navigateToGooglePlayStore() = startupActivity.startActivity(googlePlayIntent)
 
     private fun navigateToSermons() {
         sermonsIntent.addCategory(Intent.CATEGORY_BROWSABLE)
