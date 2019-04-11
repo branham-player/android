@@ -1,7 +1,6 @@
 package com.branhamplayer.android.reducers
 
 import android.content.Intent
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.RoutingAction
