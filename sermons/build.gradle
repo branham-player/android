@@ -52,6 +52,10 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
+    // Navigation
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0-alpha02'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0-alpha02'
+
     // ReKotlin
     implementation 'org.rekotlin:rekotlin:1.0.0'
 

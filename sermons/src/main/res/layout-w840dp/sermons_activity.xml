@@ -63,10 +63,13 @@
                 android:layout_width="match_parent"
                 app:cardCornerRadius="0dp">
 
-                <FrameLayout
-                    android:id="@+id/sermon_list_container"
+                <fragment
+                    android:id="@+id/sermon_navigation_host"
+                    android:name="androidx.navigation.fragment.NavHostFragment"
                     android:layout_height="match_parent"
-                    android:layout_width="match_parent"/>
+                    android:layout_width="match_parent"
+                    app:defaultNavHost="true"
+                    app:navGraph="@navigation/sermons_navigation_graph"/>
             </androidx.cardview.widget.CardView>
         </androidx.appcompat.widget.LinearLayoutCompat>
 

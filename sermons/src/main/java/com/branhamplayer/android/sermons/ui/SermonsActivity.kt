@@ -53,9 +53,6 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
     @Inject
     lateinit var drawerHeaderBinder: DrawerHeaderViewBinder
 
-    @Inject
-    lateinit var sermonListFragment: SermonListFragment
-
     // endregion
 
     // region AppCompatActivity
@@ -71,10 +68,6 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
-
-        supportFragmentManager.commit(allowStateLoss = true) {
-            replace(R.id.sermon_list_container, sermonListFragment)
-        }
 
         sermonsStore.dispatch(DataAction.SetTitleAction(RBase.string.navigation_sermons))
         sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction)

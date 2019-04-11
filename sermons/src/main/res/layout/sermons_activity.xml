@@ -19,15 +19,18 @@
         app:popupTheme="@style/ThemeOverlay.MaterialComponents.Light"
         tools:title="Sermons"/>
 
-    <FrameLayout
-        android:id="@+id/sermon_list_container"
+    <fragment
+        android:id="@+id/sermon_navigation_host"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:background="@color/small_screen_background"
         android:layout_height="0dp"
         android:layout_width="0dp"
+        app:defaultNavHost="true"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sermon_list_toolbar"/>
+        app:layout_constraintTop_toBottomOf="@+id/sermon_list_toolbar"
+        app:navGraph="@navigation/sermons_navigation_graph"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
