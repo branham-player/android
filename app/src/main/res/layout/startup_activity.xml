@@ -7,4 +7,4 @@
     android:background="@color/small_screen_background"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".ui.StartupActivity"/>
+    tools:context=".ui.StartupActivity" />
