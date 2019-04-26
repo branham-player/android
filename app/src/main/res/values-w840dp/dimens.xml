@@ -1,8 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- region Login -->
-
-    <dimen name="login_card_margin_top">120dp</dimen>
-
-    <!-- endregion -->
-</resources>
+<resources/>
