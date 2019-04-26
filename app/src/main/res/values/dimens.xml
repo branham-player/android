@@ -6,7 +6,7 @@
     <dimen name="card_max_width">560dp</dimen>
     <dimen name="card_two_column_padding">24dp</dimen>
 
-    <dimen name="card_shadow_padding">10dp</dimen>
+    <dimen name="card_shadow_padding">35dp</dimen>
     <dimen name="card_distance_from_edges_no_shadow_padding">62dp</dimen>
     <dimen name="card_two_column_padding_no_shadow_padding">14dp</dimen>
 

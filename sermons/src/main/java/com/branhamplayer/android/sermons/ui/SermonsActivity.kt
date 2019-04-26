@@ -5,23 +5,22 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.commit
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
-import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.actions.DataAction
 import com.branhamplayer.android.sermons.actions.DrawerAction
 import com.branhamplayer.android.sermons.actions.PermissionAction
 import com.branhamplayer.android.sermons.actions.ProfileAction
 import com.branhamplayer.android.sermons.di.DaggerInjector
-import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
+import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.ui.DrawerHeaderViewBinder
 import com.google.android.material.navigation.NavigationView
 import org.rekotlin.StoreSubscriber
 import javax.inject.Inject
+import com.branhamplayer.android.R as RBase
 
 class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
@@ -31,20 +30,16 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
     // region Components
 
     @JvmField
-    @BindView(R.id.navigation_drawer)
+    @BindView(R.id.drawer)
     var drawer: NavigationView? = null
 
     @JvmField
-    @BindView(R.id.navigation_drawer_layout)
+    @BindView(R.id.drawer_layout)
     var drawerLayout: DrawerLayout? = null
 
     @JvmField
-    @BindView(R.id.primary_toolbar)
-    var primaryToolbar: Toolbar? = null
-
-    @JvmField
-    @BindView(R.id.sermon_list_toolbar)
-    var sermonsListToolbar: Toolbar? = null
+    @BindView(R.id.toolbar)
+    var toolbar: Toolbar? = null
 
     // endregion
 
@@ -72,11 +67,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         sermonsStore.dispatch(DataAction.SetTitleAction(RBase.string.navigation_sermons))
         sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction)
 
-        val isTablet = resources.getBoolean(RBase.bool.is_tablet)
-
-        if (isTablet) {
-            setUpDrawer()
-        }
+        setUpDrawer()
     }
 
     override fun onDestroy() {
@@ -100,7 +91,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         }
 
         state.title?.let {
-            sermonsListToolbar?.title = it
+            toolbar?.title = it
         }
     }
 
@@ -111,7 +102,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         drawerToggle = ActionBarDrawerToggle(
             this,
             drawerLayout,
-            primaryToolbar,
+            toolbar,
             RBase.string.navigation_drawer_open,
             RBase.string.navigation_drawer_close
         )
