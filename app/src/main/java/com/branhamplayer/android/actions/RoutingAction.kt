@@ -1,8 +1,8 @@
 package com.branhamplayer.android.actions
 
-import org.rekotlin.Action
+import com.branhamplayer.android.base.redux.BaseAction
 
-sealed class RoutingAction : Action {
+sealed class RoutingAction : BaseAction {
     object CloseAppAction : RoutingAction()
 
     object NavigateToAuthenticationAction : RoutingAction()

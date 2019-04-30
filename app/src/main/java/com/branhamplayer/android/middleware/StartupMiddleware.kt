@@ -1,6 +1,7 @@
 package com.branhamplayer.android.middleware
 
 import com.branhamplayer.android.actions.PreflightChecklistAction
+import com.branhamplayer.android.base.redux.BaseAction
 import com.branhamplayer.android.di.DaggerInjector
 import com.branhamplayer.android.states.StartupState
 import org.rekotlin.DispatchFunction
@@ -23,11 +24,12 @@ class StartupMiddleware : Middleware<StartupState> {
         getState: () -> StartupState?
     ): (DispatchFunction) -> DispatchFunction = { next ->
         { action ->
+            if (action is BaseAction) {
+                DaggerInjector.startupComponent?.inject(this)
+            }
+
             when (action) {
-                is PreflightChecklistAction -> {
-                    inject()
-                    preflightChecklistMiddleware.invoke(dispatch, action, getState())
-                }
+                is PreflightChecklistAction -> preflightChecklistMiddleware.invoke(dispatch, action, getState())
             }
 
             next(action)
@@ -35,8 +37,4 @@ class StartupMiddleware : Middleware<StartupState> {
     }
 
     // endregion
-
-    private fun inject() {
-        DaggerInjector.startupComponent?.inject(this)
-    }
 }

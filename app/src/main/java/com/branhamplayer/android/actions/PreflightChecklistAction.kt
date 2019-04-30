@@ -1,8 +1,8 @@
 package com.branhamplayer.android.actions
 
-import org.rekotlin.Action
+import com.branhamplayer.android.base.redux.BaseAction
 
-sealed class PreflightChecklistAction : Action {
+sealed class PreflightChecklistAction : BaseAction {
     object CheckMessageAction : PreflightChecklistAction()
     object CheckMinimumVersionAction : PreflightChecklistAction()
     object CheckPlatformStatusAction : PreflightChecklistAction()
