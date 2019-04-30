@@ -5,23 +5,6 @@ import com.branhamplayer.android.ui.StartupActivity
 
 object DaggerInjector {
 
-    // region Authentication
-
-    var authenticationComponent: AuthenticationComponent? = null
-        private set
-
-    fun buildAuthenticationComponent(): AuthenticationComponent {
-        val component = authenticationComponent ?: DaggerAuthenticationComponent
-            .builder()
-            .startupComponent(startupComponent)
-            .build()
-
-        authenticationComponent = component
-        return component
-    }
-
-    // endregion
-
     // region Preflight Checklist
 
     // This component needs to be rebuilt every time. Since the preflight checklist fragment
@@ -44,11 +27,30 @@ object DaggerInjector {
     fun buildStartupComponent(activity: StartupActivity): StartupComponent {
         val component = startupComponent ?: DaggerStartupComponent
             .builder()
+            .authenticationModule(AuthenticationModule(activity))
             .preflightChecklistModule(PreflightChecklistModule(activity))
+            .routingModule(RoutingModule(activity))
             .startupModule(StartupModule(activity))
             .build()
 
         startupComponent = component
+        return component
+    }
+
+    // endregion
+
+    // region Welcome
+
+    var welcomeComponent: WelcomeComponent? = null
+        private set
+
+    fun buildWelcomeComponent(context: Context): WelcomeComponent {
+        val component = welcomeComponent ?: DaggerWelcomeComponent
+            .builder()
+            .authenticationModule(AuthenticationModule(context))
+            .build()
+
+        welcomeComponent = component
         return component
     }
 

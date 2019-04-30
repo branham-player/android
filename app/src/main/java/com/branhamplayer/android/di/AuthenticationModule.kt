@@ -14,7 +14,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class AuthenticationModule {
+class AuthenticationModule(private val context: Context) {
 
     @Provides
     fun provideAuth0() = Auth0(BuildConfig.AUTH0_CLIENT_ID, BuildConfig.AUTH0_DOMAIN)
@@ -31,7 +31,7 @@ class AuthenticationModule {
         AuthenticationReducer(userCredentials)
 
     @Provides
-    fun provideCredentialsManager(authenticationAPIClient: AuthenticationAPIClient, context: Context) =
+    fun provideCredentialsManager(authenticationAPIClient: AuthenticationAPIClient) =
         CredentialsManager(authenticationAPIClient, SharedPreferencesStorage(context))
 
     @Provides

@@ -13,7 +13,7 @@ import dagger.Provides
 import javax.inject.Named
 
 @Module
-class RoutingModule {
+class RoutingModule(private val startupActivity: StartupActivity) {
 
     companion object {
         const val GooglePlay = "GooglePlay"
@@ -26,7 +26,6 @@ class RoutingModule {
 
     @Provides
     fun provideRoutingReducer(
-        startupActivity: StartupActivity,
         auth0: Auth0,
         customTabsOptionsBuilder: CustomTabsOptions.Builder,
         webAuthProvider: WebAuthProvider.Builder,

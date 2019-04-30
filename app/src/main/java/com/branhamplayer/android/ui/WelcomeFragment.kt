@@ -30,7 +30,10 @@ class WelcomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DaggerInjector.buildAuthenticationComponent().inject(this)
+
+        context?.let {
+            DaggerInjector.buildWelcomeComponent(it).inject(this)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

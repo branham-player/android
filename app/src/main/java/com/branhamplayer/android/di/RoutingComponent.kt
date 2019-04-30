@@ -2,5 +2,5 @@ package com.branhamplayer.android.di
 
 import dagger.Component
 
-@Component(dependencies = [AuthenticationComponent::class, StartupComponent::class], modules = [RoutingModule::class])
+@Component(modules = [AuthenticationModule::class, RoutingModule::class])
 interface RoutingComponent
