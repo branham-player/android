@@ -8,11 +8,8 @@ import com.auth0.android.authentication.storage.SharedPreferencesStorage
 import com.auth0.android.provider.CustomTabsOptions
 import com.auth0.android.provider.WebAuthProvider
 import com.branhamplayer.android.BuildConfig
-import com.branhamplayer.android.middleware.AuthenticationMiddleware
 import com.branhamplayer.android.reducers.AuthenticationReducer
-import com.branhamplayer.android.services.auth0.Auth0Service
-import com.branhamplayer.android.ui.AuthenticationFragment
-import com.branhamplayer.android.ui.StartupActivity
+import com.branhamplayer.android.utils.auth0.ProfileManager
 import dagger.Module
 import dagger.Provides
 
@@ -24,23 +21,10 @@ class AuthenticationModule {
 
     @Provides
     fun provideAuth0Service(authClient: AuthenticationAPIClient, credentialsManager: CredentialsManager) =
-        Auth0Service(authClient, credentialsManager)
+        ProfileManager(authClient, credentialsManager)
 
     @Provides
     fun provideAuthenticationAPIClient(auth0: Auth0) = AuthenticationAPIClient(auth0)
-
-    @Provides
-    fun provideAuthenticationFragment() = AuthenticationFragment()
-
-    @Provides
-    fun provideAuthenticationMiddleware(
-        startupActivity: StartupActivity,
-        auth0: Auth0,
-        customTabsOptionsBuilder: CustomTabsOptions.Builder,
-        webAuthProvider: WebAuthProvider.Builder
-    ) = AuthenticationMiddleware(
-        startupActivity, auth0, customTabsOptionsBuilder, webAuthProvider
-    )
 
     @Provides
     fun provideAuthenticationReducer(userCredentials: CredentialsManager) =

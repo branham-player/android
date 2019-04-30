@@ -2,6 +2,9 @@ package com.branhamplayer.android.di
 
 import android.content.Intent
 import android.net.Uri
+import com.auth0.android.Auth0
+import com.auth0.android.provider.CustomTabsOptions
+import com.auth0.android.provider.WebAuthProvider
 import com.branhamplayer.android.StartupConstants
 import com.branhamplayer.android.reducers.RoutingReducer
 import com.branhamplayer.android.ui.StartupActivity
@@ -24,10 +27,16 @@ class RoutingModule {
     @Provides
     fun provideRoutingReducer(
         startupActivity: StartupActivity,
+        auth0: Auth0,
+        customTabsOptionsBuilder: CustomTabsOptions.Builder,
+        webAuthProvider: WebAuthProvider.Builder,
         @Named(GooglePlay) googlePlayIntent: Intent,
         @Named(Sermons) sermonsIntent: Intent
     ) = RoutingReducer(
         startupActivity,
+        auth0,
+        customTabsOptionsBuilder,
+        webAuthProvider,
         googlePlayIntent,
         sermonsIntent
     )

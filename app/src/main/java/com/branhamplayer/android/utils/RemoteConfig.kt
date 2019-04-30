@@ -1,4 +1,4 @@
-package com.branhamplayer.android.services
+package com.branhamplayer.android.utils
 
 import com.branhamplayer.android.BuildConfig
 import com.branhamplayer.android.R
@@ -6,7 +6,7 @@ import com.branhamplayer.android.StartupConstants
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 
-object RemoteConfigService {
+object RemoteConfig {
 
     fun initializeInstance() {
         val settings = FirebaseRemoteConfigSettings.Builder()

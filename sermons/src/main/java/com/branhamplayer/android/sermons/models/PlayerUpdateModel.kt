@@ -1,7 +1,7 @@
 package com.branhamplayer.android.sermons.models
 
 import android.support.v4.media.session.PlaybackStateCompat
-import com.branhamplayer.android.base.models.Model
+import com.branhamplayer.android.base.Model
 
 data class PlayerUpdateModel(
         val state: PlaybackStateCompat,

@@ -1,6 +1,6 @@
 package com.branhamplayer.android.sermons.models
 
-import com.branhamplayer.android.base.models.Model
+import com.branhamplayer.android.base.Model
 import java.util.Date
 
 data class SermonModel(

@@ -1,7 +1,7 @@
 package com.branhamplayer.android
 
 import android.app.Application
-import com.branhamplayer.android.services.RemoteConfigService
+import com.branhamplayer.android.utils.RemoteConfig
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
 
@@ -12,7 +12,7 @@ class App : Application() {
         super.onCreate()
 
         Logger.addLogAdapter(AndroidLogAdapter())
-        RemoteConfigService.initializeInstance()
+        RemoteConfig.initializeInstance()
         //Timber.plant(LogglyTree(BuildConfig.LOGGLY_KEY))
     }
 }

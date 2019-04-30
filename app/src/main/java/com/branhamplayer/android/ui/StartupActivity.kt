@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class StartupActivity : AppCompatActivity() {
 
-    // region DI
+    // region Dagger
 
     @Inject
     lateinit var firebaseAnalytics: FirebaseAnalytics

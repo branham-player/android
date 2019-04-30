@@ -1,4 +1,4 @@
-package com.branhamplayer.android.services.auth0
+package com.branhamplayer.android.utils.auth0
 
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.AuthenticationException
@@ -10,7 +10,7 @@ import com.auth0.android.result.UserProfile
 import io.reactivex.Single
 import javax.inject.Inject
 
-class Auth0Service @Inject constructor(
+class ProfileManager @Inject constructor(
     private val authClient: AuthenticationAPIClient,
     private val credentialsManager: CredentialsManager
 ) {

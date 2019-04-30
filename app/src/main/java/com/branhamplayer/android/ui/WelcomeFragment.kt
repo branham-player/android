@@ -10,17 +10,16 @@ import butterknife.OnClick
 import butterknife.Unbinder
 import com.auth0.android.authentication.storage.CredentialsManager
 import com.branhamplayer.android.R
-import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.RoutingAction
 import com.branhamplayer.android.di.DaggerInjector
 import com.branhamplayer.android.store.startupStore
 import javax.inject.Inject
 
-class AuthenticationFragment : Fragment() {
+class WelcomeFragment : Fragment() {
 
     private var unbinder: Unbinder? = null
 
-    // region DI
+    // region Dagger
 
     @Inject
     lateinit var credentialsManager: CredentialsManager
@@ -35,7 +34,7 @@ class AuthenticationFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val view = inflater.inflate(R.layout.authentication_fragment, container, false)
+        val view = inflater.inflate(R.layout.welcome_fragment, container, false)
         unbinder = ButterKnife.bind(this, view)
 
         return view
@@ -59,12 +58,10 @@ class AuthenticationFragment : Fragment() {
     // region Event Listeners
 
     @OnClick(R.id.login_button)
-    fun login() = launchAuth0()
+    fun login() = startupStore.dispatch(RoutingAction.NavigateToAuthenticationAction)
 
     @OnClick(R.id.login_register)
-    fun register() = launchAuth0()
+    fun register() = startupStore.dispatch(RoutingAction.NavigateToAuthenticationAction)
 
     // endregion
-
-    private fun launchAuth0() = startupStore.dispatch(AuthenticationAction.DoLoginAction)
 }

@@ -1,4 +1,4 @@
-package com.branhamplayer.android.services.logging
+package com.branhamplayer.android.utils.logging
 
 import com.branhamplayer.android.StartupConstants
 import com.orhanobut.logger.Logger

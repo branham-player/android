@@ -4,14 +4,14 @@ import com.branhamplayer.android.base.redux.TypedMiddleware
 import com.branhamplayer.android.sermons.actions.ProfileAction
 import com.branhamplayer.android.sermons.di.RxJavaModule
 import com.branhamplayer.android.sermons.states.SermonsState
-import com.branhamplayer.android.services.auth0.Auth0Service
+import com.branhamplayer.android.utils.auth0.ProfileManager
 import io.reactivex.Scheduler
 import org.rekotlin.DispatchFunction
 import javax.inject.Inject
 import javax.inject.Named
 
 class ProfileMiddleware @Inject constructor(
-    private val auth0Service: Auth0Service,
+    private val profileManager: ProfileManager,
     @Named(RxJavaModule.BG) private val bg: Scheduler,
     @Named(RxJavaModule.UI) private val ui: Scheduler
 ) : TypedMiddleware<ProfileAction, SermonsState> {
@@ -24,7 +24,7 @@ class ProfileMiddleware @Inject constructor(
 
     private fun getUserProfile(dispatch: DispatchFunction) {
         // TODO: Use a disposable
-        auth0Service.getUserProfileInformation()
+        profileManager.getUserProfileInformation()
             .subscribeOn(bg)
             .observeOn(ui)
             .subscribe({ profile ->

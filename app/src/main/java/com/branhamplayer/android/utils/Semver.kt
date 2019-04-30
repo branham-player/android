@@ -1,4 +1,4 @@
-package com.branhamplayer.android.services
+package com.branhamplayer.android.utils
 
 class Semver(version: String) {
 

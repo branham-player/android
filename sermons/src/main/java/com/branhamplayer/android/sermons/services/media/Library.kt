@@ -7,8 +7,8 @@ import android.support.v4.media.MediaMetadataCompat
 import com.branhamplayer.android.sermons.mappers.DrawerMapper
 import com.branhamplayer.android.sermons.models.DrawerItemModel
 import com.branhamplayer.android.sermons.repositories.SermonsRepository
-import com.branhamplayer.android.services.logging.Loggly
-import com.branhamplayer.android.services.logging.LogglyConstants.Tags.SERMON_LIBRARY
+import com.branhamplayer.android.utils.logging.Loggly
+import com.branhamplayer.android.utils.logging.LogglyConstants.Tags.SERMON_LIBRARY
 import java.util.Stack
 
 class Library(

@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 class PreflightChecklistFragment : Fragment(), StoreSubscriber<StartupState> {
 
-    // region DI
+    // region Dagger
 
     @Inject
     lateinit var alertDialogBuilder: AlertDialog.Builder

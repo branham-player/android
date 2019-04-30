@@ -1,6 +1,5 @@
 package com.branhamplayer.android.middleware
 
-import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.PreflightChecklistAction
 import com.branhamplayer.android.di.DaggerInjector
 import com.branhamplayer.android.states.StartupState
@@ -10,10 +9,7 @@ import javax.inject.Inject
 
 class StartupMiddleware : Middleware<StartupState> {
 
-    // region DI
-
-    @Inject
-    lateinit var authenticationMiddleware: AuthenticationMiddleware
+    // region Dagger
 
     @Inject
     lateinit var preflightChecklistMiddleware: PreflightChecklistMiddleware
@@ -28,11 +24,6 @@ class StartupMiddleware : Middleware<StartupState> {
     ): (DispatchFunction) -> DispatchFunction = { next ->
         { action ->
             when (action) {
-                is AuthenticationAction -> {
-                    inject()
-                    authenticationMiddleware.invoke(dispatch, action, getState())
-                }
-
                 is PreflightChecklistAction -> {
                     inject()
                     preflightChecklistMiddleware.invoke(dispatch, action, getState())

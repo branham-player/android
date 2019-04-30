@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/authentication_fragment"
-        android:name="com.branhamplayer.android.ui.AuthenticationFragment"
+        android:name="com.branhamplayer.android.ui.WelcomeFragment"
         android:label="AuthenticationFragment"
-        tools:layout="@layout/authentication_fragment"/>
+        tools:layout="@layout/welcome_fragment"/>
 </navigation>

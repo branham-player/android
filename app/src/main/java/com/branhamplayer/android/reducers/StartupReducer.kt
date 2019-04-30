@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class StartupReducer : Reducer<StartupState> {
 
-    // region DI
+    // region Dagger
 
     @Inject
     lateinit var authenticationReducer: AuthenticationReducer

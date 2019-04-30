@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.branhamplayer.android.sermons.database.SermonsDatabase
 import com.branhamplayer.android.sermons.database.recent.RecentEntity
 import com.branhamplayer.android.sermons.database.times.TimesEntity
-import com.branhamplayer.android.services.logging.Loggly
-import com.branhamplayer.android.services.logging.LogglyConstants.Tags.PLAYER_VIEW_MODEL
+import com.branhamplayer.android.utils.logging.Loggly
+import com.branhamplayer.android.utils.logging.LogglyConstants.Tags.PLAYER_VIEW_MODEL
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.Single

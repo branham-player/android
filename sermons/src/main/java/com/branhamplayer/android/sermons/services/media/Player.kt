@@ -9,8 +9,8 @@ import android.support.v4.media.session.PlaybackStateCompat
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.SermonConstants
 import com.branhamplayer.android.sermons.models.PlayerUpdateModel
-import com.branhamplayer.android.services.logging.Loggly
-import com.branhamplayer.android.services.logging.LogglyConstants.Tags.PLAYER
+import com.branhamplayer.android.utils.logging.Loggly
+import com.branhamplayer.android.utils.logging.LogglyConstants.Tags.PLAYER
 import io.reactivex.Completable
 
 class Player(
