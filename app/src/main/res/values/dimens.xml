@@ -2,7 +2,7 @@
 <resources>
     <!-- region Global -->
 
-    <dimen name="card_shadow_padding">35dp</dimen>
+    <dimen name="card_padding">35dp</dimen>
 
     <!-- endregion -->
 </resources>

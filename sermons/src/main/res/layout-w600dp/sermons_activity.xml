@@ -29,8 +29,8 @@
         <androidx.cardview.widget.CardView
                 android:background="@color/card_background"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="@dimen/card_shadow_padding"
-                android:layout_marginStart="@dimen/card_shadow_padding"
+                android:layout_marginEnd="@dimen/card_padding"
+                android:layout_marginStart="@dimen/card_padding"
                 android:layout_width="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:cardCornerRadius="0dp">
