@@ -1,7 +1,6 @@
 package com.branhamplayer.android.sermons.reducers
 
 import android.content.Context
-import androidx.annotation.StringRes
 import com.branhamplayer.android.base.redux.TypedReducer
 import com.branhamplayer.android.sermons.actions.DataAction
 import com.branhamplayer.android.sermons.mappers.SermonMapper
@@ -17,7 +16,6 @@ class DataReducer @Inject constructor(
 
     override fun invoke(action: DataAction, oldState: SermonsState) = when (action) {
         is DataAction.FetchSermonListAction -> fetchSermonList(oldState)
-        is DataAction.SetTitleAction -> setTitle(oldState, action.title)
     }
 
     private fun fetchSermonList(state: SermonsState): SermonsState {
@@ -28,8 +26,4 @@ class DataReducer @Inject constructor(
             sermonList = sermons?.value
         )
     }
-
-    private fun setTitle(state: SermonsState, @StringRes title: Int) = state.copy(
-        title = context.getString(title)
-    )
 }

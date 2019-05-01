@@ -7,6 +7,5 @@ import org.rekotlin.StateType
 data class SermonsState(
     val drawerItemSelectedIndex: Int = 0,
     val profile: UserProfile? = null,
-    val sermonList: List<SermonModel>? = null,
-    val title: String? = null
+    val sermonList: List<SermonModel>? = null
 ) : StateType

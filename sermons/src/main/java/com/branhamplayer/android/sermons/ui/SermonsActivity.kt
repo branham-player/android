@@ -5,11 +5,13 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.branhamplayer.android.sermons.R
-import com.branhamplayer.android.sermons.actions.DataAction
 import com.branhamplayer.android.sermons.actions.DrawerAction
 import com.branhamplayer.android.sermons.actions.PermissionAction
 import com.branhamplayer.android.sermons.actions.ProfileAction
@@ -64,9 +66,9 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
 
-        sermonsStore.dispatch(DataAction.SetTitleAction(RBase.string.navigation_sermons))
         sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction)
 
+        setUpToolbar()
         setUpDrawer()
     }
 
@@ -88,10 +90,6 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         state.profile?.let {
             drawerHeaderBinder.email?.text = it.email
             drawerHeaderBinder.name?.text = it.name
-        }
-
-        state.title?.let {
-            toolbar?.title = it
         }
     }
 
@@ -121,5 +119,13 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
         sermonsStore.dispatch(DrawerAction.SetSelectedItemAction(0))
         sermonsStore.dispatch(ProfileAction.GetUserProfileAction)
+    }
+
+    private fun setUpToolbar() {
+        val controller = findNavController(R.id.sermon_navigation_host)
+        val appBarConfiguration = AppBarConfiguration(controller.graph)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+
+        toolbar.setupWithNavController(controller, appBarConfiguration)
     }
 }
