@@ -1,4 +1,4 @@
-package com.branhamplayer.android.sermons.adapters
+package com.branhamplayer.android.sermons.ui.adapters
 
 import android.view.View
 import android.widget.TextView

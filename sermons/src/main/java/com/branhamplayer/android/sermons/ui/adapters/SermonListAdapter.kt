@@ -1,4 +1,4 @@
-package com.branhamplayer.android.sermons.adapters
+package com.branhamplayer.android.sermons.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,8 +8,8 @@ import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.models.SermonModel
 
 class SermonListAdapter(
-        context: Context?,
-        private val inflater: LayoutInflater = LayoutInflater.from(context)
+    context: Context?,
+    private val inflater: LayoutInflater = LayoutInflater.from(context)
 ) : RecyclerView.Adapter<SermonViewHolder>() {
 
     private var sermons: List<SermonModel> = emptyList()

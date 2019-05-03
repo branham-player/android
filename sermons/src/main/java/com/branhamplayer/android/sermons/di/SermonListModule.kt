@@ -1,10 +1,10 @@
 package com.branhamplayer.android.sermons.di
 
 import android.content.Context
-import com.branhamplayer.android.sermons.adapters.SermonListAdapter
 import com.branhamplayer.android.sermons.mappers.SermonListMapper
 import com.branhamplayer.android.sermons.reducers.SermonListReducer
 import com.branhamplayer.android.sermons.repositories.SermonListRepository
+import com.branhamplayer.android.sermons.ui.adapters.SermonListAdapter
 import dagger.Module
 import dagger.Provides
 
