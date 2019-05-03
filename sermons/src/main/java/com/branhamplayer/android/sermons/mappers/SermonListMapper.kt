@@ -10,7 +10,7 @@ import java.util.Date
 import java.util.GregorianCalendar
 import java.util.Locale
 
-class SermonMapper : Mapper<File, SermonModel> {
+class SermonListMapper : Mapper<File, SermonModel> {
 
     override fun map(input: List<File>?): LiveData<List<SermonModel>>? {
         val update = MutableLiveData<List<SermonModel>>()

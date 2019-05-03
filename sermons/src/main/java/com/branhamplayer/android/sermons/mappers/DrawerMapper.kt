@@ -11,7 +11,7 @@ import java.util.UUID
 
 class DrawerMapper(
         private val context: Context?,
-        private val sermonMapper: SermonMapper = SermonMapper()
+        private val sermonListMapper: SermonListMapper = SermonListMapper()
 ) {
 
     fun map(input: List<File>?): DrawerItemModel {
@@ -23,7 +23,7 @@ class DrawerMapper(
         )
 
         if (input == null) return root
-        val mappedSermons = sermonMapper.map(input)?.value ?: return root
+        val mappedSermons = sermonListMapper.map(input)?.value ?: return root
 
         mappedSermons.asSequence().sortedBy { sermon ->
             sermon.date

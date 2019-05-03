@@ -12,7 +12,7 @@ object DaggerInjector {
         val component = sermonsComponent ?: DaggerSermonsComponent
             .builder()
             .authenticationModule(AuthenticationModule(activity))
-            .rxJavaModule(RxJavaModule())
+            .sermonListModule(SermonListModule(activity))
             .sermonsModule(SermonsModule(activity))
             .build()
 

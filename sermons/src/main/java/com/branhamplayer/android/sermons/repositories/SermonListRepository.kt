@@ -8,7 +8,7 @@ import com.branhamplayer.android.utils.logging.Loggly
 import com.branhamplayer.android.utils.logging.LogglyConstants.Tags.REPOSITORY
 import java.io.File
 
-class SermonsRepository : Repository {
+class SermonListRepository : Repository {
 
     private val sermons: MutableLiveData<List<File>> = MutableLiveData()
 

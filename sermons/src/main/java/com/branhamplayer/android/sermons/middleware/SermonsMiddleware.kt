@@ -1,7 +1,8 @@
 package com.branhamplayer.android.sermons.middleware
 
-import com.branhamplayer.android.sermons.actions.PermissionAction
-import com.branhamplayer.android.sermons.actions.ProfileAction
+import com.branhamplayer.android.base.redux.BaseAction
+import com.branhamplayer.android.sermons.actions.AuthenticationAction
+import com.branhamplayer.android.sermons.actions.SermonListAction
 import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.states.SermonsState
 import org.rekotlin.DispatchFunction
@@ -11,33 +12,26 @@ import javax.inject.Inject
 class SermonsMiddleware : Middleware<SermonsState> {
 
     @Inject
-    lateinit var permissionMiddleware: PermissionMiddleware
+    lateinit var authenticationMiddleware: AuthenticationMiddleware
 
     @Inject
-    lateinit var profileMiddleware: ProfileMiddleware
+    lateinit var sermonListMiddleware: SermonListMiddleware
 
     override fun invoke(
         dispatch: DispatchFunction,
         getState: () -> SermonsState?
     ): (DispatchFunction) -> DispatchFunction = { next ->
         { action ->
-            when (action) {
-                is PermissionAction -> {
-                    inject()
-                    permissionMiddleware.invoke(dispatch, action, getState())
-                }
+            if (action is BaseAction) {
+                DaggerInjector.sermonsComponent?.inject(this)
+            }
 
-                is ProfileAction -> {
-                    inject()
-                    profileMiddleware.invoke(dispatch, action, getState())
-                }
+            when (action) {
+                is AuthenticationAction -> authenticationMiddleware.invoke(dispatch, action, getState())
+                is SermonListAction -> sermonListMiddleware.invoke(dispatch, action, getState())
             }
 
             next(action)
         }
-    }
-
-    private fun inject() {
-        DaggerInjector.sermonsComponent?.inject(this)
     }
 }

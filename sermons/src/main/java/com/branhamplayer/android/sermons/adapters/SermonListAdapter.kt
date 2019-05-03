@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.models.SermonModel
 
-class SermonsAdapter(
+class SermonListAdapter(
         context: Context?,
         private val inflater: LayoutInflater = LayoutInflater.from(context)
 ) : RecyclerView.Adapter<SermonViewHolder>() {

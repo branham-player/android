@@ -12,7 +12,7 @@ import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
-import com.branhamplayer.android.sermons.adapters.SermonsAdapter
+import com.branhamplayer.android.sermons.adapters.SermonListAdapter
 import com.branhamplayer.android.sermons.di.DaggerInjector
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.states.SermonsState
@@ -34,7 +34,7 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
     // region DI
 
     @Inject
-    lateinit var sermonAdapter: SermonsAdapter
+    lateinit var sermonAdapter: SermonListAdapter
 
     // endregion
 

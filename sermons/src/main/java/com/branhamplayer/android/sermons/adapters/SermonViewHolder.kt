@@ -6,9 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.models.SermonModel
 
-class SermonViewHolder(
-        itemView: View
-) : RecyclerView.ViewHolder(itemView) {
+class SermonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val date: TextView = itemView.findViewById(R.id.sermon_date)
     private val name: TextView = itemView.findViewById(R.id.sermon_name)

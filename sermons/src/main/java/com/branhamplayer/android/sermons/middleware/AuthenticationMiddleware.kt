@@ -1,7 +1,7 @@
 package com.branhamplayer.android.sermons.middleware
 
 import com.branhamplayer.android.base.redux.TypedMiddleware
-import com.branhamplayer.android.sermons.actions.ProfileAction
+import com.branhamplayer.android.sermons.actions.AuthenticationAction
 import com.branhamplayer.android.sermons.di.RxJavaModule
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.utils.auth0.ProfileManager
@@ -10,15 +10,15 @@ import org.rekotlin.DispatchFunction
 import javax.inject.Inject
 import javax.inject.Named
 
-class ProfileMiddleware @Inject constructor(
+class AuthenticationMiddleware @Inject constructor(
     private val profileManager: ProfileManager,
     @Named(RxJavaModule.BG) private val bg: Scheduler,
     @Named(RxJavaModule.UI) private val ui: Scheduler
-) : TypedMiddleware<ProfileAction, SermonsState> {
+) : TypedMiddleware<AuthenticationAction, SermonsState> {
 
-    override fun invoke(dispatch: DispatchFunction, action: ProfileAction, oldState: SermonsState?) {
+    override fun invoke(dispatch: DispatchFunction, action: AuthenticationAction, oldState: SermonsState?) {
         when (action) {
-            is ProfileAction.GetUserProfileAction -> getUserProfile(dispatch)
+            is AuthenticationAction.GetUserAuthenticationAction -> getUserProfile(dispatch)
         }
     }
 
@@ -28,7 +28,7 @@ class ProfileMiddleware @Inject constructor(
             .subscribeOn(bg)
             .observeOn(ui)
             .subscribe({ profile ->
-                dispatch(ProfileAction.SaveUserProfileAction(profile))
+                dispatch(AuthenticationAction.SaveUserAuthenticationAction(profile))
             }, {
                 // TODO: Do nothing?
             })
