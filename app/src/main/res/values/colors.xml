@@ -4,7 +4,7 @@
 
     <color name="colorPrimary">#6C63FF</color>
     <color name="colorPrimaryDark">#2838CB</color>
-    <color name="colorAccent">#03DAC6</color>
+    <color name="colorAccent">#A491FF</color>
 
     <color name="card_background">@android:color/white</color>
     <color name="large_screen_background">#EEEEEE</color>
