@@ -21,8 +21,5 @@ class SermonsModule(private val activity: AppCompatActivity) {
     fun provideDrawerHeaderViewBinder() = DrawerHeaderViewBinder()
 
     @Provides
-    fun provideListFragment() = SermonListFragment()
-
-    @Provides
     fun provideSermonsAdapter(context: Context) = SermonsAdapter(context)
 }

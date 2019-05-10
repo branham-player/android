@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sermons_navigation_graph"
+    app:startDestination="@+id/sermon_list_fragment">
+
+    <fragment
+        android:id="@+id/sermon_list_fragment"
+        android:name="com.branhamplayer.android.sermons.ui.SermonListFragment"
+        android:label="SermonListFragment"
+        tools:layout="@layout/sermon_list_fragment"/>
+</navigation>

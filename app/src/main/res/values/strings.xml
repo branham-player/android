@@ -17,7 +17,7 @@
 
     <!-- endregion -->
 
-    <!-- region Bottom Navigation -->
+    <!-- region Drawer -->
 
     <string name="navigation_account">Account</string>
     <string name="navigation_downloads">Downloads</string>

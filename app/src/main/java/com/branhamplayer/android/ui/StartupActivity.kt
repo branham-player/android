@@ -2,11 +2,9 @@ package com.branhamplayer.android.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
+import androidx.navigation.fragment.NavHostFragment
 import com.branhamplayer.android.BuildConfig
 import com.branhamplayer.android.R
-import com.branhamplayer.android.actions.RoutingAction
 import com.branhamplayer.android.di.DaggerInjector
 import com.branhamplayer.android.store.startupStore
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -28,16 +26,23 @@ class StartupActivity : AppCompatActivity() {
         setContentView(R.layout.startup_activity)
 
         DaggerInjector.buildStartupComponent(this).inject(this)
-
         firebaseAnalytics.setAnalyticsCollectionEnabled(BuildConfig.BUILD_TYPE.toLowerCase() == "release")
-        startupStore.dispatch(RoutingAction.NavigateToPreflightChecklistAction)
+
+        setUpNavigationGraph()
     }
 
     // endregion
 
-    fun setFragment(fragment: Fragment) {
-        supportFragmentManager.commit(allowStateLoss = true) {
-            replace(R.id.startup_container, fragment)
+    private fun setUpNavigationGraph() {
+        val navigationHost = if (startupStore.state.ranPreflightChecklistSuccessfully) {
+            NavHostFragment.create(R.navigation.after_preflight_checklist_navigation_graph)
+        } else {
+            NavHostFragment.create(R.navigation.before_preflight_checklist_navigation_graph)
         }
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.startup_navigation_host, navigationHost)
+            .setPrimaryNavigationFragment(navigationHost)
+            .commit()
     }
 }
