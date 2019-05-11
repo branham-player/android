@@ -2,9 +2,9 @@
 <resources>
     <!-- region Global -->
 
-    <color name="colorPrimary">#3DA7F8</color>
-    <color name="colorPrimaryDark">#3086D4</color>
-    <color name="colorAccent">#5AFDFF</color>
+    <color name="colorPrimary">#6C63FF</color>
+    <color name="colorPrimaryDark">#2838CB</color>
+    <color name="colorAccent">#A491FF</color>
 
     <color name="card_background">@android:color/white</color>
     <color name="large_screen_background">#EEEEEE</color>
