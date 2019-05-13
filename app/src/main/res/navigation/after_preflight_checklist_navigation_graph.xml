@@ -4,11 +4,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/after_preflight_checklist_navigation_graph"
-    app:startDestination="@+id/authentication_fragment">
+    app:startDestination="@+id/welcome_fragment">
 
     <fragment
-        android:id="@+id/authentication_fragment"
+        android:id="@+id/welcome_fragment"
         android:name="com.branhamplayer.android.ui.WelcomeFragment"
-        android:label="AuthenticationFragment"
+        android:label="@string/navigation_welcome"
         tools:layout="@layout/welcome_fragment"/>
 </navigation>
