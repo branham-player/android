@@ -1,4 +1,4 @@
-package com.branhamplayer.android.di
+package com.branhamplayer.android.dagger
 
 import com.branhamplayer.android.ui.PreflightChecklistFragment
 import dagger.Component

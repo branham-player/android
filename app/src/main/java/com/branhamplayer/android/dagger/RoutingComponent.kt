@@ -1,4 +1,4 @@
-package com.branhamplayer.android.di
+package com.branhamplayer.android.dagger
 
 import dagger.Component
 

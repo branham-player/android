@@ -1,4 +1,4 @@
-package com.branhamplayer.android.sermons.di
+package com.branhamplayer.android.sermons.dagger
 
 import com.branhamplayer.android.sermons.middleware.AuthenticationMiddleware
 import com.branhamplayer.android.sermons.reducers.AuthenticationReducer

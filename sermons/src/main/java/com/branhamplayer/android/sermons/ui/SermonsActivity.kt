@@ -15,7 +15,7 @@ import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.actions.AuthenticationAction
 import com.branhamplayer.android.sermons.actions.DrawerAction
 import com.branhamplayer.android.sermons.actions.SermonListAction
-import com.branhamplayer.android.sermons.di.DaggerInjector
+import com.branhamplayer.android.sermons.dagger.DaggerInjector
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.ui.DrawerHeaderViewBinder

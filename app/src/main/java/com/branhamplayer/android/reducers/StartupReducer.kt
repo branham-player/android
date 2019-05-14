@@ -4,7 +4,7 @@ import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.PreflightChecklistAction
 import com.branhamplayer.android.actions.RoutingAction
 import com.branhamplayer.android.base.redux.BaseAction
-import com.branhamplayer.android.di.DaggerInjector
+import com.branhamplayer.android.dagger.DaggerInjector
 import com.branhamplayer.android.states.StartupState
 import org.rekotlin.Action
 import org.rekotlin.Reducer

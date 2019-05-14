@@ -11,10 +11,10 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.branhamplayer.android.sermons.R
-import com.branhamplayer.android.sermons.ui.adapters.SermonListAdapter
-import com.branhamplayer.android.sermons.di.DaggerInjector
+import com.branhamplayer.android.sermons.dagger.DaggerInjector
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.store.sermonsStore
+import com.branhamplayer.android.sermons.ui.adapters.SermonListAdapter
 import org.rekotlin.StoreSubscriber
 import javax.inject.Inject
 import com.branhamplayer.android.R as RBase

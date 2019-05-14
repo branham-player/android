@@ -14,7 +14,7 @@ import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.RoutingAction
 import com.branhamplayer.android.base.redux.TypedReducer
-import com.branhamplayer.android.di.RoutingModule
+import com.branhamplayer.android.dagger.RoutingModule
 import com.branhamplayer.android.states.StartupState
 import com.branhamplayer.android.store.startupStore
 import com.branhamplayer.android.ui.StartupActivity

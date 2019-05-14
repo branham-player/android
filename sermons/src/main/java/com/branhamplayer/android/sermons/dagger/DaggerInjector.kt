@@ -1,7 +1,7 @@
-package com.branhamplayer.android.sermons.di
+package com.branhamplayer.android.sermons.dagger
 
 import androidx.appcompat.app.AppCompatActivity
-import com.branhamplayer.android.di.AuthenticationModule
+import com.branhamplayer.android.dagger.AuthenticationModule
 
 object DaggerInjector {
 

@@ -1,4 +1,4 @@
-package com.branhamplayer.android.sermons.di
+package com.branhamplayer.android.sermons.dagger
 
 import dagger.Module
 import dagger.Provides

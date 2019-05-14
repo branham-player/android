@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.branhamplayer.android.BuildConfig
 import com.branhamplayer.android.R
-import com.branhamplayer.android.di.DaggerInjector
+import com.branhamplayer.android.dagger.DaggerInjector
 import com.branhamplayer.android.store.startupStore
 import com.google.firebase.analytics.FirebaseAnalytics
 import javax.inject.Inject

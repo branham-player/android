@@ -2,7 +2,7 @@ package com.branhamplayer.android.middleware
 
 import com.branhamplayer.android.actions.PreflightChecklistAction
 import com.branhamplayer.android.base.redux.BaseAction
-import com.branhamplayer.android.di.DaggerInjector
+import com.branhamplayer.android.dagger.DaggerInjector
 import com.branhamplayer.android.states.StartupState
 import org.rekotlin.DispatchFunction
 import org.rekotlin.Middleware

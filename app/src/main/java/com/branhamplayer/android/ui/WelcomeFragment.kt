@@ -11,7 +11,7 @@ import butterknife.Unbinder
 import com.auth0.android.authentication.storage.CredentialsManager
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.RoutingAction
-import com.branhamplayer.android.di.DaggerInjector
+import com.branhamplayer.android.dagger.DaggerInjector
 import com.branhamplayer.android.store.startupStore
 import javax.inject.Inject
 

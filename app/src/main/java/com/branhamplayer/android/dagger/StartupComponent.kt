@@ -1,4 +1,4 @@
-package com.branhamplayer.android.di
+package com.branhamplayer.android.dagger
 
 import com.branhamplayer.android.middleware.StartupMiddleware
 import com.branhamplayer.android.reducers.StartupReducer

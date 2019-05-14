@@ -4,13 +4,15 @@ import com.branhamplayer.android.base.redux.BaseAction
 import com.branhamplayer.android.sermons.actions.AuthenticationAction
 import com.branhamplayer.android.sermons.actions.DrawerAction
 import com.branhamplayer.android.sermons.actions.SermonListAction
-import com.branhamplayer.android.sermons.di.DaggerInjector
+import com.branhamplayer.android.sermons.dagger.DaggerInjector
 import com.branhamplayer.android.sermons.states.SermonsState
 import org.rekotlin.Action
 import org.rekotlin.Reducer
 import javax.inject.Inject
 
 class SermonsReducer : Reducer<SermonsState> {
+
+    // region Dagger
 
     @Inject
     lateinit var authenticationReducer: AuthenticationReducer
@@ -20,6 +22,8 @@ class SermonsReducer : Reducer<SermonsState> {
 
     @Inject
     lateinit var sermonListReducer: SermonListReducer
+
+    // endregion
 
     override fun invoke(action: Action, sermonsState: SermonsState?): SermonsState {
         val oldState = sermonsState ?: SermonsState()
