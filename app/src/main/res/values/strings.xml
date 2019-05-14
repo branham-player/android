@@ -8,6 +8,9 @@
     <string name="navigation_drawer_close">Close Sesame</string>
     <string name="navigation_drawer_open">Open Sesame</string>
 
+    <string name="navigation_preflight_checklist">Preflight Checklist</string>
+    <string name="navigation_welcome">Welcome</string>
+
     <!-- endregion -->
 
     <!-- region Application Modules -->

@@ -3,8 +3,8 @@ package com.branhamplayer.android.sermons.utils.permissions
 import android.app.Activity
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
-import com.branhamplayer.android.services.logging.Loggly
-import com.branhamplayer.android.services.logging.LogglyConstants.Tags.PERMISSIONS
+import com.branhamplayer.android.utils.logging.Loggly
+import com.branhamplayer.android.utils.logging.LogglyConstants.Tags.PERMISSIONS
 import io.reactivex.Single
 
 class PermissionManager(private val activity: Activity?) {

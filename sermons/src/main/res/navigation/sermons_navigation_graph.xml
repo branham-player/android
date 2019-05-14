@@ -9,6 +9,6 @@
     <fragment
         android:id="@+id/sermon_list_fragment"
         android:name="com.branhamplayer.android.sermons.ui.SermonListFragment"
-        android:label="SermonListFragment"
+        android:label="@string/navigation_sermons"
         tools:layout="@layout/sermon_list_fragment"/>
 </navigation>

@@ -5,8 +5,8 @@ import com.branhamplayer.android.StartupConstants
 import com.branhamplayer.android.actions.PreflightChecklistAction
 import com.branhamplayer.android.actions.RoutingAction
 import com.branhamplayer.android.base.redux.TypedMiddleware
-import com.branhamplayer.android.services.Semver
 import com.branhamplayer.android.states.StartupState
+import com.branhamplayer.android.utils.Semver
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import org.rekotlin.DispatchFunction
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class PreflightChecklistMiddleware @Inject constructor(
         val message = firebaseRemoteConfig.getString(StartupConstants.PreflightChecklist.message)
 
         if (message.isNullOrBlank()) {
-            dispatch(RoutingAction.NavigateToAuthenticationAction)
+            dispatch(RoutingAction.NavigateToWelcomeAction)
         } else {
             dispatch(PreflightChecklistAction.NotifyWithMessageAction(message))
         }

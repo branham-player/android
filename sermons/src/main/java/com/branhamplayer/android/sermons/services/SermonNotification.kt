@@ -17,8 +17,8 @@ import com.branhamplayer.android.R as RBase
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.SermonConstants
 import com.branhamplayer.android.sermons.ui.SermonsActivity
-import com.branhamplayer.android.services.logging.Loggly
-import com.branhamplayer.android.services.logging.LogglyConstants.Tags.NOTIFICATION
+import com.branhamplayer.android.utils.logging.Loggly
+import com.branhamplayer.android.utils.logging.LogglyConstants.Tags.NOTIFICATION
 
 class SermonNotification(
         private val service: SermonService,

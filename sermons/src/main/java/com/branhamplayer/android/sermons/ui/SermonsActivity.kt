@@ -5,15 +5,17 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.branhamplayer.android.sermons.R
-import com.branhamplayer.android.sermons.actions.DataAction
+import com.branhamplayer.android.sermons.actions.AuthenticationAction
 import com.branhamplayer.android.sermons.actions.DrawerAction
-import com.branhamplayer.android.sermons.actions.PermissionAction
-import com.branhamplayer.android.sermons.actions.ProfileAction
-import com.branhamplayer.android.sermons.di.DaggerInjector
+import com.branhamplayer.android.sermons.actions.SermonListAction
+import com.branhamplayer.android.sermons.dagger.DaggerInjector
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.ui.DrawerHeaderViewBinder
@@ -29,21 +31,18 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
     // region Components
 
-    @JvmField
     @BindView(R.id.drawer)
-    var drawer: NavigationView? = null
+    lateinit var drawer: NavigationView
 
-    @JvmField
     @BindView(R.id.drawer_layout)
-    var drawerLayout: DrawerLayout? = null
+    lateinit var drawerLayout: DrawerLayout
 
-    @JvmField
     @BindView(R.id.toolbar)
-    var toolbar: Toolbar? = null
+    lateinit var toolbar: Toolbar
 
     // endregion
 
-    // region DI
+    // region Dagger
 
     @Inject
     lateinit var drawerHeaderBinder: DrawerHeaderViewBinder
@@ -64,9 +63,9 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
 
-        sermonsStore.dispatch(DataAction.SetTitleAction(RBase.string.navigation_sermons))
-        sermonsStore.dispatch(PermissionAction.GetFileReadPermissionAction)
+        sermonsStore.dispatch(SermonListAction.GetFileReadPermissionAction)
 
+        setUpToolbar()
         setUpDrawer()
     }
 
@@ -83,15 +82,11 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
     override fun newState(state: SermonsState) {
 
-        drawer?.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
+        drawer.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
 
         state.profile?.let {
             drawerHeaderBinder.email?.text = it.email
             drawerHeaderBinder.name?.text = it.name
-        }
-
-        state.title?.let {
-            toolbar?.title = it
         }
     }
 
@@ -108,18 +103,26 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         )
 
         drawerToggle?.let {
-            drawerLayout?.addDrawerListener(it)
+            drawerLayout.addDrawerListener(it)
         }
 
         drawerToggle?.syncState()
 
-        if (drawer?.headerCount == 1) {
-            drawer?.getHeaderView(0)?.let {
+        if (drawer.headerCount == 1) {
+            drawer.getHeaderView(0)?.let {
                 drawerHeaderBinder.bind(it)
             }
         }
 
         sermonsStore.dispatch(DrawerAction.SetSelectedItemAction(0))
-        sermonsStore.dispatch(ProfileAction.GetUserProfileAction)
+        sermonsStore.dispatch(AuthenticationAction.GetUserAuthenticationAction)
+    }
+
+    private fun setUpToolbar() {
+        val controller = findNavController(R.id.sermon_navigation_host)
+        val appBarConfiguration = AppBarConfiguration(controller.graph)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+
+        toolbar.setupWithNavController(controller, appBarConfiguration)
     }
 }

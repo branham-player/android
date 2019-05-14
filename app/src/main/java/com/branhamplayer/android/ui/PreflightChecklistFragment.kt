@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.PreflightChecklistAction
 import com.branhamplayer.android.actions.RoutingAction
-import com.branhamplayer.android.di.DaggerInjector
+import com.branhamplayer.android.dagger.DaggerInjector
 import com.branhamplayer.android.states.StartupState
 import com.branhamplayer.android.store.startupStore
 import org.rekotlin.StoreSubscriber
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 class PreflightChecklistFragment : Fragment(), StoreSubscriber<StartupState> {
 
-    // region DI
+    // region Dagger
 
     @Inject
     lateinit var alertDialogBuilder: AlertDialog.Builder

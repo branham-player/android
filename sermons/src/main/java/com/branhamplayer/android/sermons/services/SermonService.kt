@@ -89,7 +89,6 @@ class SermonService : MediaBrowserServiceCompat(), AudioFocus.Callback, Player.C
 
     // region Player.Callback
 
-
     override fun onPlayerStateChanged(update: PlayerUpdateModel) {
 
         library.setCurrentByMediaId(update.newSermon.id)

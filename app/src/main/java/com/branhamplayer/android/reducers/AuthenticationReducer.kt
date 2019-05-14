@@ -3,7 +3,6 @@ package com.branhamplayer.android.reducers
 import com.auth0.android.authentication.storage.CredentialsManager
 import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.base.redux.TypedReducer
-import com.branhamplayer.android.di.DaggerInjector
 import com.branhamplayer.android.states.StartupState
 import javax.inject.Inject
 

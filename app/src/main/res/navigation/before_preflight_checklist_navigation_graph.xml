@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/preflight_checklist_fragment"
         android:name="com.branhamplayer.android.ui.PreflightChecklistFragment"
-        android:label="PreflightChecklistFragment"
+        android:label="@string/navigation_preflight_checklist"
         tools:layout="@layout/preflight_checklist_fragment">
 
         <action
