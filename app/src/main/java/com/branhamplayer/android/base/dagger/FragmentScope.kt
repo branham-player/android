@@ -1,4 +1,4 @@
-package com.branhamplayer.android.base.di
+package com.branhamplayer.android.base.dagger
 
 import javax.inject.Scope
 
