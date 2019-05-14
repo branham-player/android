@@ -1,6 +1,15 @@
 package com.branhamplayer.android
 
 object StartupConstants {
+    object Database {
+        const val name = "branham_player"
+        const val version = 1
+
+        object Tables {
+            const val metadata = "metadata"
+        }
+    }
+
     object FirebaseRemoteConfig {
         const val cacheExipration = 3600L // In seconds
         const val logLevel = "log_level"
