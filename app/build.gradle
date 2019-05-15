@@ -5,7 +5,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-
     def auth0Domain = BRANHAM_PLAYER_ANDROID_AUTH0_DOMAIN
     def auth0DevClientId = BRANHAM_PLAYER_ANDROID_AUTH0_DEV_CLIENT_ID
     def auth0ProdClientId = BRANHAM_PLAYER_ANDROID_AUTH0_PRD_CLIENT_ID
@@ -68,6 +67,8 @@ crashlytics {
 }
 
 dependencies {
+    implementation project(':data')
+
     // Android Support Libraries
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
     implementation 'androidx.cardview:cardview:1.0.0'
@@ -109,16 +110,6 @@ dependencies {
 
     // ReKotlin
     implementation 'org.rekotlin:rekotlin:1.0.0'
-
-    // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
-
-    // Room
-    implementation 'androidx.room:room-runtime:2.1.0-beta01'
-    implementation 'androidx.room:room-rxjava2:2.1.0-beta01'
-    kapt 'androidx.room:room-compiler:2.1.0-beta01'
 
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'

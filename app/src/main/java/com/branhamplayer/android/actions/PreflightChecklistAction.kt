@@ -4,6 +4,7 @@ import com.branhamplayer.android.base.redux.BaseAction
 
 sealed class PreflightChecklistAction : BaseAction {
     object CheckMessageAction : PreflightChecklistAction()
+    object CheckMetadataAction : PreflightChecklistAction()
     object CheckMinimumVersionAction : PreflightChecklistAction()
     object CheckPlatformStatusAction : PreflightChecklistAction()
 

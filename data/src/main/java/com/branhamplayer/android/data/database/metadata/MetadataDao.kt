@@ -1,4 +1,4 @@
-package com.branhamplayer.android.utils.database.metadata
+package com.branhamplayer.android.data.database.metadata
 
 import androidx.room.Dao
 import androidx.room.Insert

@@ -1,11 +1,11 @@
-package com.branhamplayer.android.utils.database.metadata
+package com.branhamplayer.android.data.database.metadata
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.branhamplayer.android.StartupConstants
+import com.branhamplayer.android.data.DataConstants
 
-@Entity(tableName = StartupConstants.Database.Tables.metadata)
+@Entity(tableName = DataConstants.Database.Tables.metadata)
 data class MetadataEntity(
     @PrimaryKey(autoGenerate = false) val id: String,
     @ColumnInfo(name = "audio") val audio: String,

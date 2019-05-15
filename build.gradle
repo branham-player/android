@@ -1,4 +1,6 @@
-buildscript {
+buildscript { 
+    ext.kotlin_version = '1.3.31'
+
     ext {
         application_id = 'com.branhamplayer.android'
         application_id_dev_suffix = '.dev'

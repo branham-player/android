@@ -18,6 +18,7 @@ class PreflightChecklistMiddleware @Inject constructor(
     override fun invoke(dispatch: DispatchFunction, action: PreflightChecklistAction, oldState: StartupState?) {
         when (action) {
             is PreflightChecklistAction.CheckMessageAction -> checkMessage(dispatch)
+            is PreflightChecklistAction.CheckMetadataAction -> checkMetadataAction(dispatch)
             is PreflightChecklistAction.CheckMinimumVersionAction -> checkMinimumVersion(dispatch)
             is PreflightChecklistAction.CheckPlatformStatusAction -> checkPlatformStatus(dispatch)
         }
@@ -31,6 +32,11 @@ class PreflightChecklistMiddleware @Inject constructor(
         } else {
             dispatch(PreflightChecklistAction.NotifyWithMessageAction(message))
         }
+    }
+
+    private fun checkMetadataAction(dispatch: DispatchFunction) {
+        val configuredVersion = Semver(firebaseRemoteConfig.getString(StartupConstants.PreflightChecklist.metadataVersion))
+        val downloadedVersion = Semver("0.0.0")
     }
 
     private fun checkMinimumVersion(dispatch: DispatchFunction) {
