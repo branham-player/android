@@ -7,7 +7,7 @@ import com.branhamplayer.android.data.DataConstants
 
 @Entity(tableName = DataConstants.Database.Tables.metadata)
 data class MetadataEntity(
-    @PrimaryKey(autoGenerate = false) val id: String,
+    @PrimaryKey(autoGenerate = DataConstants.Database.Tables.Metadata.autoGenerateId) @ColumnInfo(name = DataConstants.Database.Tables.Metadata.id) val id: String,
     @ColumnInfo(name = "audio") val audio: String,
     @ColumnInfo(name = "artwork_large") val artworkLarge: String,
     @ColumnInfo(name = "artwork_thumbnail") val artworkThumbnail: String,
