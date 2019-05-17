@@ -1,10 +1,8 @@
 package com.branhamplayer.android.data.models
 
-import android.net.Uri
-
 data class RawMetadata(
     val id: String?,
-    val audio: Uri?,
+    val audio: String?,
     val date: MetadataDate?,
     val location: MetadataLocation?,
     val title: String?,
@@ -28,7 +26,7 @@ data class RawMetadata(
     )
 
     data class MetadataArtwork(
-        val large: Uri?,
-        val thumbnail: Uri?
+        val large: String?,
+        val thumbnail: String?
     )
 }

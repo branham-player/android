@@ -13,13 +13,13 @@ import retrofit2.http.Path
 interface RawMetadataNetworkProvider {
     companion object {
         val api: Retrofit = Retrofit.Builder()
-            .baseUrl(DataConstants.Network.rawMetadata)
+            .baseUrl(DataConstants.Network.RawMetadata.baseUrl)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
     @Headers("Accept: application/json")
-    @GET("{version}/condensed.json")
-    fun getRawMetadata(@Path(value = "version") version: String?): Single<RawMetadata>
+    @GET(DataConstants.Network.RawMetadata.path)
+    fun getRawMetadata(@Path(value = "version") version: String?): Single<List<RawMetadata>>
 }

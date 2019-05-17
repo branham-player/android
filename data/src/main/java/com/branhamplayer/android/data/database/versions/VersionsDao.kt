@@ -5,14 +5,15 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.branhamplayer.android.data.DataConstants
+import io.reactivex.Completable
 import io.reactivex.Maybe
 
 @Dao
 interface VersionsDao {
 
-    @Query("SELECT * FROM ${DataConstants.Database.Tables.versions} WHERE ${DataConstants.Database.Tables.Versions.property} = '${DataConstants.Database.Tables.Versions.metadataVersion}'")
+    @Query("SELECT * FROM versions WHERE property = '${DataConstants.Database.Tables.Metadata.metadataVersion}'")
     fun fetchMetadataVersion(): Maybe<VersionsEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(versionInfo: VersionsEntity)
+    fun insertOrUpdate(versionInfo: VersionsEntity): Completable
 }

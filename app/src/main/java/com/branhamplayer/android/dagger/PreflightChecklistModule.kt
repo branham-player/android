@@ -2,11 +2,16 @@ package com.branhamplayer.android.dagger
 
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
+import com.branhamplayer.android.data.database.BranhamPlayerDatabase
+import com.branhamplayer.android.data.mappers.MetadataMapper
+import com.branhamplayer.android.data.network.RawMetadataNetworkProvider
 import com.branhamplayer.android.middleware.PreflightChecklistMiddleware
 import com.branhamplayer.android.reducers.PreflightChecklistReducer
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import dagger.Module
 import dagger.Provides
+import io.reactivex.Scheduler
+import javax.inject.Named
 
 @Module
 class PreflightChecklistModule(private val context: Context) {
@@ -18,8 +23,21 @@ class PreflightChecklistModule(private val context: Context) {
     fun provideFirebaseRemoteConfig(): FirebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
 
     @Provides
-    fun providePreflightChecklistMiddleware(firebaseRemoteConfig: FirebaseRemoteConfig) =
-        PreflightChecklistMiddleware(firebaseRemoteConfig)
+    fun providePreflightChecklistMiddleware(
+        firebaseRemoteConfig: FirebaseRemoteConfig,
+        branhamPlayerDatabase: BranhamPlayerDatabase,
+        rawMetadataNetworkProvider: RawMetadataNetworkProvider,
+        metadataMapper: MetadataMapper,
+        @Named(RxJavaModule.BG) bg: Scheduler,
+        @Named(RxJavaModule.UI) ui: Scheduler
+    ) = PreflightChecklistMiddleware(
+        firebaseRemoteConfig,
+        branhamPlayerDatabase,
+        rawMetadataNetworkProvider,
+        metadataMapper,
+        bg,
+        ui
+    )
 
     @Provides
     fun providePreflightChecklistReducer() = PreflightChecklistReducer()

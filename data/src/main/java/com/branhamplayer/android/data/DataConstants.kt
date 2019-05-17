@@ -10,23 +10,21 @@ object DataConstants {
             const val versions = "versions"
 
             object Metadata {
-                const val autoGenerateId = false
-
-                const val id = "id"
-            }
-
-            object Versions {
-                const val autoGenerateId = true
-
-                const val property = "property"
-                const val version = "version"
-
                 const val metadataVersion = "metadata_version"
             }
         }
     }
 
+    object Mappers {
+        object Metadata {
+            const val divider = " - "
+        }
+    }
+
     object Network {
-        const val rawMetadata = "https://raw.githubusercontent.com/branham-player/golden-dataset"
+        object RawMetadata {
+            const val baseUrl = "https://raw.githubusercontent.com/branham-player/golden-dataset/"
+            const val path = "{version}/condensed.json"
+        }
     }
 }

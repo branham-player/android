@@ -1,13 +1,13 @@
 package com.branhamplayer.android.data.database.versions
 
-import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.branhamplayer.android.data.DataConstants
 
-@Entity(tableName = DataConstants.Database.Tables.versions)
+@Entity(tableName = DataConstants.Database.Tables.versions, indices = [Index(value = ["property"], unique = true)])
 data class VersionsEntity(
-    @PrimaryKey(autoGenerate = DataConstants.Database.Tables.Versions.autoGenerateId) val id: Int = 0,
-    @ColumnInfo(name = DataConstants.Database.Tables.Versions.property) val property: String,
-    @ColumnInfo(name = DataConstants.Database.Tables.Versions.version) val version: String
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val property: String,
+    val version: String
 )
