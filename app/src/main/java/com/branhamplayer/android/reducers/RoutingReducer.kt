@@ -36,7 +36,7 @@ class RoutingReducer @Inject constructor(
             is RoutingAction.NavigateToAuthenticationAction -> navigateToAuthentication()
             is RoutingAction.NavigateToGooglePlayStoreAction -> navigateToGooglePlayStore()
             is RoutingAction.NavigateToSermonsAction -> navigateToSermons()
-            is RoutingAction.NavigateToWelcomeAction -> navigateToWelcome(oldState)
+            is RoutingAction.NavigateToWelcomeAction -> return navigateToWelcome(oldState)
         }
 
         return oldState
