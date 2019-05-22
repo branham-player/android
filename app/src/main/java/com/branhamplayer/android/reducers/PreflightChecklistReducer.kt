@@ -8,6 +8,7 @@ class PreflightChecklistReducer : TypedReducer<PreflightChecklistAction, Startup
 
     override fun invoke(action: PreflightChecklistAction, oldState: StartupState) = when (action) {
         is PreflightChecklistAction.NotifyWithMessageAction -> notifyWithMessage(action.message, oldState)
+        is PreflightChecklistAction.StopAppWithMetadataFailureAction -> stopAppWithMetadataFailure(oldState)
         is PreflightChecklistAction.StopAppWithMinimumVersionFailureAction -> stopAppWithMinimumVersionFailure(oldState)
         is PreflightChecklistAction.StopAppWithPlatformDownAction -> stopWithPlatformDownAction(action.message, oldState)
         else -> oldState
@@ -15,6 +16,10 @@ class PreflightChecklistReducer : TypedReducer<PreflightChecklistAction, Startup
 
     private fun notifyWithMessage(message: String, oldState: StartupState) = oldState.copy(
         message = message
+    )
+
+    private fun stopAppWithMetadataFailure(oldState: StartupState) = oldState.copy(
+        metadataAvailable = false
     )
 
     private fun stopAppWithMinimumVersionFailure(oldState: StartupState) = oldState.copy(
