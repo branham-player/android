@@ -8,6 +8,9 @@ import com.branhamplayer.android.R
 import com.branhamplayer.android.dagger.DaggerInjector
 import com.branhamplayer.android.store.startupStore
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
 import javax.inject.Inject
 
 class StartupActivity : AppCompatActivity() {
@@ -29,9 +32,21 @@ class StartupActivity : AppCompatActivity() {
         firebaseAnalytics.setAnalyticsCollectionEnabled(BuildConfig.BUILD_TYPE.toLowerCase() == "release")
 
         setUpNavigationGraph()
+        setUpAppCenter()
     }
 
     // endregion
+
+    private fun setUpAppCenter() {
+        if (BuildConfig.DEBUG) return
+
+        AppCenter.start(
+            application,
+            BuildConfig.APP_CENTER_KEY,
+            Analytics::class.java,
+            Crashes::class.java
+        )
+    }
 
     private fun setUpNavigationGraph() {
         val navigationHost = if (startupStore.state.ranPreflightChecklistSuccessfully) {
