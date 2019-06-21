@@ -9,5 +9,5 @@ import dagger.Provides
 class DatabaseModule(private val context: Context) {
 
     @Provides
-    fun provideBranhamPlayerDatabase() = BranhamPlayerDatabase.newInstance(context).build()
+    fun provideBranhamPlayerDatabase() = BranhamPlayerDatabase.newInstance(context)
 }

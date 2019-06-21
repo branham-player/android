@@ -10,6 +10,9 @@ sealed class PreflightChecklistAction : BaseAction {
 
     data class NotifyWithMessageAction(val message: String) : PreflightChecklistAction()
 
+    object ResetMetadataUnavailableFlagAction : PreflightChecklistAction()
+    object ResetPlatformUnavailableFlagAction : PreflightChecklistAction()
+
     object StopAppWithMetadataFailureAction : PreflightChecklistAction()
     object StopAppWithMinimumVersionFailureAction : PreflightChecklistAction()
     data class StopAppWithPlatformDownAction(val message: String) : PreflightChecklistAction()

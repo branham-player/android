@@ -1,4 +1,4 @@
-package com.branhamplayer.android.sermons.database.times
+package com.branhamplayer.android.data.database.times
 
 import androidx.room.Dao
 import androidx.room.Insert

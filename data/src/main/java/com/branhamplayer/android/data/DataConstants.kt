@@ -7,6 +7,8 @@ object DataConstants {
 
         object Tables {
             const val metadata = "metadata"
+            const val recent = "recent"
+            const val times = "times"
             const val versions = "versions"
 
             object Metadata {
