@@ -63,7 +63,8 @@ class PreflightChecklistMiddleware @Inject constructor(
             }
             .subscribeOn(bg)
             .observeOn(ui)
-            .subscribe({ versionInformation -> // Data returned
+            .subscribe({ versionInformation ->
+                // Data returned
                 val downloadedVersion = Semver(versionInformation.version)
 
                 if (configuredVersion > downloadedVersion) {
@@ -71,9 +72,11 @@ class PreflightChecklistMiddleware @Inject constructor(
                 } else {
                     dispatch(PreflightChecklistAction.CheckMessageAction)
                 }
-            }, { // Error encountered
+            }, {
+                // Error encountered
                 updateLocalMetadata(configuredVersion.toString(), dispatch)
-            }, { // No data returned
+            }, {
+                // No data returned
                 updateLocalMetadata(configuredVersion.toString(), dispatch)
             })
     }
