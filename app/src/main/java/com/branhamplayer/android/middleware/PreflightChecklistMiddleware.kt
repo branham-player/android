@@ -56,11 +56,7 @@ class PreflightChecklistMiddleware @Inject constructor(
         branhamPlayerDatabase
             .metadataDao()
             .fetchFirstIfExists()
-            .flatMap {
-                branhamPlayerDatabase
-                    .versionsDao()
-                    .fetchMetadataVersion()
-            }
+            .flatMap { branhamPlayerDatabase.versionsDao().fetchMetadataVersion() }
             .subscribeOn(bg)
             .observeOn(ui)
             .subscribe({ versionInformation ->
@@ -114,10 +110,7 @@ class PreflightChecklistMiddleware @Inject constructor(
             }
             .andThen(
                 branhamPlayerDatabase.versionsDao().insertOrUpdate(
-                    VersionsEntity(
-                        property = DataConstants.Database.Tables.Metadata.metadataVersion,
-                        version = configuredVersion
-                    )
+                    VersionsEntity(0, DataConstants.Database.Tables.Metadata.metadataVersion, configuredVersion)
                 )
             )
             .subscribeOn(bg)

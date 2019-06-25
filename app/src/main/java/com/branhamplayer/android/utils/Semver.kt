@@ -48,7 +48,6 @@ class Semver(private val version: String) {
         return true
     }
 
-    override fun toString(): String {
-        return version
-    }
+    override fun hashCode() = toString().hashCode()
+    override fun toString() = "$major.$minor.$patch"
 }
