@@ -42,7 +42,7 @@
     <string name="preflight_checklist_close_app">Close App</string>
     <string name="preflight_checklist_notice">Notice</string>
     <string name="preflight_checklist_ok">OK</string>
-    <string name="preflight_checklist_metadata_unavailable_message">Branham Player is not able to fetch the necessary data for each of the sermons. Double-check you internet connection and please try again.</string>
+    <string name="preflight_checklist_metadata_unavailable_message">Branham Player is not able to fetch the necessary data for each of the sermons. Double-check your internet connection and please try again.</string>
     <string name="preflight_checklist_metadata_unavailable_title">Sermon Data Unavailable</string>
     <string name="preflight_checklist_platform_unavailable_message">Branham Player is currently unavailable, please check back later.</string>
     <string name="preflight_checklist_platform_unavailable_title">App Unavailable</string>
