@@ -64,6 +64,11 @@ class PreflightChecklistFragment : Fragment(), StoreSubscriber<StartupState> {
             return
         }
 
+        if (!state.metadataAvailable) {
+            showMetadataUnavailableMessage()
+            return
+        }
+
         if (!state.message.isNullOrBlank()) {
             showNotice(state.message)
         }
@@ -101,11 +106,34 @@ class PreflightChecklistFragment : Fragment(), StoreSubscriber<StartupState> {
         builder.create().show()
     }
 
+    private fun showMetadataUnavailableMessage() {
+        val builder = alertDialogBuilder
+            .setCancelable(false)
+            .setTitle(R.string.preflight_checklist_metadata_unavailable_title)
+            .setMessage(R.string.preflight_checklist_metadata_unavailable_message)
+            .setPositiveButton(R.string.preflight_checklist_retry) { dialog, _ ->
+                dialog.dismiss()
+                startupStore.dispatch(PreflightChecklistAction.ResetMetadataUnavailableFlagAction)
+                startupStore.dispatch(PreflightChecklistAction.CheckPlatformStatusAction)
+            }
+            .setNegativeButton(R.string.preflight_checklist_close_app) { dialog, _ ->
+                dialog.dismiss()
+                startupStore.dispatch(RoutingAction.CloseAppAction)
+            }
+
+        builder.create().show()
+    }
+
     private fun showPlatformUnavailableMessage(message: String?) {
         val builder = alertDialogBuilder
             .setCancelable(false)
             .setTitle(R.string.preflight_checklist_platform_unavailable_title)
-            .setPositiveButton(R.string.preflight_checklist_close_app) { dialog, _ ->
+            .setPositiveButton(R.string.preflight_checklist_retry) { dialog, _ ->
+                dialog.dismiss()
+                startupStore.dispatch(PreflightChecklistAction.ResetPlatformUnavailableFlagAction)
+                startupStore.dispatch(PreflightChecklistAction.CheckPlatformStatusAction)
+            }
+            .setNegativeButton(R.string.preflight_checklist_close_app) { dialog, _ ->
                 dialog.dismiss()
                 startupStore.dispatch(RoutingAction.CloseAppAction)
             }

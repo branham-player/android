@@ -1,4 +1,4 @@
-package com.branhamplayer.android.sermons.database.recent
+package com.branhamplayer.android.data.database.recent
 
 import androidx.room.Dao
 import androidx.room.Insert

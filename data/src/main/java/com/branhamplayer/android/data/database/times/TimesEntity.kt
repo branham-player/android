@@ -1,12 +1,12 @@
-package com.branhamplayer.android.sermons.database.times
+package com.branhamplayer.android.data.database.times
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.branhamplayer.android.sermons.SermonConstants
+import com.branhamplayer.android.data.DataConstants
 
-@Entity(tableName = SermonConstants.Database.Tables.Times, indices = [Index(value = ["media_id"], unique = true)])
+@Entity(tableName = DataConstants.Database.Tables.times, indices = [Index(value = ["media_id"], unique = true)])
 data class TimesEntity(
         @PrimaryKey(autoGenerate = true) var id: Int = 0,
         @ColumnInfo(name = "media_id") var mediaId: String,

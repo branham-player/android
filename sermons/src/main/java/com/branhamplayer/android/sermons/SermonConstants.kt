@@ -1,16 +1,6 @@
 package com.branhamplayer.android.sermons
 
 object SermonConstants {
-    object Database {
-        const val Name = "branham_player"
-        const val Version = 1
-
-        object Tables {
-            const val Recent = "recent"
-            const val Times = "times"
-        }
-    }
-
     object Player {
         object CustomActions {
             const val Restart = "com.branhamplayer.android.sermons.SermonConstants.Restart"
