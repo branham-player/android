@@ -1,4 +1,4 @@
-package com.branhamplayer.android.sermons.dagger
+package com.branhamplayer.android.sermons.dagger.modules
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity

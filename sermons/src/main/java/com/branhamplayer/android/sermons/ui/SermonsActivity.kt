@@ -14,7 +14,6 @@ import butterknife.Unbinder
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.actions.AuthenticationAction
 import com.branhamplayer.android.sermons.actions.DrawerAction
-import com.branhamplayer.android.sermons.actions.SermonListAction
 import com.branhamplayer.android.sermons.dagger.DaggerInjector
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.store.sermonsStore
@@ -65,8 +64,6 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
-
-        sermonsStore.dispatch(SermonListAction.GetFileReadPermissionAction)
 
         setUpToolbar()
         setUpDrawer()

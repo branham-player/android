@@ -25,4 +25,11 @@
     </style>
 
     <!-- endregion -->
+
+    <!-- region Permission Dialog -->
+
+    <style name="SermonList.Permissions" parent="Theme.MaterialComponents">
+
+    </style>
+    <!-- endregion -->
 </resources>

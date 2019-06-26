@@ -49,6 +49,9 @@ dependencies {
     implementation 'com.google.dagger:dagger:2.22.1'
     kapt 'com.google.dagger:dagger-compiler:2.22.1'
 
+    // Dexter
+    implementation 'com.karumi:dexter:5.0.0'
+
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 

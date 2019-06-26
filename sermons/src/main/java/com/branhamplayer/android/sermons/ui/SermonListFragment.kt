@@ -11,13 +11,13 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.branhamplayer.android.sermons.R
+import com.branhamplayer.android.sermons.actions.SermonListAction
 import com.branhamplayer.android.sermons.dagger.DaggerInjector
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.ui.adapters.SermonListAdapter
 import org.rekotlin.StoreSubscriber
 import javax.inject.Inject
-import com.branhamplayer.android.R as RBase
 
 class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
 
@@ -52,6 +52,11 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
         sermonsRecyclerView?.layoutManager = LinearLayoutManager(context)
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        sermonsStore.dispatch(SermonListAction.GetFileReadPermissionAction)
     }
 
     override fun onDestroyView() {
