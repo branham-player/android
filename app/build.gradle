@@ -5,6 +5,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
+
+    def appCenterDevKey = BRANHAM_PLAYER_APP_CENTER_DEV_KEY
+    def appCenterReleaseKey = BRANHAM_PLAYER_APP_CENTER_RELEASE_KEY
+
     def auth0Domain = BRANHAM_PLAYER_ANDROID_AUTH0_DOMAIN
     def auth0DevClientId = BRANHAM_PLAYER_ANDROID_AUTH0_DEV_CLIENT_ID
     def auth0ProdClientId = BRANHAM_PLAYER_ANDROID_AUTH0_PRD_CLIENT_ID
@@ -31,6 +35,8 @@ android {
                 auth0Scheme: application_id
         ]
 
+        buildConfigField "String", "APP_CENTER_KEY", "\"$appCenterDevKey\""
+
         buildConfigField "String", "AUTH0_CLIENT_ID", "\"$auth0ProdClientId\""
         buildConfigField "String", "AUTH0_DOMAIN", "\"$auth0Domain\""
         buildConfigField "String", "AUTH0_SCHEME", "\"$application_id\""
@@ -52,6 +58,8 @@ android {
         }
 
         release {
+            buildConfigField "String", "APP_CENTER_KEY", "\"$appCenterReleaseKey\""
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -79,6 +87,10 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.2.0-alpha02'
     implementation 'androidx.fragment:fragment-ktx:1.1.0-beta01'
     implementation 'com.google.android.material:material:1.1.0-alpha07'
+
+    //App Center
+    implementation 'com.microsoft.appcenter:appcenter-analytics:2.1.0'
+    implementation 'com.microsoft.appcenter:appcenter-crashes:2.1.0'
 
     // Auth0
     implementation 'com.auth0.android:auth0:1.15.1'
