@@ -6,7 +6,9 @@ apply plugin: 'kotlin-kapt'
 
 android {
 
-    def appCenterKey = BRANHAM_PLAYER_APP_CENTER_KEY
+    def appCenterDevKey = BRANHAM_PLAYER_APP_CENTER_DEV_KEY
+    def appCenterReleaseKey = BRANHAM_PLAYER_APP_CENTER_RELEASE_KEY
+
     def auth0Domain = BRANHAM_PLAYER_ANDROID_AUTH0_DOMAIN
     def auth0DevClientId = BRANHAM_PLAYER_ANDROID_AUTH0_DEV_CLIENT_ID
     def auth0ProdClientId = BRANHAM_PLAYER_ANDROID_AUTH0_PRD_CLIENT_ID
@@ -33,7 +35,7 @@ android {
                 auth0Scheme: application_id
         ]
 
-        buildConfigField "String", "APP_CENTER_KEY", "\"$appCenterKey\""
+        buildConfigField "String", "APP_CENTER_KEY", "\"$appCenterDevKey\""
 
         buildConfigField "String", "AUTH0_CLIENT_ID", "\"$auth0ProdClientId\""
         buildConfigField "String", "AUTH0_DOMAIN", "\"$auth0Domain\""
@@ -56,6 +58,8 @@ android {
         }
 
         release {
+            buildConfigField "String", "APP_CENTER_KEY", "\"$appCenterReleaseKey\""
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -71,12 +75,17 @@ crashlytics {
 }
 
 dependencies {
+    implementation project(':data')
+
+    // Android Debug Database
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
     // Android Support Libraries
-    implementation 'androidx.appcompat:appcompat:1.1.0-alpha05'
+    implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta1'
-    implementation 'androidx.core:core-ktx:1.2.0-alpha01'
-    implementation 'androidx.fragment:fragment-ktx:1.1.0-alpha09'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
+    implementation 'androidx.core:core-ktx:1.2.0-alpha02'
+    implementation 'androidx.fragment:fragment-ktx:1.1.0-beta01'
     implementation 'com.google.android.material:material:1.1.0-alpha07'
 
     //App Center
@@ -96,8 +105,8 @@ dependencies {
 
     // Firebase
     implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
-    implementation 'com.google.firebase:firebase-config:17.0.0'
-    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-config:18.0.0'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
@@ -111,11 +120,16 @@ dependencies {
     implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
 
     // Navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0-alpha04'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0-alpha04'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0-alpha05'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0-alpha05'
 
     // ReKotlin
     implementation 'org.rekotlin:rekotlin:1.0.0'
+
+    // Room
+    implementation 'androidx.room:room-runtime:2.1.0'
+    implementation 'androidx.room:room-rxjava2:2.1.0'
+    kapt 'androidx.room:room-compiler:2.1.0'
 
     // RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'

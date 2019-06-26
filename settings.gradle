@@ -1,1 +1,1 @@
-include ':app', ':sermons'
+include ':app', ':sermons', ':data'

@@ -25,8 +25,9 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
 
     // region Components
 
+    @JvmField
     @BindView(R.id.sermon_list)
-    lateinit var sermonsRecyclerView: RecyclerView
+    var sermonsRecyclerView: RecyclerView? = null
 
     // endregion
 
@@ -47,8 +48,8 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
         unbinder = ButterKnife.bind(this, view)
         sermonsStore.subscribe(this)
 
-        sermonsRecyclerView.adapter = sermonAdapter
-        sermonsRecyclerView.layoutManager = LinearLayoutManager(context)
+        sermonsRecyclerView?.adapter = sermonAdapter
+        sermonsRecyclerView?.layoutManager = LinearLayoutManager(context)
 
         return view
     }
@@ -65,7 +66,7 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
     override fun newState(state: SermonsState) {
         state.sermonList?.let {
             sermonAdapter.setSermons(it)
-            sermonsRecyclerView.adapter?.notifyDataSetChanged()
+            sermonsRecyclerView?.adapter?.notifyDataSetChanged()
         }
     }
 

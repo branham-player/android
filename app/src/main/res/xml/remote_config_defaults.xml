@@ -9,6 +9,11 @@
     </entry>
 
     <entry>
+        <key>metadata_version</key>
+        <value>1.0.0</value>
+    </entry>
+
+    <entry>
         <key>minimum_version</key>
         <value>1.0.0</value>
     </entry>

@@ -2,8 +2,8 @@ package com.branhamplayer.android.sermons.middleware
 
 import androidx.appcompat.app.AppCompatActivity
 import com.branhamplayer.android.base.redux.TypedMiddleware
+import com.branhamplayer.android.dagger.RxJavaModule
 import com.branhamplayer.android.sermons.actions.SermonListAction
-import com.branhamplayer.android.sermons.dagger.RxJavaModule
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.utils.permissions.PermissionConstants
 import com.branhamplayer.android.sermons.utils.permissions.PermissionManager
