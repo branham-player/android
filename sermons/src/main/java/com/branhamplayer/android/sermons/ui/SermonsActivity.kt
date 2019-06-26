@@ -31,14 +31,17 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
     // region Components
 
+    @JvmField
     @BindView(R.id.drawer)
-    lateinit var drawer: NavigationView
+    var drawer: NavigationView? = null
 
+    @JvmField
     @BindView(R.id.drawer_layout)
-    lateinit var drawerLayout: DrawerLayout
+    var drawerLayout: DrawerLayout? = null
 
+    @JvmField
     @BindView(R.id.toolbar)
-    lateinit var toolbar: Toolbar
+    var toolbar: Toolbar? = null
 
     // endregion
 
@@ -82,7 +85,7 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
 
     override fun newState(state: SermonsState) {
 
-        drawer.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
+        drawer?.menu?.getItem(state.drawerItemSelectedIndex)?.isChecked = true
 
         state.profile?.let {
             drawerHeaderBinder.email?.text = it.email
@@ -103,13 +106,13 @@ class SermonsActivity : AppCompatActivity(), StoreSubscriber<SermonsState> {
         )
 
         drawerToggle?.let {
-            drawerLayout.addDrawerListener(it)
+            drawerLayout?.addDrawerListener(it)
         }
 
         drawerToggle?.syncState()
 
-        if (drawer.headerCount == 1) {
-            drawer.getHeaderView(0)?.let {
+        if (drawer?.headerCount == 1) {
+            drawer?.getHeaderView(0)?.let {
                 drawerHeaderBinder.bind(it)
             }
         }
