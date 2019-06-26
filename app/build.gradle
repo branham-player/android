@@ -89,8 +89,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha07'
 
     //App Center
-    implementation 'com.microsoft.appcenter:appcenter-analytics:2.0.0'
-    implementation 'com.microsoft.appcenter:appcenter-crashes:2.0.0'
+    implementation 'com.microsoft.appcenter:appcenter-analytics:2.1.0'
+    implementation 'com.microsoft.appcenter:appcenter-crashes:2.1.0'
 
     // Auth0
     implementation 'com.auth0.android:auth0:1.15.1'
