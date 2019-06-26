@@ -38,14 +38,20 @@ class StartupActivity : AppCompatActivity() {
     // endregion
 
     private fun setUpAppCenter() {
-        if (BuildConfig.DEBUG) return
-
-        AppCenter.start(
-            application,
-            BuildConfig.APP_CENTER_KEY,
-            Analytics::class.java,
-            Crashes::class.java
-        )
+        if (BuildConfig.DEBUG) {
+            AppCenter.start(
+                application,
+                BuildConfig.APP_CENTER_KEY,
+                Analytics::class.java
+            )
+        } else {
+            AppCenter.start(
+                application,
+                BuildConfig.APP_CENTER_KEY,
+                Analytics::class.java,
+                Crashes::class.java
+            )
+        }
     }
 
     private fun setUpNavigationGraph() {
