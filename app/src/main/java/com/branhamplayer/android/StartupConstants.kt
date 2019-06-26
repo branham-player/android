@@ -13,6 +13,7 @@ object StartupConstants {
 
     object PreflightChecklist {
         const val message = "message"
+        const val metadataVersion = "metadata_version"
         const val minimumVersion = "minimum_version"
         const val platformStatus = "platform_available"
     }

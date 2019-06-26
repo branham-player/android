@@ -2,9 +2,9 @@ package com.branhamplayer.android.sermons.viewmodels
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.branhamplayer.android.sermons.database.SermonsDatabase
-import com.branhamplayer.android.sermons.database.recent.RecentEntity
-import com.branhamplayer.android.sermons.database.times.TimesEntity
+import com.branhamplayer.android.data.database.BranhamPlayerDatabase
+import com.branhamplayer.android.data.database.recent.RecentEntity
+import com.branhamplayer.android.data.database.times.TimesEntity
 import com.branhamplayer.android.utils.logging.Loggly
 import com.branhamplayer.android.utils.logging.LogglyConstants.Tags.PLAYER_VIEW_MODEL
 import io.reactivex.Completable
@@ -16,7 +16,7 @@ import io.reactivex.schedulers.Schedulers
 
 class PlayerViewModel(
     context: Context,
-    private val database: SermonsDatabase = SermonsDatabase.newInstance(context),
+    private val database: BranhamPlayerDatabase = BranhamPlayerDatabase.newInstance(context),
     private val disposable: CompositeDisposable = CompositeDisposable(),
     private val bg: Scheduler = Schedulers.io(),
     private val ui: Scheduler = AndroidSchedulers.mainThread()

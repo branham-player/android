@@ -1,6 +1,7 @@
 package com.branhamplayer.android.dagger
 
 import android.content.Context
+import com.branhamplayer.android.data.dagger.DatabaseModule
 import com.branhamplayer.android.ui.StartupActivity
 
 object DaggerInjector {
@@ -14,6 +15,7 @@ object DaggerInjector {
     fun buildPreflightChecklistComponent(context: Context): PreflightChecklistComponent =
         DaggerPreflightChecklistComponent
             .builder()
+            .databaseModule(DatabaseModule(context))
             .preflightChecklistModule(PreflightChecklistModule(context))
             .build()
 
@@ -28,6 +30,7 @@ object DaggerInjector {
         val component = startupComponent ?: DaggerStartupComponent
             .builder()
             .authenticationModule(AuthenticationModule(activity))
+            .databaseModule(DatabaseModule(activity))
             .preflightChecklistModule(PreflightChecklistModule(activity))
             .routingModule(RoutingModule(activity))
             .startupModule(StartupModule(activity))
