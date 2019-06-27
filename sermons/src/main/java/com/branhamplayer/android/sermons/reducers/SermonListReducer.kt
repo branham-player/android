@@ -14,6 +14,7 @@ class SermonListReducer @Inject constructor(
 
     override fun invoke(action: SermonListAction, oldState: SermonsState) = when (action) {
         is SermonListAction.FetchListAction -> fetchList(oldState)
+        is SermonListAction.ShowPermissionNotYetRequestedAction -> showPermissionNotYetRequested(oldState)
         else -> oldState
     }
 
@@ -22,7 +23,12 @@ class SermonListReducer @Inject constructor(
         val sermons = sermonListMapper.map(filesOnDisk)
 
         return state.copy(
+            permissionRequestedYet = true,
             sermonList = sermons?.value
         )
     }
+
+    private fun showPermissionNotYetRequested(oldState: SermonsState) = oldState.copy(
+        permissionRequestedYet = false
+    )
 }

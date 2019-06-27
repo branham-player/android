@@ -28,8 +28,9 @@
 
     <!-- region Permission Dialog -->
 
-    <style name="SermonList.Permissions" parent="Theme.MaterialComponents">
-
+    <style name="Theme.Transparent" parent="android:style/Theme.Translucent.NoTitleBar">
+        <item name="android:windowIsFloating">true</item>
     </style>
+
     <!-- endregion -->
 </resources>

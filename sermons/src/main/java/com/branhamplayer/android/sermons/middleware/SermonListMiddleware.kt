@@ -22,36 +22,32 @@ class SermonListMiddleware @Inject constructor(
     override fun invoke(dispatch: DispatchFunction, action: SermonListAction, oldState: SermonsState?) {
         when (action) {
             is SermonListAction.CheckFileReadPermissionAction -> checkFileReadPermission(dispatch)
-            is SermonListAction.GetFileReadPermissionAction -> getFileReadPermission(dispatch)
+            is SermonListAction.RequestFileReadPermissionAction -> requestFileReadPermission(dispatch)
             is SermonListAction.ShowPermissionDeniedErrorAction -> showPermissionDeniedError()
         }
     }
 
-    private fun checkFileReadPermission(dispatch: (Action) -> Unit) {
+    private fun checkFileReadPermission(dispatch: (Action) -> Unit) =
         if (permissionManager.hasPermission(PermissionConstants.fileRead)) {
             dispatch(SermonListAction.FetchListAction)
         } else {
             dispatch(SermonListAction.ShowPermissionNotYetRequestedAction)
         }
-    }
 
     @SuppressLint("CheckResult")
-    private fun getFileReadPermission(dispatcher: DispatchFunction) {
-        // TODO: Use disposable
-        permissionManager
-            .getSinglePermission(PermissionConstants.fileRead)
-            .subscribeOn(bg)
-            .observeOn(ui)
-            .subscribe({ hasPermission ->
-                if (hasPermission) {
-                    dispatcher(SermonListAction.FetchListAction)
-                } else {
-                    dispatcher(SermonListAction.ShowPermissionDeniedErrorAction)
-                }
-            }, {
+    private fun requestFileReadPermission(dispatcher: DispatchFunction) = permissionManager
+        .getSinglePermission(PermissionConstants.fileRead)
+        .subscribeOn(bg)
+        .observeOn(ui)
+        .subscribe({ gotPermission ->
+            if (gotPermission) {
+                dispatcher(SermonListAction.FetchListAction)
+            } else {
                 dispatcher(SermonListAction.ShowPermissionDeniedErrorAction)
-            })
-    }
+            }
+        }, {
+            dispatcher(SermonListAction.ShowPermissionDeniedErrorAction)
+        })
 
     private fun showPermissionDeniedError() {
         // TODO: Get rid of this whenever the design for the permission request is finished

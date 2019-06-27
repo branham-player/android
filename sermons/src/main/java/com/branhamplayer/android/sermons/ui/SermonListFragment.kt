@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ViewFlipper
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
+import butterknife.OnClick
 import butterknife.Unbinder
 import com.branhamplayer.android.sermons.R
 import com.branhamplayer.android.sermons.actions.SermonListAction
@@ -28,6 +30,10 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
     @JvmField
     @BindView(R.id.sermon_list)
     var sermonsRecyclerView: RecyclerView? = null
+
+    @JvmField
+    @BindView(R.id.sermon_list_view_flipper)
+    var viewFlipper: ViewFlipper? = null
 
     // endregion
 
@@ -56,7 +62,7 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sermonsStore.dispatch(SermonListAction.GetFileReadPermissionAction)
+        sermonsStore.dispatch(SermonListAction.RequestFileReadPermissionAction)
     }
 
     override fun onDestroyView() {
@@ -73,7 +79,16 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
             sermonAdapter.setSermons(it)
             sermonsRecyclerView?.adapter?.notifyDataSetChanged()
         }
+
+        viewFlipper?.displayedChild = when {
+            !state.permissionRequestedYet -> 0
+            state.permissionRequestedYet -> 1
+            else -> 0
+        }
     }
 
     // endregion
+
+    @OnClick(R.id.request_permission_button)
+    fun requestPermission() = sermonsStore.dispatch(SermonListAction.RequestFileReadPermissionAction)
 }

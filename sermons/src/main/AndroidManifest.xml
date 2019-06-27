@@ -43,7 +43,7 @@
 
         <activity
             android:name="com.karumi.dexter.DexterActivity"
-            android:theme="@style/Theme.MaterialComponents"
+            android:theme="@android:style/Theme.Light.Panel"
             tools:replace="android:theme" />
 
         <meta-data
