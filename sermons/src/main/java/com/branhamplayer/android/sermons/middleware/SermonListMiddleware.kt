@@ -23,7 +23,6 @@ class SermonListMiddleware @Inject constructor(
         when (action) {
             is SermonListAction.CheckFileReadPermissionAction -> checkFileReadPermission(dispatch)
             is SermonListAction.RequestFileReadPermissionAction -> requestFileReadPermission(dispatch)
-            is SermonListAction.ShowPermissionDeniedErrorAction -> showPermissionDeniedError()
         }
     }
 
@@ -39,23 +38,20 @@ class SermonListMiddleware @Inject constructor(
         .getSinglePermission(PermissionConstants.fileRead)
         .subscribeOn(bg)
         .observeOn(ui)
-        .subscribe({ gotPermission ->
-            if (gotPermission) {
-                dispatcher(SermonListAction.FetchListAction)
-            } else {
-                dispatcher(SermonListAction.ShowPermissionDeniedErrorAction)
+        .subscribe({ status ->
+            when (status) {
+                PermissionManager.PermissionStatus.DeniedOnce ->
+                    dispatcher(SermonListAction.ShowPermissionDeniedOnceErrorAction)
+
+                PermissionManager.PermissionStatus.DeniedPermanently ->
+                    dispatcher(SermonListAction.ShowPermissionDeniedPermanentlyErrorAction)
+
+                PermissionManager.PermissionStatus.Granted -> {
+                    dispatcher(SermonListAction.ShowPermissionGrantedAction)
+                    dispatcher(SermonListAction.FetchListAction)
+                }
             }
         }, {
-            dispatcher(SermonListAction.ShowPermissionDeniedErrorAction)
+            dispatcher(SermonListAction.ShowPermissionDeniedOnceErrorAction)
         })
-
-    private fun showPermissionDeniedError() {
-        // TODO: Get rid of this whenever the design for the permission request is finished
-        // TODO: No point in trying to work with this
-//        val toast: Toast = StandAloneContext.getKoin().koinContext.get {
-//            parametersOf(context, R.string.permission_denied_message, Toast.LENGTH_LONG)
-//        }
-//
-//        toast.show()
-    }
 }

@@ -14,6 +14,9 @@ class SermonListReducer @Inject constructor(
 
     override fun invoke(action: SermonListAction, oldState: SermonsState) = when (action) {
         is SermonListAction.FetchListAction -> fetchList(oldState)
+        is SermonListAction.ShowPermissionDeniedOnceErrorAction -> showPermissionDeniedOnceError(oldState)
+        is SermonListAction.ShowPermissionDeniedPermanentlyErrorAction -> showPermissionDeniedPermanentlyError(oldState)
+        is SermonListAction.ShowPermissionGrantedAction -> showPermissionGranted(oldState)
         is SermonListAction.ShowPermissionNotYetRequestedAction -> showPermissionNotYetRequested(oldState)
         else -> oldState
     }
@@ -23,12 +26,23 @@ class SermonListReducer @Inject constructor(
         val sermons = sermonListMapper.map(filesOnDisk)
 
         return state.copy(
-            permissionRequestedYet = true,
             sermonList = sermons?.value
         )
     }
 
+    private fun showPermissionDeniedOnceError(oldState: SermonsState) = oldState.copy(
+        fileReadPermission = SermonsState.PermissionType.DeniedOnce
+    )
+
+    private fun showPermissionDeniedPermanentlyError(oldState: SermonsState) = oldState.copy(
+        fileReadPermission = SermonsState.PermissionType.DeniedPermanently
+    )
+
+    private fun showPermissionGranted(oldState: SermonsState) = oldState.copy(
+        fileReadPermission = SermonsState.PermissionType.Granted
+    )
+
     private fun showPermissionNotYetRequested(oldState: SermonsState) = oldState.copy(
-        permissionRequestedYet = false
+        fileReadPermission = SermonsState.PermissionType.NotRequested
     )
 }

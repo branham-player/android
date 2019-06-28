@@ -46,7 +46,11 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
 
     // region Controller
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.sermon_list_fragment, container, false)
 
         DaggerInjector.sermonsComponent?.inject(this)
@@ -62,7 +66,7 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        sermonsStore.dispatch(SermonListAction.RequestFileReadPermissionAction)
+        sermonsStore.dispatch(SermonListAction.CheckFileReadPermissionAction)
     }
 
     override fun onDestroyView() {
@@ -81,8 +85,9 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
         }
 
         viewFlipper?.displayedChild = when {
-            !state.permissionRequestedYet -> 0
-            state.permissionRequestedYet -> 1
+            state.fileReadPermission == SermonsState.PermissionType.DeniedPermanently -> 1
+            state.fileReadPermission == SermonsState.PermissionType.Granted -> 2
+            state.fileReadPermission != SermonsState.PermissionType.Granted -> 0
             else -> 0
         }
     }
@@ -90,5 +95,6 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
     // endregion
 
     @OnClick(R.id.request_permission_button)
-    fun requestPermission() = sermonsStore.dispatch(SermonListAction.RequestFileReadPermissionAction)
+    fun requestPermission() =
+        sermonsStore.dispatch(SermonListAction.RequestFileReadPermissionAction)
 }

@@ -7,6 +7,8 @@ sealed class SermonListAction : BaseAction {
 
     object CheckFileReadPermissionAction : SermonListAction()
     object RequestFileReadPermissionAction : SermonListAction()
-    object ShowPermissionDeniedErrorAction : SermonListAction()
+    object ShowPermissionDeniedOnceErrorAction : SermonListAction()
+    object ShowPermissionDeniedPermanentlyErrorAction : SermonListAction()
+    object ShowPermissionGrantedAction : SermonListAction()
     object ShowPermissionNotYetRequestedAction : SermonListAction()
 }

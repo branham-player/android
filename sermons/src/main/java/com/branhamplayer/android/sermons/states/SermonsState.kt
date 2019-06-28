@@ -6,7 +6,15 @@ import org.rekotlin.StateType
 
 data class SermonsState(
     val drawerItemSelectedIndex: Int = 0,
-    val permissionRequestedYet: Boolean = false,
+    val fileReadPermission: PermissionType = PermissionType.NotRequested,
     val profile: UserProfile? = null,
     val sermonList: List<SermonModel>? = null
-) : StateType
+) : StateType {
+
+    sealed class PermissionType {
+        object DeniedOnce : PermissionType()
+        object DeniedPermanently : PermissionType()
+        object Granted : PermissionType()
+        object NotRequested : PermissionType()
+    }
+}

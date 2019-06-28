@@ -66,6 +66,65 @@
             app:layout_constraintTop_toBottomOf="@+id/request_permission_description" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/sermon_list_request_permission_denied_permanently_prompt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/denied_permanently_icon"
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:src="@drawable/permissions"
+            app:layout_constraintBottom_toTopOf="@+id/denied_permanently_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/denied_permanently_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/permission_request_denied_permanently_title"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/denied_permanently_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/denied_permanently_icon" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/denied_permanently_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/permission_request_denied_permanently_description"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/denied_permanently_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/denied_permanently_title" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/denied_permanently_button"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:background="@drawable/diagonal_gradient_background"
+            android:text="@string/permission_request_denied_permanently_button"
+            android:textColor="@android:color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/denied_permanently_description" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/sermon_list"
         android:layout_width="match_parent"
