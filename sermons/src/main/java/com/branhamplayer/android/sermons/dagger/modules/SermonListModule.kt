@@ -3,6 +3,7 @@ package com.branhamplayer.android.sermons.dagger.modules
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.branhamplayer.android.dagger.RxJavaModule
+import com.branhamplayer.android.data.database.BranhamPlayerDatabase
 import com.branhamplayer.android.sermons.mappers.SermonListMapper
 import com.branhamplayer.android.sermons.middleware.SermonListMiddleware
 import com.branhamplayer.android.sermons.reducers.SermonListReducer
@@ -26,11 +27,17 @@ class SermonListModule(private val context: Context) {
 
     @Provides
     fun providePermissionManager(
-        context: Context,
-        dexter: DexterBuilder.Permission
+        activity: AppCompatActivity,
+        database: BranhamPlayerDatabase,
+        dexter: DexterBuilder.Permission,
+        @Named(RxJavaModule.BG) bg: Scheduler,
+        @Named(RxJavaModule.UI) ui: Scheduler
     ) = PermissionManager(
-        context = context,
-        dexter = dexter
+        activity = activity,
+        database = database,
+        dexter = dexter,
+        bg = bg,
+        ui = ui
     )
 
     @Provides

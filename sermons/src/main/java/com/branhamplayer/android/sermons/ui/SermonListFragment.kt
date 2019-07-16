@@ -18,6 +18,7 @@ import com.branhamplayer.android.sermons.dagger.DaggerInjector
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.store.sermonsStore
 import com.branhamplayer.android.sermons.ui.adapters.SermonListAdapter
+import com.branhamplayer.android.sermons.utils.permissions.PermissionManager
 import org.rekotlin.StoreSubscriber
 import javax.inject.Inject
 
@@ -85,9 +86,9 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
         }
 
         viewFlipper?.displayedChild = when {
-            state.fileReadPermission == SermonsState.PermissionType.DeniedPermanently -> 1
-            state.fileReadPermission == SermonsState.PermissionType.Granted -> 2
-            state.fileReadPermission != SermonsState.PermissionType.Granted -> 0
+            state.fileReadPermission == PermissionManager.PermissionStatus.DeniedPermanently -> 1
+            state.fileReadPermission == PermissionManager.PermissionStatus.Granted -> 2
+            state.fileReadPermission != PermissionManager.PermissionStatus.Granted -> 0
             else -> 0
         }
     }

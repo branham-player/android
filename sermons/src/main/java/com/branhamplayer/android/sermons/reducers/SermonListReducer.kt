@@ -5,6 +5,7 @@ import com.branhamplayer.android.sermons.actions.SermonListAction
 import com.branhamplayer.android.sermons.mappers.SermonListMapper
 import com.branhamplayer.android.sermons.repositories.SermonListRepository
 import com.branhamplayer.android.sermons.states.SermonsState
+import com.branhamplayer.android.sermons.utils.permissions.PermissionManager
 import javax.inject.Inject
 
 class SermonListReducer @Inject constructor(
@@ -17,7 +18,6 @@ class SermonListReducer @Inject constructor(
         is SermonListAction.ShowPermissionDeniedOnceErrorAction -> showPermissionDeniedOnceError(oldState)
         is SermonListAction.ShowPermissionDeniedPermanentlyErrorAction -> showPermissionDeniedPermanentlyError(oldState)
         is SermonListAction.ShowPermissionGrantedAction -> showPermissionGranted(oldState)
-        is SermonListAction.ShowPermissionNotYetRequestedAction -> showPermissionNotYetRequested(oldState)
         else -> oldState
     }
 
@@ -31,18 +31,14 @@ class SermonListReducer @Inject constructor(
     }
 
     private fun showPermissionDeniedOnceError(oldState: SermonsState) = oldState.copy(
-        fileReadPermission = SermonsState.PermissionType.DeniedOnce
+        fileReadPermission = PermissionManager.PermissionStatus.DeniedOnce
     )
 
     private fun showPermissionDeniedPermanentlyError(oldState: SermonsState) = oldState.copy(
-        fileReadPermission = SermonsState.PermissionType.DeniedPermanently
+        fileReadPermission = PermissionManager.PermissionStatus.DeniedPermanently
     )
 
     private fun showPermissionGranted(oldState: SermonsState) = oldState.copy(
-        fileReadPermission = SermonsState.PermissionType.Granted
-    )
-
-    private fun showPermissionNotYetRequested(oldState: SermonsState) = oldState.copy(
-        fileReadPermission = SermonsState.PermissionType.NotRequested
+        fileReadPermission = PermissionManager.PermissionStatus.Granted
     )
 }

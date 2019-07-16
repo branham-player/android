@@ -26,11 +26,23 @@ class SermonListMiddleware @Inject constructor(
         }
     }
 
-    private fun checkFileReadPermission(dispatch: (Action) -> Unit) =
-        if (permissionManager.hasPermission(PermissionConstants.fileRead)) {
-            dispatch(SermonListAction.FetchListAction)
-        } else {
-            dispatch(SermonListAction.ShowPermissionNotYetRequestedAction)
+    private fun checkFileReadPermission(dispatch: (Action) -> Unit) = permissionManager
+        .checkPermissionStatus(PermissionConstants.fileRead)
+        .subscribe({
+            when (it) {
+                PermissionManager.PermissionStatus.DeniedOnce -> dispatch(SermonListAction.ShowPermissionDeniedOnceErrorAction)
+                PermissionManager.PermissionStatus.DeniedPermanently -> dispatch(SermonListAction.ShowPermissionDeniedPermanentlyErrorAction)
+
+                PermissionManager.PermissionStatus.Granted -> {
+                    dispatch(SermonListAction.ShowPermissionGrantedAction)
+                    dispatch(SermonListAction.FetchListAction)
+                }
+            }
+        }, {
+            dispatch(SermonListAction.ShowPermissionDeniedOnceErrorAction)
+        })
+        .let {
+            // TODO, dispose
         }
 
     @SuppressLint("CheckResult")

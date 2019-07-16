@@ -2,6 +2,7 @@ package com.branhamplayer.android.sermons.dagger
 
 import androidx.appcompat.app.AppCompatActivity
 import com.branhamplayer.android.dagger.AuthenticationModule
+import com.branhamplayer.android.data.dagger.DatabaseModule
 import com.branhamplayer.android.sermons.dagger.components.DaggerSermonsComponent
 import com.branhamplayer.android.sermons.dagger.components.SermonsComponent
 import com.branhamplayer.android.sermons.dagger.modules.SermonListModule
@@ -16,11 +17,8 @@ object DaggerInjector {
         val component = sermonsComponent ?: DaggerSermonsComponent
             .builder()
             .authenticationModule(AuthenticationModule(activity))
-            .sermonListModule(
-                SermonListModule(
-                    activity
-                )
-            )
+            .databaseModule(DatabaseModule(activity))
+            .sermonListModule(SermonListModule(activity))
             .sermonsModule(SermonsModule(activity))
             .build()
 

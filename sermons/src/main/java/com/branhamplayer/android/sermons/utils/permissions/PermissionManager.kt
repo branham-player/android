@@ -1,8 +1,13 @@
 package com.branhamplayer.android.sermons.utils.permissions
 
-import android.content.Context
-import android.content.pm.PackageManager
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.PermissionChecker
+import androidx.core.content.PermissionChecker.PERMISSION_DENIED
+import androidx.core.content.PermissionChecker.PERMISSION_DENIED_APP_OP
+import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
+import com.branhamplayer.android.dagger.RxJavaModule
+import com.branhamplayer.android.data.database.BranhamPlayerDatabase
+import com.branhamplayer.android.data.database.permissions.PermissionsEntity
 import com.branhamplayer.android.utils.logging.Loggly
 import com.branhamplayer.android.utils.logging.LogglyConstants.Tags.PERMISSIONS
 import com.karumi.dexter.DexterBuilder
@@ -11,53 +16,130 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
+import io.reactivex.Scheduler
 import io.reactivex.Single
 import javax.inject.Inject
+import javax.inject.Named
 
 class PermissionManager @Inject constructor(
-    private val context: Context,
-    private val dexter: DexterBuilder.Permission
+    private val activity: AppCompatActivity,
+    private val database: BranhamPlayerDatabase,
+    private val dexter: DexterBuilder.Permission,
+    @Named(RxJavaModule.BG) private val bg: Scheduler,
+    @Named(RxJavaModule.UI) private val ui: Scheduler
 ) {
 
-    fun getSinglePermission(permission: String): Single<PermissionStatus> = Single.create { subscriber ->
+    fun checkPermissionStatus(permission: String) = checkAndroidForPermissionStatus(permission)
+        .flatMap { status ->
+            if (status == PermissionStatus.Granted) {
+                return@flatMap Single.just(status)
+            }
 
-        if (hasPermission(permission)) {
-            Loggly.i(PERMISSIONS, "Permission '$permission' previously granted")
-            subscriber.onSuccess(PermissionStatus.Granted)
-            return@create
+            database
+                .permissionsDao()
+                .isDeniedPermanently(permission)
+                .flatMapSingle<PermissionStatus> {
+                    // Condition: found that the permission is denied permanently
+                    // Runs only when there is a value, and throws if the Maybe is empty
+                    // causing the onErrorReturn to run
+                    Single.just(PermissionStatus.DeniedPermanently)
+                }
+                .onErrorReturn {
+                    // Condition: permission was not denied permanently, only once
+                    // Runs when a value is not found or the database cannot be accessed
+                    status
+                }
+        }
+        .flatMap { status ->
+            if (status == PermissionStatus.DeniedPermanently) {
+                markPermissionDeniedStatus(permission, status)
+            } else {
+                clearPermissionDeniedStatus(permission, status)
+            }
+        }
+        .subscribeOn(bg)
+        .observeOn(ui)
+
+    fun getSinglePermission(permission: String): Single<PermissionStatus> = checkPermissionStatus(permission)
+        .flatMap {
+            when (it) {
+                PermissionStatus.Granted -> {
+                    Loggly.i(PERMISSIONS, "Permission '$permission' previously granted")
+                    return@flatMap Single.just(PermissionStatus.Granted)
+                }
+
+                PermissionStatus.DeniedPermanently -> {
+                    Loggly.i(PERMISSIONS, "Permission '$permission' denied permanently")
+                    return@flatMap Single.just(PermissionStatus.DeniedPermanently)
+                }
+
+                else -> Loggly.i(PERMISSIONS, "Permission '$permission' denied once, requesting it again")
+            }
+
+            Single.create<PermissionStatus> { subscriber ->
+                dexter
+                    .withPermission(permission)
+                    .withListener(object : PermissionListener {
+
+                        override fun onPermissionDenied(response: PermissionDeniedResponse?) {
+                            if (response?.isPermanentlyDenied == true) {
+                                Loggly.w(PERMISSIONS, "Just asked for permission, '$permission' permanently denied")
+                                subscriber.onSuccess(PermissionStatus.DeniedPermanently)
+                            } else {
+                                Loggly.w(PERMISSIONS, "Just asked for permission, '$permission' denied once")
+                                subscriber.onSuccess(PermissionStatus.DeniedOnce)
+                            }
+                        }
+
+                        override fun onPermissionGranted(response: PermissionGrantedResponse?) {
+                            Loggly.i(PERMISSIONS, "Just asked for permission, '$permission' granted")
+                            subscriber.onSuccess(PermissionStatus.Granted)
+                        }
+
+                        override fun onPermissionRationaleShouldBeShown(permission: PermissionRequest?, token: PermissionToken?) {
+                            Loggly.i(PERMISSIONS, "Permission rationale triggered for '$permission'")
+                            token?.continuePermissionRequest()
+                        }
+                    })
+                    .check()
+            }
+        }
+        .observeOn(bg)
+        .flatMap { status ->
+            if (status == PermissionStatus.DeniedPermanently) {
+                markPermissionDeniedStatus(permission, status)
+            } else {
+                clearPermissionDeniedStatus(permission, status)
+            }
+        }
+        .observeOn(ui)
+
+    private fun checkAndroidForPermissionStatus(permission: String): Single<PermissionStatus> {
+        val status = when {
+            PermissionChecker.checkSelfPermission(activity, permission) == PERMISSION_DENIED -> PermissionStatus.DeniedOnce
+            PermissionChecker.checkSelfPermission(activity, permission) == PERMISSION_DENIED_APP_OP -> PermissionStatus.DeniedPermanently
+            PermissionChecker.checkSelfPermission(activity, permission) == PERMISSION_GRANTED -> PermissionStatus.Granted
+            else -> PermissionStatus.DeniedOnce
         }
 
-        dexter
-            .withPermission(permission)
-            .withListener(object : PermissionListener {
-
-                override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-                    if (response?.isPermanentlyDenied == true) {
-                        Loggly.w(PERMISSIONS, "Permission '$permission' permanently denied")
-                        subscriber.onSuccess(PermissionStatus.DeniedPermanently)
-                    } else {
-                        Loggly.w(PERMISSIONS, "Permission '$permission' denied once")
-                        subscriber.onSuccess(PermissionStatus.DeniedOnce)
-                    }
-                }
-
-                override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                    Loggly.i(PERMISSIONS, "Permission '$permission' granted")
-                    subscriber.onSuccess(PermissionStatus.Granted)
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    permission: PermissionRequest?,
-                    token: PermissionToken?
-                ) {
-                    Loggly.i(PERMISSIONS, "Permission rationale triggered for '$permission'")
-                    token?.continuePermissionRequest()
-                }
-            })
-            .check()
+        return Single.just(status)
     }
 
-    fun hasPermission(permission: String) = ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+    private fun clearPermissionDeniedStatus(permission: String, status: PermissionStatus) = database
+        .permissionsDao()
+        .clearDeniedPermanently(permission)
+        .andThen(
+            Single.just(status)
+        )
+
+    private fun markPermissionDeniedStatus(permission: String, status: PermissionStatus) = database
+        .permissionsDao()
+        .markAsDeniedPermanently(PermissionsEntity(
+            permission = permission
+        ))
+        .andThen(
+            Single.just(status)
+        )
 
     sealed class PermissionStatus {
         object DeniedOnce : PermissionStatus()

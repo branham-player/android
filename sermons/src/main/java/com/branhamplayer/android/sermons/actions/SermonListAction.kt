@@ -10,5 +10,4 @@ sealed class SermonListAction : BaseAction {
     object ShowPermissionDeniedOnceErrorAction : SermonListAction()
     object ShowPermissionDeniedPermanentlyErrorAction : SermonListAction()
     object ShowPermissionGrantedAction : SermonListAction()
-    object ShowPermissionNotYetRequestedAction : SermonListAction()
 }
