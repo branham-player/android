@@ -76,33 +76,7 @@ class PermissionManager @Inject constructor(
                 else -> Loggly.i(PERMISSIONS, "Permission '$permission' denied once, requesting it again")
             }
 
-            Single.create<PermissionStatus> { subscriber ->
-                dexter
-                    .withPermission(permission)
-                    .withListener(object : PermissionListener {
-
-                        override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-                            if (response?.isPermanentlyDenied == true) {
-                                Loggly.w(PERMISSIONS, "Just asked for permission, '$permission' permanently denied")
-                                subscriber.onSuccess(PermissionStatus.DeniedPermanently)
-                            } else {
-                                Loggly.w(PERMISSIONS, "Just asked for permission, '$permission' denied once")
-                                subscriber.onSuccess(PermissionStatus.DeniedOnce)
-                            }
-                        }
-
-                        override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                            Loggly.i(PERMISSIONS, "Just asked for permission, '$permission' granted")
-                            subscriber.onSuccess(PermissionStatus.Granted)
-                        }
-
-                        override fun onPermissionRationaleShouldBeShown(permission: PermissionRequest?, token: PermissionToken?) {
-                            Loggly.i(PERMISSIONS, "Permission rationale triggered for '$permission'")
-                            token?.continuePermissionRequest()
-                        }
-                    })
-                    .check()
-            }
+            askForPermission(permission)
         }
         .observeOn(bg)
         .flatMap { status ->
@@ -113,6 +87,34 @@ class PermissionManager @Inject constructor(
             }
         }
         .observeOn(ui)
+
+    private fun askForPermission(permission: String) = Single.create<PermissionStatus> { subscriber ->
+        dexter
+            .withPermission(permission)
+            .withListener(object : PermissionListener {
+
+                override fun onPermissionDenied(response: PermissionDeniedResponse?) {
+                    if (response?.isPermanentlyDenied == true) {
+                        Loggly.w(PERMISSIONS, "Just asked for permission, '$permission' permanently denied")
+                        subscriber.onSuccess(PermissionStatus.DeniedPermanently)
+                    } else {
+                        Loggly.w(PERMISSIONS, "Just asked for permission, '$permission' denied once")
+                        subscriber.onSuccess(PermissionStatus.DeniedOnce)
+                    }
+                }
+
+                override fun onPermissionGranted(response: PermissionGrantedResponse?) {
+                    Loggly.i(PERMISSIONS, "Just asked for permission, '$permission' granted")
+                    subscriber.onSuccess(PermissionStatus.Granted)
+                }
+
+                override fun onPermissionRationaleShouldBeShown(permission: PermissionRequest?, token: PermissionToken?) {
+                    Loggly.i(PERMISSIONS, "Permission rationale triggered for '$permission'")
+                    token?.continuePermissionRequest()
+                }
+            })
+            .check()
+    }
 
     private fun checkAndroidForPermissionStatus(permission: String): Single<PermissionStatus> {
         val status = when {
