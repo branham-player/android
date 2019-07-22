@@ -2,6 +2,7 @@ package com.branhamplayer.android.sermons.middleware
 
 import com.branhamplayer.android.base.redux.BaseAction
 import com.branhamplayer.android.sermons.actions.AuthenticationAction
+import com.branhamplayer.android.sermons.actions.RoutingAction
 import com.branhamplayer.android.sermons.actions.SermonListAction
 import com.branhamplayer.android.sermons.dagger.DaggerInjector
 import com.branhamplayer.android.sermons.states.SermonsState
@@ -17,14 +18,14 @@ class SermonsMiddleware : Middleware<SermonsState> {
     lateinit var authenticationMiddleware: AuthenticationMiddleware
 
     @Inject
+    lateinit var routingMiddleware: RoutingMiddleware
+
+    @Inject
     lateinit var sermonListMiddleware: SermonListMiddleware
 
     // endregion
 
-    override fun invoke(
-        dispatch: DispatchFunction,
-        getState: () -> SermonsState?
-    ): (DispatchFunction) -> DispatchFunction = { next ->
+    override fun invoke(dispatch: DispatchFunction, getState: () -> SermonsState?): (DispatchFunction) -> DispatchFunction = { next ->
         { action ->
             if (action is BaseAction) {
                 DaggerInjector.sermonsComponent?.inject(this)
@@ -32,6 +33,7 @@ class SermonsMiddleware : Middleware<SermonsState> {
 
             when (action) {
                 is AuthenticationAction -> authenticationMiddleware.invoke(dispatch, action, getState())
+                is RoutingAction -> routingMiddleware.invoke(dispatch, action, getState())
                 is SermonListAction -> sermonListMiddleware.invoke(dispatch, action, getState())
             }
 

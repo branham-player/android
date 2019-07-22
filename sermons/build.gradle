@@ -46,8 +46,8 @@ dependencies {
     kapt 'com.jakewharton:butterknife-compiler:10.1.0'
 
     // Dagger
-    implementation 'com.google.dagger:dagger:2.22.1'
-    kapt 'com.google.dagger:dagger-compiler:2.22.1'
+    implementation 'com.google.dagger:dagger:2.23.2'
+    kapt 'com.google.dagger:dagger-compiler:2.23.2'
 
     // Dexter
     implementation 'com.karumi:dexter:5.0.0'
@@ -56,8 +56,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // Navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0-alpha06'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0-alpha06'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0-beta02'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0-beta02'
 
     // ReKotlin
     implementation 'org.rekotlin:rekotlin:1.0.0'

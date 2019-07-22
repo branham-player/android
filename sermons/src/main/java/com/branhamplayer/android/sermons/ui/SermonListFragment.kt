@@ -13,6 +13,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import butterknife.Unbinder
 import com.branhamplayer.android.sermons.R
+import com.branhamplayer.android.sermons.actions.RoutingAction
 import com.branhamplayer.android.sermons.actions.SermonListAction
 import com.branhamplayer.android.sermons.dagger.DaggerInjector
 import com.branhamplayer.android.sermons.states.SermonsState
@@ -47,11 +48,7 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
 
     // region Controller
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.sermon_list_fragment, container, false)
 
         DaggerInjector.sermonsComponent?.inject(this)
@@ -94,6 +91,10 @@ class SermonListFragment : Fragment(), StoreSubscriber<SermonsState> {
     }
 
     // endregion
+
+    @OnClick(R.id.denied_permanently_button)
+    fun goToAppSettings() =
+        sermonsStore.dispatch(RoutingAction.NavigateToApplicationSettings)
 
     @OnClick(R.id.request_permission_button)
     fun requestPermission() =
