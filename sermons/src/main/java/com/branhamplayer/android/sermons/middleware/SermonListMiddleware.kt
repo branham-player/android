@@ -47,7 +47,7 @@ class SermonListMiddleware @Inject constructor(
 
     @SuppressLint("CheckResult")
     private fun requestFileReadPermission(dispatcher: DispatchFunction) = permissionManager
-        .getSinglePermission(PermissionConstants.fileRead)
+        .requestPermission(PermissionConstants.fileRead)
         .subscribeOn(bg)
         .observeOn(ui)
         .subscribe({ status ->

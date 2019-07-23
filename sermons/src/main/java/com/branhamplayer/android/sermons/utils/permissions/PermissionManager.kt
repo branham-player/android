@@ -56,7 +56,7 @@ class PermissionManager @Inject constructor(
         .subscribeOn(bg)
         .observeOn(ui)
 
-    fun getSinglePermission(permission: String): Single<PermissionStatus> = checkPermissionStatus(permission)
+    fun requestPermission(permission: String): Single<PermissionStatus> = checkPermissionStatus(permission)
         .flatMap {
             when (it) {
                 PermissionStatus.Granted -> {
