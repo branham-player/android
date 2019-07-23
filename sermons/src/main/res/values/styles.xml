@@ -25,12 +25,4 @@
     </style>
 
     <!-- endregion -->
-
-    <!-- region Permission Dialog -->
-
-    <style name="Theme.Transparent" parent="android:style/Theme.Translucent.NoTitleBar">
-        <item name="android:windowIsFloating">true</item>
-    </style>
-
-    <!-- endregion -->
 </resources>
