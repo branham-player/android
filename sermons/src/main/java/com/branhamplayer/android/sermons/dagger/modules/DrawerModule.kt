@@ -1,4 +1,4 @@
-package com.branhamplayer.android.sermons.dagger
+package com.branhamplayer.android.sermons.dagger.modules
 
 import com.branhamplayer.android.sermons.reducers.DrawerReducer
 import com.branhamplayer.android.ui.DrawerHeaderViewBinder

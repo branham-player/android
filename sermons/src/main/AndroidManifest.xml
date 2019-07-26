@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.branhamplayer.android.sermons">
@@ -39,6 +40,11 @@
                 <data android:pathPattern="/sermon-list" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.karumi.dexter.DexterActivity"
+            android:theme="@android:style/Theme.Light.Panel"
+            tools:replace="android:theme" />
 
         <meta-data
             android:name="com.google.android.gms.car.application"

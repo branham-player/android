@@ -25,6 +25,14 @@
 
     <!-- region Sermon List -->
 
+    <string name="permission_request_denied_permanently_button">Open Settings</string>
+    <string name="permission_request_denied_permanently_description">Branham Player was denied access to read your files. Please open up the app settings and grant the Storage permission.</string>
+    <string name="permission_request_denied_permanently_title">File Access Denied</string>
+
+    <string name="permission_request_button">Grant Access</string>
+    <string name="permission_request_description">Branham Player needs permission to access your files before it can play a sermon</string>
+    <string name="permission_request_title">File Access Permission</string>
+
     <string name="permission_denied_message">This permission is necessary for the Branham Player to work properly</string>
 
     <!-- endregion -->
