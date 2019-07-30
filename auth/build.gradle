@@ -8,12 +8,12 @@ android {
     compileSdkVersion compile_sdk_version
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility java_version
+        targetCompatibility java_version
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = java_version
     }
 
     defaultConfig {
@@ -29,19 +29,22 @@ android {
 
 dependencies {
 
-    // Auth0
-    implementation 'com.auth0.android:auth0:1.15.1'
-
     // Dagger
-    implementation 'com.google.dagger:dagger:2.24'
-    kapt 'com.google.dagger:dagger-compiler:2.24'
+    implementation "com.google.dagger:dagger:$dagger"
+    kapt "com.google.dagger:dagger-compiler:$dagger"
 
     // Firebase
-    implementation 'com.google.firebase:firebase-auth:18.1.0'
+    implementation "com.firebaseui:firebase-ui-auth:$firebase_auth_ui"
+    implementation "com.google.firebase:firebase-auth:$firebase_auth"
+    implementation "com.google.firebase:firebase-core:$firebase_core"
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // RxJava
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.8'
+    implementation "io.reactivex.rxjava2:rxjava:$reactivex_java"
+
+    // TedRxOnActivityResult
+    // GitHub: https://github.com/ParkSangGwon/TedRxOnActivityResult
+    implementation "gun0912.ted:tedonactivityresult-rx2:$reactivex_activity_result"
 }
