@@ -29,6 +29,10 @@ android {
 
 dependencies {
 
+    // AndroidX
+    implementation "androidx.constraintlayout:constraintlayout:$androidX_constraint_layout"
+    implementation "androidx.core:core-ktx:$androidX_core"
+
     // Dagger
     implementation "com.google.dagger:dagger:$dagger"
     kapt "com.google.dagger:dagger-compiler:$dagger"
@@ -40,6 +44,9 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$androidX_navigation"
 
     // RxJava
     implementation "io.reactivex.rxjava2:rxjava:$reactivex_java"

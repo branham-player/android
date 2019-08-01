@@ -79,6 +79,7 @@ crashlytics {
 }
 
 dependencies {
+    implementation project(':auth')
     implementation project(':data')
 
     // Android Debug Database

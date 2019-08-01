@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/after_preflight_checklist_navigation_graph"
+    app:startDestination="@id/preflight_checklist_fragment">
+
+    <fragment
+        android:id="@+id/preflight_checklist_fragment"
+        android:name="com.branhamplayer.android.ui.PreflightChecklistFragment"
+        android:label="@string/navigation_preflight_checklist"
+        tools:layout="@layout/preflight_checklist_fragment">
+
+        <action
+            android:id="@+id/action_preflight_checklist_fragment_to_welcome_fragment"
+            app:destination="@id/welcome_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/welcome_fragment"
+        android:name="com.branhamplayer.android.ui.WelcomeFragment"
+        android:label="@string/navigation_welcome"
+        tools:layout="@layout/welcome_fragment">
+
+        <action
+            android:id="@+id/action_welcome_fragment_to_login"
+            app:destination="@id/login" />
+    </fragment>
+
+    <login
+        android:id="@+id/login"
+        tools:layout="@layout/graph_placeholder_login" />
+</navigation>

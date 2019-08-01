@@ -8,7 +8,7 @@ import com.tedpark.tedonactivityresult.rx2.TedRxOnActivityResult
 import io.reactivex.Single
 import javax.inject.Inject
 
-class LoginUtility @Inject constructor(
+class Authenticate @Inject constructor(
     private val context: Context
 ) {
 
@@ -21,7 +21,7 @@ class LoginUtility @Inject constructor(
         ) : Outcome()
     }
 
-    fun login(): Single<Outcome> {
+    fun presentLogin(): Single<Outcome> {
         val intent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(

@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/startup_navigation_host"
-    android:name="androidx.navigation.fragment.NavHostFragment"
-    android:background="@color/small_screen_background"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    tools:context=".ui.StartupActivity" />
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/startup_navigation_host"
+        android:name="com.branhamplayer.android.utils.navigation.StartupNavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/small_screen_background"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/startup_graph"
+        tools:context=".ui.StartupActivity" />
+</FrameLayout>
+
