@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/after_preflight_checklist_navigation_graph"
@@ -25,9 +26,19 @@
         <action
             android:id="@+id/action_welcome_fragment_to_login"
             app:destination="@id/login" />
+
+        <action
+            android:id="@+id/action_welcome_fragment_to_sermons_module"
+            app:destination="@id/sermons_module" />
     </fragment>
 
     <login
         android:id="@+id/login"
         tools:layout="@layout/graph_placeholder_login" />
+
+    <module
+        android:id="@+id/sermons_module"
+        app:clearBackStack="true"
+        app:uri="https://branhamplayer.com/sermons"
+        tools:layout="@layout/graph_placeholder_module" />
 </navigation>

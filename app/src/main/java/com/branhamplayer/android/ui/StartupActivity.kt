@@ -1,9 +1,13 @@
 package com.branhamplayer.android.ui
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import com.branhamplayer.android.BuildConfig
 import com.branhamplayer.android.R
+import com.branhamplayer.android.auth.navigation.LoginNavigator
 import com.branhamplayer.android.dagger.DaggerInjector
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.microsoft.appcenter.AppCenter
@@ -30,6 +34,15 @@ class StartupActivity : AppCompatActivity() {
         firebaseAnalytics.setAnalyticsCollectionEnabled(BuildConfig.BUILD_TYPE.toLowerCase() == "release")
 
         setUpAppCenter()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == LoginNavigator.RequestCode && resultCode == Activity.RESULT_OK) {
+            findNavController(R.id.startup_navigation_host)
+                .navigate(R.id.action_welcome_fragment_to_sermons_module)
+        }
     }
 
     // endregion
