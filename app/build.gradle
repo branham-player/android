@@ -8,10 +8,6 @@ android {
 
     def appCenterDevKey = BRANHAM_PLAYER_APP_CENTER_DEV_KEY
     def appCenterReleaseKey = BRANHAM_PLAYER_APP_CENTER_RELEASE_KEY
-
-    def auth0Domain = BRANHAM_PLAYER_ANDROID_AUTH0_DOMAIN
-    def auth0DevClientId = BRANHAM_PLAYER_ANDROID_AUTH0_DEV_CLIENT_ID
-    def auth0ProdClientId = BRANHAM_PLAYER_ANDROID_AUTH0_PRD_CLIENT_ID
     def logglyDevKey = BRANHAM_PLAYER_ANDROID_DEV_LOGGLY_KEY
 
     compileSdkVersion compile_sdk_version
@@ -34,16 +30,7 @@ android {
         versionCode version_code
         versionName version_name
 
-        manifestPlaceholders = [
-                auth0Domain: auth0Domain,
-                auth0Scheme: application_id
-        ]
-
         buildConfigField "String", "APP_CENTER_KEY", "\"$appCenterDevKey\""
-
-        buildConfigField "String", "AUTH0_CLIENT_ID", "\"$auth0ProdClientId\""
-        buildConfigField "String", "AUTH0_DOMAIN", "\"$auth0Domain\""
-        buildConfigField "String", "AUTH0_SCHEME", "\"$application_id\""
 
         buildConfigField "String", "LOGGLY_ENVIRONMENT", '"development"'
         buildConfigField "String", "LOGGLY_KEY", "\"$logglyDevKey\""
@@ -52,13 +39,6 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix application_id_dev_suffix
-
-            buildConfigField "String", "AUTH0_CLIENT_ID", "\"$auth0DevClientId\""
-            buildConfigField "String", "AUTH0_SCHEME", "\"$application_id$application_id_dev_suffix\""
-
-            manifestPlaceholders += [
-                    auth0Scheme: "$application_id$application_id_dev_suffix"
-            ]
         }
 
         release {
@@ -96,9 +76,6 @@ dependencies {
     // App Center
     implementation 'com.microsoft.appcenter:appcenter-analytics:2.1.0'
     implementation 'com.microsoft.appcenter:appcenter-crashes:2.1.0'
-
-    // Auth0
-    implementation 'com.auth0.android:auth0:1.15.1'
 
     // Butter Knife
     implementation 'com.jakewharton:butterknife:10.1.0'

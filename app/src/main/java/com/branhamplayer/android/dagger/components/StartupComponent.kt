@@ -13,18 +13,16 @@ import com.branhamplayer.android.reducers.StartupReducer
 import com.branhamplayer.android.ui.StartupActivity
 import dagger.Component
 
-@Component(
-    modules = [
-        AuthenticationModule::class,
-        DatabaseModule::class,
-        MapperModule::class,
-        NetworkModule::class,
-        PreflightChecklistModule::class,
-        RoutingModule::class,
-        RxJavaModule::class,
-        StartupModule::class
-    ]
-)
+@Component(modules = [
+    AuthenticationModule::class,
+    DatabaseModule::class,
+    MapperModule::class,
+    NetworkModule::class,
+    PreflightChecklistModule::class,
+    RoutingModule::class,
+    RxJavaModule::class,
+    StartupModule::class
+])
 interface StartupComponent {
     fun inject(activity: StartupActivity)
     fun inject(rootMiddleware: StartupMiddleware)

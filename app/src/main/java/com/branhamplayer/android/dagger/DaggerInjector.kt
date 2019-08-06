@@ -1,12 +1,8 @@
 package com.branhamplayer.android.dagger
 
 import android.content.Context
-import com.branhamplayer.android.dagger.components.DaggerPreflightChecklistComponent
-import com.branhamplayer.android.dagger.components.DaggerStartupComponent
-import com.branhamplayer.android.dagger.components.DaggerWelcomeComponent
-import com.branhamplayer.android.dagger.components.PreflightChecklistComponent
-import com.branhamplayer.android.dagger.components.StartupComponent
-import com.branhamplayer.android.dagger.components.WelcomeComponent
+import com.branhamplayer.android.auth.dagger.components.DaggerAuthComponent
+import com.branhamplayer.android.dagger.components.*
 import com.branhamplayer.android.dagger.modules.AuthenticationModule
 import com.branhamplayer.android.dagger.modules.PreflightChecklistModule
 import com.branhamplayer.android.dagger.modules.RoutingModule
@@ -57,10 +53,14 @@ object DaggerInjector {
     var welcomeComponent: WelcomeComponent? = null
         private set
 
-    fun buildWelcomeComponent(context: Context): WelcomeComponent {
+    fun buildWelcomeComponent(): WelcomeComponent {
+        val authComponent = DaggerAuthComponent
+            .builder()
+            .build()
+
         val component = welcomeComponent ?: DaggerWelcomeComponent
             .builder()
-            .authenticationModule(AuthenticationModule(context))
+            .authComponent(authComponent)
             .build()
 
         welcomeComponent = component

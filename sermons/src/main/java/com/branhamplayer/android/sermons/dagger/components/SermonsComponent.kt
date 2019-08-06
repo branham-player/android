@@ -1,5 +1,6 @@
 package com.branhamplayer.android.sermons.dagger.components
 
+import com.branhamplayer.android.auth.dagger.components.AuthComponent
 import com.branhamplayer.android.dagger.modules.AuthenticationModule
 import com.branhamplayer.android.dagger.modules.RxJavaModule
 import com.branhamplayer.android.data.dagger.DatabaseModule
@@ -21,6 +22,8 @@ import dagger.Component
     RxJavaModule::class,
     SermonListModule::class,
     SermonsModule::class
+], dependencies = [
+    AuthComponent::class
 ])
 interface SermonsComponent {
     fun inject(activity: SermonsActivity)
