@@ -1,6 +1,6 @@
 package com.branhamplayer.android.sermons.dagger
 
-import com.branhamplayer.android.dagger.AuthenticationModule
+import com.branhamplayer.android.dagger.modules.AuthenticationModule
 import com.branhamplayer.android.data.dagger.DatabaseModule
 import com.branhamplayer.android.sermons.dagger.components.DaggerSermonsComponent
 import com.branhamplayer.android.sermons.dagger.components.SermonsComponent

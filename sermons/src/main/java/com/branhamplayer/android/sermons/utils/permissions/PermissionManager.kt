@@ -5,7 +5,7 @@ import androidx.core.content.PermissionChecker
 import androidx.core.content.PermissionChecker.PERMISSION_DENIED
 import androidx.core.content.PermissionChecker.PERMISSION_DENIED_APP_OP
 import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
-import com.branhamplayer.android.dagger.RxJavaModule
+import com.branhamplayer.android.dagger.modules.RxJavaModule
 import com.branhamplayer.android.data.database.BranhamPlayerDatabase
 import com.branhamplayer.android.data.database.permissions.PermissionsEntity
 import com.branhamplayer.android.utils.logging.Loggly

@@ -1,5 +1,10 @@
-package com.branhamplayer.android.dagger
+package com.branhamplayer.android.dagger.components
 
+import com.branhamplayer.android.dagger.modules.AuthenticationModule
+import com.branhamplayer.android.dagger.modules.PreflightChecklistModule
+import com.branhamplayer.android.dagger.modules.RoutingModule
+import com.branhamplayer.android.dagger.modules.RxJavaModule
+import com.branhamplayer.android.dagger.modules.StartupModule
 import com.branhamplayer.android.data.dagger.DatabaseModule
 import com.branhamplayer.android.data.dagger.MapperModule
 import com.branhamplayer.android.data.dagger.NetworkModule

@@ -8,7 +8,7 @@ import com.auth0.android.provider.WebAuthProvider
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.RoutingAction
 import com.branhamplayer.android.base.redux.TypedReducer
-import com.branhamplayer.android.dagger.RoutingModule
+import com.branhamplayer.android.dagger.modules.RoutingModule
 import com.branhamplayer.android.states.StartupState
 import com.branhamplayer.android.ui.StartupActivity
 import javax.inject.Inject

@@ -1,6 +1,6 @@
 package com.branhamplayer.android.sermons.dagger.modules
 
-import com.branhamplayer.android.dagger.RxJavaModule
+import com.branhamplayer.android.dagger.modules.RxJavaModule
 import com.branhamplayer.android.sermons.middleware.AuthenticationMiddleware
 import com.branhamplayer.android.sermons.reducers.AuthenticationReducer
 import com.branhamplayer.android.utils.auth0.ProfileManager

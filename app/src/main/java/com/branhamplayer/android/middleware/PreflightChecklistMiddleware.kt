@@ -6,7 +6,7 @@ import com.branhamplayer.android.StartupConstants
 import com.branhamplayer.android.actions.PreflightChecklistAction
 import com.branhamplayer.android.actions.RoutingAction
 import com.branhamplayer.android.base.redux.TypedMiddleware
-import com.branhamplayer.android.dagger.RxJavaModule
+import com.branhamplayer.android.dagger.modules.RxJavaModule
 import com.branhamplayer.android.data.DataConstants
 import com.branhamplayer.android.data.database.BranhamPlayerDatabase
 import com.branhamplayer.android.data.database.versions.VersionsEntity

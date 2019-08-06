@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import butterknife.ButterKnife
 import butterknife.OnClick
 import butterknife.Unbinder
-import com.auth0.android.authentication.storage.CredentialsManager
 import com.branhamplayer.android.R
 import com.branhamplayer.android.actions.RoutingAction
+import com.branhamplayer.android.auth.utils.User
 import com.branhamplayer.android.dagger.DaggerInjector
 import com.branhamplayer.android.store.startupStore
 import javax.inject.Inject
@@ -22,7 +22,7 @@ class WelcomeFragment : Fragment() {
     // region Dagger
 
     @Inject
-    lateinit var credentialsManager: CredentialsManager
+    lateinit var user: User
 
     // endregion
 
@@ -46,7 +46,7 @@ class WelcomeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if (credentialsManager.hasValidCredentials()) {
+        if (user.isLoggedIn()) {
             startupStore.dispatch(RoutingAction.NavigateToSermonsAction)
         }
     }

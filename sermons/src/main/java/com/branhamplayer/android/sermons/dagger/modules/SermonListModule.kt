@@ -2,7 +2,7 @@ package com.branhamplayer.android.sermons.dagger.modules
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
-import com.branhamplayer.android.dagger.RxJavaModule
+import com.branhamplayer.android.dagger.modules.RxJavaModule
 import com.branhamplayer.android.data.database.BranhamPlayerDatabase
 import com.branhamplayer.android.sermons.mappers.SermonListMapper
 import com.branhamplayer.android.sermons.middleware.SermonListMiddleware

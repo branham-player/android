@@ -1,6 +1,5 @@
 package com.branhamplayer.android.ui
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +12,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.microsoft.appcenter.AppCenter
 import com.microsoft.appcenter.analytics.Analytics
 import com.microsoft.appcenter.crashes.Crashes
+import java.util.Locale
 import javax.inject.Inject
 
 class StartupActivity : AppCompatActivity() {
@@ -31,7 +31,7 @@ class StartupActivity : AppCompatActivity() {
         setContentView(R.layout.startup_activity)
 
         DaggerInjector.buildStartupComponent(this).inject(this)
-        firebaseAnalytics.setAnalyticsCollectionEnabled(BuildConfig.BUILD_TYPE.toLowerCase() == "release")
+        firebaseAnalytics.setAnalyticsCollectionEnabled(BuildConfig.BUILD_TYPE.isRelease())
 
         setUpAppCenter()
     }
@@ -39,7 +39,7 @@ class StartupActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == LoginNavigator.RequestCode && resultCode == Activity.RESULT_OK) {
+        if (LoginNavigator.loginOutcome(requestCode, resultCode, data) == LoginNavigator.LoginOutcome.Success) {
             findNavController(R.id.startup_navigation_host)
                 .navigate(R.id.action_welcome_fragment_to_sermons_module)
         }
@@ -63,4 +63,6 @@ class StartupActivity : AppCompatActivity() {
             )
         }
     }
+
+    private fun String.isRelease() = this.toLowerCase(Locale.ROOT).contains("release")
 }

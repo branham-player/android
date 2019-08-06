@@ -1,7 +1,7 @@
 package com.branhamplayer.android.sermons.middleware
 
 import com.branhamplayer.android.base.redux.TypedMiddleware
-import com.branhamplayer.android.dagger.RxJavaModule
+import com.branhamplayer.android.dagger.modules.RxJavaModule
 import com.branhamplayer.android.sermons.actions.AuthenticationAction
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.utils.auth0.ProfileManager

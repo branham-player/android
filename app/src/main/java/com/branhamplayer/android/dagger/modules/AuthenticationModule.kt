@@ -1,4 +1,4 @@
-package com.branhamplayer.android.dagger
+package com.branhamplayer.android.dagger.modules
 
 import android.content.Context
 import com.auth0.android.Auth0

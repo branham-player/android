@@ -2,7 +2,7 @@ package com.branhamplayer.android.sermons.middleware
 
 import android.annotation.SuppressLint
 import com.branhamplayer.android.base.redux.TypedMiddleware
-import com.branhamplayer.android.dagger.RxJavaModule
+import com.branhamplayer.android.dagger.modules.RxJavaModule
 import com.branhamplayer.android.sermons.actions.SermonListAction
 import com.branhamplayer.android.sermons.states.SermonsState
 import com.branhamplayer.android.sermons.utils.permissions.PermissionConstants
