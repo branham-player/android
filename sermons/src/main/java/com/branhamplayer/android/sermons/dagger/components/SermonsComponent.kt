@@ -1,7 +1,6 @@
 package com.branhamplayer.android.sermons.dagger.components
 
 import com.branhamplayer.android.auth.dagger.components.AuthComponent
-import com.branhamplayer.android.dagger.modules.AuthenticationModule
 import com.branhamplayer.android.dagger.modules.RxJavaModule
 import com.branhamplayer.android.data.dagger.DatabaseModule
 import com.branhamplayer.android.sermons.dagger.modules.DrawerModule
@@ -15,7 +14,6 @@ import com.branhamplayer.android.sermons.ui.SermonsActivity
 import dagger.Component
 
 @Component(modules = [
-    AuthenticationModule::class,
     DatabaseModule::class,
     DrawerModule::class,
     RoutingModule::class,

@@ -1,6 +1,5 @@
 package com.branhamplayer.android.dagger.components
 
-import com.branhamplayer.android.dagger.modules.AuthenticationModule
 import com.branhamplayer.android.dagger.modules.PreflightChecklistModule
 import com.branhamplayer.android.dagger.modules.RoutingModule
 import com.branhamplayer.android.dagger.modules.RxJavaModule
@@ -14,7 +13,6 @@ import com.branhamplayer.android.ui.StartupActivity
 import dagger.Component
 
 @Component(modules = [
-    AuthenticationModule::class,
     DatabaseModule::class,
     MapperModule::class,
     NetworkModule::class,

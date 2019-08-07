@@ -2,8 +2,12 @@ package com.branhamplayer.android.dagger
 
 import android.content.Context
 import com.branhamplayer.android.auth.dagger.components.DaggerAuthComponent
-import com.branhamplayer.android.dagger.components.*
-import com.branhamplayer.android.dagger.modules.AuthenticationModule
+import com.branhamplayer.android.dagger.components.DaggerPreflightChecklistComponent
+import com.branhamplayer.android.dagger.components.DaggerStartupComponent
+import com.branhamplayer.android.dagger.components.DaggerWelcomeComponent
+import com.branhamplayer.android.dagger.components.PreflightChecklistComponent
+import com.branhamplayer.android.dagger.components.StartupComponent
+import com.branhamplayer.android.dagger.components.WelcomeComponent
 import com.branhamplayer.android.dagger.modules.PreflightChecklistModule
 import com.branhamplayer.android.dagger.modules.RoutingModule
 import com.branhamplayer.android.dagger.modules.StartupModule
@@ -35,7 +39,6 @@ object DaggerInjector {
     fun buildStartupComponent(activity: StartupActivity): StartupComponent {
         val component = startupComponent ?: DaggerStartupComponent
             .builder()
-            .authenticationModule(AuthenticationModule(activity))
             .databaseModule(DatabaseModule(activity))
             .preflightChecklistModule(PreflightChecklistModule(activity))
             .routingModule(RoutingModule(activity))

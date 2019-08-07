@@ -1,6 +1,5 @@
 package com.branhamplayer.android.reducers
 
-import com.branhamplayer.android.actions.AuthenticationAction
 import com.branhamplayer.android.actions.PreflightChecklistAction
 import com.branhamplayer.android.actions.RoutingAction
 import com.branhamplayer.android.base.redux.BaseAction
@@ -13,9 +12,6 @@ import javax.inject.Inject
 class StartupReducer : Reducer<StartupState> {
 
     // region Dagger
-
-    @Inject
-    lateinit var authenticationReducer: AuthenticationReducer
 
     @Inject
     lateinit var preflightChecklistReducer: PreflightChecklistReducer
@@ -35,7 +31,6 @@ class StartupReducer : Reducer<StartupState> {
         }
 
         return when (action) {
-            is AuthenticationAction -> authenticationReducer.invoke(action, oldState)
             is PreflightChecklistAction -> preflightChecklistReducer.invoke(action, oldState)
             is RoutingAction -> routingReducer.invoke(action, oldState)
             else -> oldState
