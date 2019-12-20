@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.branhamplayer.android">
 
     <dist:module
         dist:instant="true"
-        dist:onDemand="true"
         dist:title="@string/application_base">
 
-        <dist:fusing dist:include="true"/>
+        <dist:fusing dist:include="true" />
     </dist:module>
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".App"
@@ -26,33 +24,33 @@
         <!-- Disables Firebase. This flag is automatically enabled when building for release. -->
         <meta-data
             android:name="firebase_analytics_collection_enabled"
-            android:value="false"/>
+            android:value="false" />
 
         <activity
             android:name=".ui.StartupActivity"
             android:label="@string/app_name">
 
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
 
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
+                <data android:scheme="http" />
+                <data android:scheme="https" />
 
-                <data android:host="branhamplayer.app"/>
-                <data android:host="branhamplayer.com"/>
+                <data android:host="branhamplayer.app" />
+                <data android:host="branhamplayer.com" />
 
-                <data android:pathPattern="/login"/>
-                <data android:pathPattern="/register"/>
-                <data android:pathPattern="/startup"/>
-                <data android:pathPattern="/start-up"/>
+                <data android:pathPattern="/login" />
+                <data android:pathPattern="/register" />
+                <data android:pathPattern="/startup" />
+                <data android:pathPattern="/start-up" />
             </intent-filter>
         </activity>
     </application>
